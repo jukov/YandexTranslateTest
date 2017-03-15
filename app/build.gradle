@@ -17,6 +17,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    packagingOptions {
+        exclude 'META-INF/LICENSE'
+    }
 }
 
 dependencies {
@@ -30,7 +33,6 @@ dependencies {
 
     compile "com.squareup.retrofit2:retrofit:$retrofitVersion"
     compile "com.squareup.retrofit2:converter-jackson:$retrofitVersion"
-
 
     compile "com.android.support:appcompat-v7:$supportVersion"
     compile "com.android.support:design:$supportVersion"

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<EditText
+		android:id="@+id/editTextTranslatable"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_alignParentTop="true"
+		android:inputType="text"
+		tools:text="Привет"/>
+
+	<Button
+		android:id="@+id/buttonTranslate"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/editTextTranslatable"
+		android:text="@string/screen_main_buttonTranslate"/>
+
+	<TextView
+		android:id="@+id/textViewTranslated"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/buttonTranslate"
+		tools:text="Hi"/>
+
+</RelativeLayout>
