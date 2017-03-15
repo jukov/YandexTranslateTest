@@ -1,15 +1,18 @@
 package info.jukov.yandextranslatetest.ui.screen.main;
 
 import android.os.Bundle;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import info.jukov.yandextranslatetest.R;
+import info.jukov.yandextranslatetest.ui.TabAdapter;
+import info.jukov.yandextranslatetest.ui.screen.favorites.FavoritesFragment;
+import info.jukov.yandextranslatetest.ui.screen.history.HistoryFragment;
+import info.jukov.yandextranslatetest.ui.screen.translate.TranslateFragment;
 
 /**
  * User: jukov
@@ -22,30 +25,31 @@ public final class ScreenMainActivity extends MvpAppCompatActivity implements Sc
 	@InjectPresenter
 	ScreenMainPresenter presenter;
 
-	@BindView(R.id.editTextTranslatable)
-	EditText editTextTranslatable;
-
-	@BindView(R.id.buttonTranslate)
-	Button buttonTranslate;
-
-	@BindView(R.id.textViewTranslated)
-	TextView textViewTranslated;
+	@BindView(R.id.toolbar) Toolbar toolbar;
+	@BindView(R.id.tabLayout) TabLayout tabLayout;
+	@BindView(R.id.viewPager) ViewPager viewPager;
 
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.screen_main);
-
+		setContentView(R.layout.activity_main);
 		ButterKnife.bind(this);
+
+		setSupportActionBar(toolbar);
+
+		initTabLayout();
 	}
 
-	@OnClick(R.id.buttonTranslate)
-	void onTranslateClick() {
-		presenter.translate(null, editTextTranslatable.getText().toString());
-	}
+	private void initTabLayout() {
 
-	@Override
-	public void setTranslatedText(final String text) {
-		textViewTranslated.setText(text);
+		TabAdapter tabAdapter = new TabAdapter.Builder(this, getSupportFragmentManager())
+			.addTab(TranslateFragment.newInstance(), R.string.fragmentTranslate_title)
+			.addTab(FavoritesFragment.newInstance(), R.string.fragmentFavorites_title)
+			.addTab(HistoryFragment.newInstance(), R.string.fragmentHistory_title)
+			.build();
+
+		viewPager.setAdapter(tabAdapter);
+		tabLayout.setupWithViewPager(viewPager);
+		tabAdapter.notifyDataSetChanged();
 	}
 }

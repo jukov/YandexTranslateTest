@@ -16,14 +16,16 @@
 		android:id="@+id/buttonTranslate"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_below="@id/editTextTranslatable"
-		android:text="@string/screen_main_buttonTranslate"/>
+		android:text="@string/screen_main_buttonTranslate"
+		android:layout_below="@+id/editTextTranslatable"
+		android:layout_alignParentStart="true"/>
 
 	<TextView
 		android:id="@+id/textViewTranslated"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_below="@id/buttonTranslate"
-		tools:text="Hi"/>
+		tools:text="Hi"
+		android:layout_below="@+id/buttonTranslate"
+		android:layout_alignParentStart="true"/>
 
 </RelativeLayout>

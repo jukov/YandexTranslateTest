@@ -9,7 +9,4 @@ import com.arellomobile.mvp.MvpView;
  */
 
 interface ScreenMainView extends MvpView {
-
-	void setTranslatedText(String text);
-
 }
