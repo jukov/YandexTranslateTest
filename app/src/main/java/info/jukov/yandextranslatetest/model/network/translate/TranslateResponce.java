@@ -1,4 +1,4 @@
-package info.jukov.yandextranslatetest.model.network;
+package info.jukov.yandextranslatetest.model.network.translate;
 
 import java.util.List;
 
@@ -13,9 +13,6 @@ public final class TranslateResponce {
 	private int code;
 	private String lang;
 	private List<String> text;
-
-	public TranslateResponce() {
-	}
 
 	public int getCode() {
 		return code;

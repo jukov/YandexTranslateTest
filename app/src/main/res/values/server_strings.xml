@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	
-	<string name="serverUrl">https://translate.yandex.net/api/v1.5/tr.json/</string>
+	<string name="translateUrl">https://translate.yandex.net/api/v1.5/tr.json/</string>
+	<string name="dictUrl">https://dictionary.yandex.net/api/v1/dicservice.json/</string>
 
-	<string name="apiKey">trnsl.1.1.20170314T144634Z.4a0f76c141f2bcff.0b18b649b2e1b68bb286d187840724c0dada8c6c</string>
+	<string name="apiKeyTranslate">trnsl.1.1.20170314T144634Z.4a0f76c141f2bcff.0b18b649b2e1b68bb286d187840724c0dada8c6c</string>
+	<string name="apiKeyDict">dict.1.1.20170316T144634Z.670120439279f1cd.17d3390458ddb94b60160f5c0bd88503614cedea</string>
 
 </resources>

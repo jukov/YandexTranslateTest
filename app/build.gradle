@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'org.greenrobot.greendao'
 
 android {
     compileSdkVersion 25
@@ -30,6 +31,7 @@ dependencies {
     def jacksonVersion = "2.0.1"
     def butterKnifeVersion = "8.5.1"
     def moxyVersion = "1.4.5"
+    def greenDaoVersion = "3.2.0"
 
     compile "com.squareup.retrofit2:retrofit:$retrofitVersion"
     compile "com.squareup.retrofit2:converter-jackson:$retrofitVersion"
@@ -46,4 +48,6 @@ dependencies {
     provided "com.arello-mobile:moxy-compiler:$moxyVersion"
     compile "com.arello-mobile:moxy-android:$moxyVersion"
     compile "com.arello-mobile:moxy-app-compat:$moxyVersion"
+
+    compile "org.greenrobot:greendao:$greenDaoVersion"
 }

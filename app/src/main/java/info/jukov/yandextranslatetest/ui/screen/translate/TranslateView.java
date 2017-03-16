@@ -12,4 +12,6 @@ public interface TranslateView extends MvpView {
 
 	void setTranslatedText(String text);
 
+	void setDictText(String text);
+
 }

@@ -37,6 +37,7 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 	@BindView(R.id.editTextTranslatable) EditText editTextTranslatable;
 	@BindView(R.id.buttonTranslate) Button buttonTranslate;
 	@BindView(R.id.textViewTranslated) TextView textViewTranslated;
+	@BindView(R.id.textViewDict) TextView textViewDict;
 
 	@Override
 	public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container,
@@ -55,5 +56,10 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 	@Override
 	public void setTranslatedText(final String text) {
 		textViewTranslated.setText(text);
+	}
+
+	@Override
+	public void setDictText(final String text) {
+		textViewDict.setText(text);
 	}
 }

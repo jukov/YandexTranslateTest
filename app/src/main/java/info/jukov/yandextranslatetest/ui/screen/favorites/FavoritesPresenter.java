@@ -11,5 +11,4 @@ import com.arellomobile.mvp.MvpPresenter;
 public class FavoritesPresenter extends MvpPresenter<FavoritesView> {
 
 
-
 }

@@ -1,4 +1,4 @@
-package info.jukov.yandextranslatetest.model.network;
+package info.jukov.yandextranslatetest.model.network.translate;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,7 +15,7 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
  * Time: 23:08
  */
 
-public final class Api {
+public final class TranslateApi {
 
 	private static YandexTranslateApi api;
 
@@ -23,15 +23,15 @@ public final class Api {
 
 	static {
 		api = new Retrofit.Builder()
-			.baseUrl(TranslateApp.getContext().getString(R.string.serverUrl))
+			.baseUrl(TranslateApp.getContext().getString(R.string.translateUrl))
 			.addConverterFactory(JacksonConverterFactory.create())
 			.build()
 			.create(YandexTranslateApi.class);
 
-		apiKey = TranslateApp.getContext().getString(R.string.apiKey);
+		apiKey = TranslateApp.getContext().getString(R.string.apiKeyTranslate);
 	}
 
-	private Api() {
+	private TranslateApi() {
 	}
 
 	public static <T> Sender use(@NonNull final Callback<T> callback,

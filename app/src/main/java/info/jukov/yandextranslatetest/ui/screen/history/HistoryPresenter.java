@@ -11,5 +11,4 @@ import com.arellomobile.mvp.MvpPresenter;
 public class HistoryPresenter extends MvpPresenter<HistoryView> {
 
 
-
 }
