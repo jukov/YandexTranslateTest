@@ -10,6 +10,9 @@ import info.jukov.yandextranslatetest.model.network.dict.LookupResponce;
 import info.jukov.yandextranslatetest.model.network.translate.TranslateApi;
 import info.jukov.yandextranslatetest.model.network.translate.TranslateResponce;
 import info.jukov.yandextranslatetest.ui.base.Progressable;
+import info.jukov.yandextranslatetest.util.Guard;
+import info.jukov.yandextranslatetest.util.MultiSetBoolean;
+import info.jukov.yandextranslatetest.util.MultiSetBoolean.OnValueTrueListener;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -21,9 +24,33 @@ import retrofit2.Response;
 @InjectViewState
 public class TranslatePresenter extends MvpPresenter<TranslateView> {
 
+	private enum Queries {
+		TRANSLATE,
+		DICT
+	}
+
+	private TranslateResponce translateResponce;
+	private LookupResponce lookupResponce;
+
+	private final MultiSetBoolean<Queries> allQueriesLoaded = new MultiSetBoolean<>(
+		Queries.values().length, new OnValueTrueListener() {
+		@Override
+		public void onTrue() {
+			if (lookupResponce.isEmpty()) {
+				getViewState().setTranslatedText(lookupResponce.toString());
+			} else {
+				getViewState().setTranslatedText(translateResponce.getText().toString());
+			}
+		}
+	});
+
 	void translate(@NonNull final String lang, @NonNull final String text) {
-		TranslateApi.use(new TranslateCallback(null), null).translate("en-ru", text);
-		DictApi.use(new DictCallback(null), null).lookup("en-ru", text, null, null);
+		Guard.checkNotNull(lang, "null == lang");
+		Guard.checkNotNull(text, "null == text");
+
+		allQueriesLoaded.reset();
+		TranslateApi.use(new TranslateCallback(null), null).translate(lang, text);
+		DictApi.use(new DictCallback(null), null).lookup(lang, text, null, null);
 	}
 
 	private final class TranslateCallback extends CallbackWithProgress<TranslateResponce> {
@@ -37,13 +64,16 @@ public class TranslatePresenter extends MvpPresenter<TranslateView> {
 							   final Response<TranslateResponce> response) {
 			super.onResponse(call, response);
 			if (response.body() != null) {
-				getViewState().setTranslatedText(response.body().getText().toString());
+				translateResponce = response.body();
+				allQueriesLoaded.set(Queries.TRANSLATE);
 			}
 		}
 
 		@Override
 		public void onFailure(final Call<TranslateResponce> call, final Throwable t) {
 			super.onFailure(call, t);
+			allQueriesLoaded.set(Queries.DICT);
+
 		}
 	}
 
@@ -58,13 +88,15 @@ public class TranslatePresenter extends MvpPresenter<TranslateView> {
 							   final Response<LookupResponce> response) {
 			super.onResponse(call, response);
 			if (response.body() != null) {
-				getViewState().setTranslatedText(response.body().toString());
+				lookupResponce = response.body();
+				allQueriesLoaded.set(Queries.DICT);
 			}
 		}
 
 		@Override
 		public void onFailure(final Call<LookupResponce> call, final Throwable t) {
 			super.onFailure(call, t);
+			allQueriesLoaded.set(Queries.DICT);
 		}
 	}
 

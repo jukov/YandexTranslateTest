@@ -32,6 +32,10 @@ public final class LookupResponce {
 		this.def = def;
 	}
 
+	public boolean isEmpty() {
+		return def == null || def.size() == 0;
+	}
+
 	@Override
 	public String toString() {
 		return "LookupResponce{" +

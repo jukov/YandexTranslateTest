@@ -50,7 +50,7 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 
 	@OnClick(R.id.buttonTranslate)
 	void onTranslateClick() {
-		presenter.translate(null, editTextTranslatable.getText().toString());
+		presenter.translate("en-ru", editTextTranslatable.getText().toString());
 	}
 
 	@Override

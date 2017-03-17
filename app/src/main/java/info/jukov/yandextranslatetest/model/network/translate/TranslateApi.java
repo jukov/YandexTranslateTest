@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import info.jukov.yandextranslatetest.R;
 import info.jukov.yandextranslatetest.TranslateApp;
 import info.jukov.yandextranslatetest.ui.base.Progressable;
+import info.jukov.yandextranslatetest.util.Guard;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
@@ -36,6 +37,8 @@ public final class TranslateApi {
 
 	public static <T> Sender use(@NonNull final Callback<T> callback,
 								 @Nullable final Progressable progressable) {
+		Guard.checkNotNull(callback, "null == callback");
+		
 		return new Sender(callback, progressable);
 	}
 
@@ -58,6 +61,9 @@ public final class TranslateApi {
 		}
 
 		public void translate(@NonNull final String lang, @NonNull final String text) {
+			Guard.checkNotNull(lang, "null == lang");
+			Guard.checkNotNull(text, "null == text");
+			
 			api.translate(apiKey, lang, text).enqueue(callback);
 			startProgress();
 		}

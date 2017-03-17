@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import info.jukov.yandextranslatetest.R;
 import info.jukov.yandextranslatetest.TranslateApp;
 import info.jukov.yandextranslatetest.ui.base.Progressable;
+import info.jukov.yandextranslatetest.util.Guard;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
@@ -36,6 +37,8 @@ public final class DictApi {
 
 	public static <T> DictApi.Sender use(@NonNull final Callback<T> callback,
 										 @Nullable final Progressable progressable) {
+		Guard.checkNotNull(callback, "null == callback");
+		
 		return new DictApi.Sender(callback, progressable);
 	}
 
@@ -59,6 +62,9 @@ public final class DictApi {
 
 		public void lookup(final String lang, final String text, @Nullable final String ui,
 							  @Nullable final String flags) {
+			Guard.checkNotNull(lang, "null == lang");
+			Guard.checkNotNull(text, "null == text");
+
 			api.lookup(apiKey, lang, text, ui, flags).enqueue(callback);
 			startProgress();
 		}

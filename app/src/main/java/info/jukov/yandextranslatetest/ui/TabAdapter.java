@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import com.arellomobile.mvp.MvpAppCompatFragment;
+import info.jukov.yandextranslatetest.util.Guard;
 import java.util.ArrayList;
 
 /**
@@ -20,8 +21,10 @@ public class TabAdapter extends FragmentStatePagerAdapter {
 
 	private ArrayList<TabWrapper> tabs;
 
-	private TabAdapter(final FragmentManager fm) {
-		super(fm);
+	private TabAdapter(final FragmentManager fragmentManager) {
+		super(fragmentManager);
+		Guard.checkNotNull(fragmentManager, "null == fragmentManager");
+
 		tabs = new ArrayList<>(EXPECTED_TAB_COUNT);
 	}
 

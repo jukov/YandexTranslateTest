@@ -13,6 +13,7 @@ public final class Log {
 	private final String tag;
 
 	public Log(@NonNull final Class clazz) {
+		Guard.checkNotNull(clazz, "null == class");
 		tag = clazz.getName();
 	}
 
