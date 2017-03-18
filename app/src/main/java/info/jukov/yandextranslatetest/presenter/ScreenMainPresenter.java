@@ -1,4 +1,4 @@
-package info.jukov.yandextranslatetest.ui.screen.main;
+package info.jukov.yandextranslatetest.presenter;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
@@ -9,6 +9,6 @@ import com.arellomobile.mvp.MvpPresenter;
  * Time: 21:48
  */
 @InjectViewState
-public class ScreenMainPresenter extends MvpPresenter<ScreenMainView> {
+public final class ScreenMainPresenter extends MvpPresenter<ScreenMainView> {
 
 }

@@ -15,7 +15,7 @@ import java.util.ArrayList;
  * Time: 20:27
  */
 
-public class TabAdapter extends FragmentStatePagerAdapter {
+public final class TabAdapter extends FragmentStatePagerAdapter {
 
 	private static final int EXPECTED_TAB_COUNT = 3;
 

@@ -1,4 +1,4 @@
-package info.jukov.yandextranslatetest.ui.screen.main;
+package info.jukov.yandextranslatetest.presenter;
 
 import com.arellomobile.mvp.MvpView;
 
@@ -8,6 +8,6 @@ import com.arellomobile.mvp.MvpView;
  * Time: 21:48
  */
 
-interface ScreenMainView extends MvpView {
+public interface ScreenMainView extends MvpView {
 
 }

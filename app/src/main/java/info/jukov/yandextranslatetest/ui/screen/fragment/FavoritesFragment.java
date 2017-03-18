@@ -1,4 +1,4 @@
-package info.jukov.yandextranslatetest.ui.screen.favorites;
+package info.jukov.yandextranslatetest.ui.screen.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

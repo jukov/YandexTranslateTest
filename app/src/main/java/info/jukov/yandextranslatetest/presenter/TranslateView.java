@@ -1,4 +1,4 @@
-package info.jukov.yandextranslatetest.ui.screen.translate;
+package info.jukov.yandextranslatetest.presenter;
 
 import com.arellomobile.mvp.MvpView;
 

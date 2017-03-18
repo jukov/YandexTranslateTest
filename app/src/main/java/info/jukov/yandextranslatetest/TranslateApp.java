@@ -1,9 +1,14 @@
 package info.jukov.yandextranslatetest;
 
 import android.app.Application;
-import android.content.Context;
-import info.jukov.yandextranslatetest.model.dao.DaoMaster;
-import info.jukov.yandextranslatetest.model.dao.DaoSession;
+import info.jukov.yandextranslatetest.model.component.AppComponent;
+import info.jukov.yandextranslatetest.model.component.DaggerAppComponent;
+import info.jukov.yandextranslatetest.model.module.ApiModule;
+import info.jukov.yandextranslatetest.model.module.ContextModule;
+import info.jukov.yandextranslatetest.model.network.dict.DictApi;
+import info.jukov.yandextranslatetest.model.network.translate.TranslateApi;
+import info.jukov.yandextranslatetest.model.storage.dao.DaoMaster;
+import info.jukov.yandextranslatetest.model.storage.dao.DaoSession;
 import org.greenrobot.greendao.database.Database;
 
 /**
@@ -12,31 +17,38 @@ import org.greenrobot.greendao.database.Database;
  * Time: 23:06
  */
 
-public class TranslateApp extends Application {
+public final class TranslateApp extends Application {
 
 	private static final String DATABASE_NAME = "words.db";
 
-	private static Context context;
+	private static AppComponent appComponent;
 
 	private static DaoSession daoSession;
 
-	public static Context getContext() {
-		return context;
-	}
-
 	public static DaoSession getDaoSession() {
 		return daoSession;
+	}
+
+	public static AppComponent getAppComponent() {
+		return appComponent;
 	}
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
 
-		context = getApplicationContext();
+		appComponent = buildComponent();
 
 		DaoMaster.DevOpenHelper devOpenHelper = new DaoMaster.DevOpenHelper(this, DATABASE_NAME);
 		Database database = devOpenHelper.getReadableDb();
 		daoSession = new DaoMaster(database).newSession();
+	}
+
+	private AppComponent buildComponent() {
+		return DaggerAppComponent.builder()
+			.contextModule(new ContextModule(this))
+			.apiModule(new ApiModule(new DictApi(this), new TranslateApi(this)))
+			.build();
 	}
 
 }

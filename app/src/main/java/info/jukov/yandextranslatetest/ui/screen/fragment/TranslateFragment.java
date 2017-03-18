@@ -1,4 +1,4 @@
-package info.jukov.yandextranslatetest.ui.screen.translate;
+package info.jukov.yandextranslatetest.ui.screen.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,6 +14,8 @@ import butterknife.OnClick;
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import info.jukov.yandextranslatetest.R;
+import info.jukov.yandextranslatetest.presenter.TranslatePresenter;
+import info.jukov.yandextranslatetest.presenter.TranslateView;
 
 /**
  * User: jukov

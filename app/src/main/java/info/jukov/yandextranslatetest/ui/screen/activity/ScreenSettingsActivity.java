@@ -1,4 +1,4 @@
-package info.jukov.yandextranslatetest.ui.screen.settings;
+package info.jukov.yandextranslatetest.ui.screen.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import info.jukov.yandextranslatetest.R;
+import info.jukov.yandextranslatetest.ui.screen.fragment.SettingsFragment;
 
 /**
  * User: jukov
@@ -17,7 +18,7 @@ import info.jukov.yandextranslatetest.R;
  * Time: 7:17
  */
 
-public class ScreenSettingsActivity extends AppCompatActivity {
+public final class ScreenSettingsActivity extends AppCompatActivity {
 
 	public static void start(final Context context) {
 		Intent starter = new Intent(context, ScreenSettingsActivity.class);
