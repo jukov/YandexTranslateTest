@@ -28,4 +28,7 @@ interface YandexDictionaryApi {
 								@Field("text") String text, @Query("ui") String ui,
 								@Query("flags") String flags);
 
+	//TODO: Family filter
+	//TODO:Error code processing
+
 }

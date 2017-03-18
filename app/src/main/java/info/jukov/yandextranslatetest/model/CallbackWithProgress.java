@@ -13,7 +13,7 @@ import retrofit2.Response;
 
 public class CallbackWithProgress<T> extends CallbackWithLog<T> {
 
-	private Progressable progressable;
+	private final Progressable progressable;
 
 	public CallbackWithProgress(@Nullable final Progressable progressable) {
 		this.progressable = progressable;

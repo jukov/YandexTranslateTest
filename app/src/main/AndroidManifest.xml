@@ -1,4 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	package="info.jukov.yandextranslatetest">
 
 	<uses-permission android:name="android.permission.INTERNET"/>
@@ -19,6 +20,8 @@
 				<category android:name="android.intent.category.LAUNCHER"/>
 			</intent-filter>
 		</activity>
+
+		<activity android:name=".ui.screen.settings.ScreenSettingsActivity"/>
 
 	</application>
 

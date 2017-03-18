@@ -2,6 +2,7 @@ package info.jukov.yandextranslatetest.model.network.translate;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.preference.PreferenceManager;
 import info.jukov.yandextranslatetest.R;
 import info.jukov.yandextranslatetest.TranslateApp;
 import info.jukov.yandextranslatetest.ui.base.Progressable;
@@ -18,9 +19,16 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 
 public final class TranslateApi {
 
-	private static YandexTranslateApi api;
+	private static final YandexTranslateApi api;
 
-	private static String apiKey;
+	private static final String apiKey;
+
+	public static <T> Sender use(@NonNull final Callback<T> callback,
+								 @Nullable final Progressable progressable) {
+		Guard.checkNotNull(callback, "null == callback");
+
+		return new Sender(callback, progressable);
+	}
 
 	static {
 		api = new Retrofit.Builder()
@@ -29,24 +37,20 @@ public final class TranslateApi {
 			.build()
 			.create(YandexTranslateApi.class);
 
-		apiKey = TranslateApp.getContext().getString(R.string.apiKeyTranslate);
+		final String preferenceKey = TranslateApp.getContext()
+			.getString(R.string.preferenceKey_translateApiKey);
+		apiKey = PreferenceManager.getDefaultSharedPreferences(TranslateApp.getContext())
+			.getString(preferenceKey, "");
 	}
 
 	private TranslateApi() {
 	}
 
-	public static <T> Sender use(@NonNull final Callback<T> callback,
-								 @Nullable final Progressable progressable) {
-		Guard.checkNotNull(callback, "null == callback");
-		
-		return new Sender(callback, progressable);
-	}
-
 	public static class Sender<T> {
 
-		private Callback callback;
+		private final Callback callback;
 
-		@Nullable private Progressable progressable;
+		@Nullable private final Progressable progressable;
 
 		private Sender(@NonNull final Callback<T> callback,
 					   @Nullable final Progressable progressable) {
@@ -63,7 +67,7 @@ public final class TranslateApi {
 		public void translate(@NonNull final String lang, @NonNull final String text) {
 			Guard.checkNotNull(lang, "null == lang");
 			Guard.checkNotNull(text, "null == text");
-			
+
 			api.translate(apiKey, lang, text).enqueue(callback);
 			startProgress();
 		}

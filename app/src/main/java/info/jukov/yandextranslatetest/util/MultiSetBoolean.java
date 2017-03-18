@@ -14,7 +14,7 @@ public final class MultiSetBoolean<E extends Enum> implements Serializable {
 	private final int capacity;
 	private final BitSet value;
 
-	private transient OnValueTrueListener onValueTrueListener;
+	private final transient OnValueTrueListener onValueTrueListener;
 
 	public MultiSetBoolean(final int capacity, @NonNull final OnValueTrueListener onValueTrueListener) {
 		Guard.checkNotNull(onValueTrueListener, "null == onValueTrueListener");

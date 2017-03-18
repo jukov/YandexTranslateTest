@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<PreferenceCategory
+		android:title="@string/activityPreference_apiKeysCategory">
+
+		<EditTextPreference
+			android:defaultValue=""
+			android:key="editTextPreference_translateApiKey"
+			android:selectAllOnFocus="true"
+			android:singleLine="true"
+			android:title="@string/activityPreference_translateApiKey"/>
+
+		<EditTextPreference
+			android:defaultValue=""
+			android:key="editTextPreference_dictApiKey"
+			android:selectAllOnFocus="true"
+			android:singleLine="true"
+			android:title="@string/activityPreference_dictApiKey"/>
+	</PreferenceCategory>
+</PreferenceScreen>

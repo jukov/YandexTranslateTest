@@ -19,7 +19,7 @@ public class TabAdapter extends FragmentStatePagerAdapter {
 
 	private static final int EXPECTED_TAB_COUNT = 3;
 
-	private ArrayList<TabWrapper> tabs;
+	private final ArrayList<TabWrapper> tabs;
 
 	private TabAdapter(final FragmentManager fragmentManager) {
 		super(fragmentManager);
@@ -45,9 +45,9 @@ public class TabAdapter extends FragmentStatePagerAdapter {
 
 	public static class Builder {
 
-		private TabAdapter tabAdapter;
+		private final TabAdapter tabAdapter;
 
-		private Context context;
+		private final Context context;
 
 		public Builder(final Context context, final FragmentManager fm) {
 			this.context = context;
@@ -67,8 +67,8 @@ public class TabAdapter extends FragmentStatePagerAdapter {
 
 	private static class TabWrapper {
 
-		@StringRes private String title;
-		private MvpAppCompatFragment fragment;
+		@StringRes private final String title;
+		private final MvpAppCompatFragment fragment;
 
 		private TabWrapper(final MvpAppCompatFragment fragment, @StringRes final String title) {
 			this.fragment = fragment;

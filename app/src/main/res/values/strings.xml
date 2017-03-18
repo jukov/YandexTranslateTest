@@ -2,8 +2,17 @@
 	<string name="app_name">YandexTranslateTest</string>
 	<string name="screen_main_buttonTranslate">Translate</string>
 
+	<!--Screen Titles-->
 	<string name="fragmentTranslate_title">Translate</string>
 	<string name="fragmentHistory_title">History</string>
 	<string name="fragmentFavorites_title">Favorites</string>
 
+	<!--Toolbar Menu-->
+	<string name="toolbarMenu_settings">Settings</string>
+	<string name="toolbarMenu_license">License information</string>
+
+	<!--Preferences-->
+	<string name="activityPreference_apiKeysCategory">API keys</string>
+	<string name="activityPreference_translateApiKey">Yandex.Translate API key</string>
+	<string name="activityPreference_dictApiKey">Yandex.Dictionary API key</string>
 </resources>

@@ -36,7 +36,7 @@ public class TranslatePresenter extends MvpPresenter<TranslateView> {
 		Queries.values().length, new OnValueTrueListener() {
 		@Override
 		public void onTrue() {
-			if (lookupResponce.isEmpty()) {
+			if (!lookupResponce.isEmpty()) {
 				getViewState().setTranslatedText(lookupResponce.toString());
 			} else {
 				getViewState().setTranslatedText(translateResponce.getText().toString());

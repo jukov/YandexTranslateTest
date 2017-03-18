@@ -14,7 +14,7 @@ import retrofit2.Response;
 
 public class CallbackWithLog<T> implements Callback<T> {
 
-	private Log log;
+	private final Log log;
 
 	private String errorBody;
 
