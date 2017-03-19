@@ -1,6 +1,6 @@
 package info.jukov.yandextranslatetest.model.network.dict;
 
-import java.util.List;
+import java.util.Set;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -20,7 +20,7 @@ interface YandexDictionaryApi {
 	String LOOKUP = "lookup";
 
 	@GET(GET_LANGS)
-	Call<List<String>> getLangs(@Query("key") String key);
+	Call<Set<String>> getLangs(@Query("key") String key);
 
 	@FormUrlEncoded
 	@POST(LOOKUP)

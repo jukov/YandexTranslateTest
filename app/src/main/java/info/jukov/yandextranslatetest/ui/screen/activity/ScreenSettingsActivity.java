@@ -1,6 +1,5 @@
 package info.jukov.yandextranslatetest.ui.screen.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -20,12 +19,16 @@ import info.jukov.yandextranslatetest.ui.screen.fragment.SettingsFragment;
 
 public final class ScreenSettingsActivity extends AppCompatActivity {
 
-	public static void start(final Context context) {
-		Intent starter = new Intent(context, ScreenSettingsActivity.class);
-		context.startActivity(starter);
+	public static final int REQUEST_CODE_RESTART_AFTER_API_KEY_CHANGE = 655;
+
+	public static void start(final AppCompatActivity activity) {
+		Intent starter = new Intent(activity, ScreenSettingsActivity.class);
+		activity.startActivityForResult(starter, REQUEST_CODE_RESTART_AFTER_API_KEY_CHANGE);
 	}
 
 	@BindView(R.id.toolbar) Toolbar toolbar;
+
+	private SettingsFragment settingsFragment;
 
 	@Override
 	protected void onCreate(@Nullable final Bundle savedInstanceState) {
@@ -38,7 +41,7 @@ public final class ScreenSettingsActivity extends AppCompatActivity {
 			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		}
 
-		SettingsFragment settingsFragment = SettingsFragment.newInstance();
+		settingsFragment = SettingsFragment.newInstance();
 
 		final FragmentTransaction fragmentTransaction = getSupportFragmentManager()
 			.beginTransaction();
@@ -49,6 +52,11 @@ public final class ScreenSettingsActivity extends AppCompatActivity {
 
 	@Override
 	public boolean onSupportNavigateUp() {
+		if (settingsFragment.isApiKeysChanged()) {
+			setResult(RESULT_OK);
+		} else {
+			setResult(RESULT_CANCELED);
+		}
 		finish();
 		return true;
 	}

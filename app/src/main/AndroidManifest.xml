@@ -20,7 +20,8 @@
 			</intent-filter>
 		</activity>
 
-		<activity android:name=".ui.screen.activity.ScreenMainActivity"/>
+		<activity android:name=".ui.screen.activity.ScreenMainActivity"
+			android:launchMode="singleTop"/>
 
 		<activity android:name=".ui.screen.activity.ScreenSettingsActivity"/>
 

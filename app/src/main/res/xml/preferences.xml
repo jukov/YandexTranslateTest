@@ -2,20 +2,34 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
 	<PreferenceCategory
-		android:title="@string/activityPreference_apiKeysCategory">
+		android:title="@string/activityPreference_apiKeysCategory_title">
 
 		<EditTextPreference
 			android:defaultValue=""
 			android:key="@string/preferenceKey_translateApiKey"
 			android:selectAllOnFocus="true"
 			android:singleLine="true"
-			android:title="@string/activityPreference_translateApiKey"/>
+			android:title="@string/activityPreference_translateApiKey_title"/>
+
+		<Preference
+			android:title="@string/activityPreference_getTranslateKey_title"
+			android:summary="@string/activityPreference_getKey_summary">
+			<intent android:action="android.intent.action.VIEW"
+				android:data="@string/activityPreference_getTranslateKeyUrl"/>
+		</Preference>
 
 		<EditTextPreference
 			android:defaultValue=""
 			android:key="@string/preferenceKey_dictApiKey"
 			android:selectAllOnFocus="true"
 			android:singleLine="true"
-			android:title="@string/activityPreference_dictApiKey"/>
+			android:title="@string/activityPreference_dictApiKey_title"/>
+
+		<Preference
+			android:title="@string/activityPreference_getDictKey_title"
+			android:summary="@string/activityPreference_getKey_summary">
+			<intent android:action="android.intent.action.VIEW"
+				android:data="@string/activityPreference_getDictKeyUrl"/>
+		</Preference>
 	</PreferenceCategory>
 </PreferenceScreen>

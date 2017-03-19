@@ -1,7 +1,7 @@
 package info.jukov.yandextranslatetest.model.network.translate;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * User: jukov
@@ -11,14 +11,14 @@ import java.util.Map;
 
 public final class GetLangsResponce {
 
-	List<String> dirs;
+	Set<String> dirs;
 	Map<String, String> langs;
 
-	public List<String> getDirs() {
+	public Set<String> getDirs() {
 		return dirs;
 	}
 
-	public void setDirs(final List<String> dirs) {
+	public void setDirs(final Set<String> dirs) {
 		this.dirs = dirs;
 	}
 

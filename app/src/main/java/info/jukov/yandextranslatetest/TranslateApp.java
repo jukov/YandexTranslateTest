@@ -19,7 +19,7 @@ import org.greenrobot.greendao.database.Database;
 
 public final class TranslateApp extends Application {
 
-	private static final String DATABASE_NAME = "words.db";
+	private static final String DATABASE_NAME = "translations-database";
 
 	private static AppComponent appComponent;
 
@@ -39,9 +39,7 @@ public final class TranslateApp extends Application {
 
 		appComponent = buildComponent();
 
-		DaoMaster.DevOpenHelper devOpenHelper = new DaoMaster.DevOpenHelper(this, DATABASE_NAME);
-		Database database = devOpenHelper.getReadableDb();
-		daoSession = new DaoMaster(database).newSession();
+		daoSession = openDatabase();
 	}
 
 	private AppComponent buildComponent() {
@@ -49,6 +47,12 @@ public final class TranslateApp extends Application {
 			.contextModule(new ContextModule(this))
 			.apiModule(new ApiModule(new DictApi(this), new TranslateApi(this)))
 			.build();
+	}
+
+	private DaoSession openDatabase() {
+		DaoMaster.DevOpenHelper devOpenHelper = new DaoMaster.DevOpenHelper(this, DATABASE_NAME);
+		Database database = devOpenHelper.getWritableDb();
+		return new DaoMaster(database).newSession();
 	}
 
 }

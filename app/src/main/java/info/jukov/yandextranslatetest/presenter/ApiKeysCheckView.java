@@ -5,12 +5,12 @@ import com.arellomobile.mvp.MvpView;
 /**
  * User: jukov
  * Date: 18.03.2017
- * Time: 11:47
+ * Time: 21:03
  */
 
-public interface LangsLoaderView extends MvpView {
+public interface ApiKeysCheckView extends MvpView {
 
-	void onLoadFinished();
+	void onKeysEntered();
 
-	void onLoadFailed(final int errorCode);
+	void onKeysNotEntered();
 }

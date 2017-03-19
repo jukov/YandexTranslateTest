@@ -30,10 +30,17 @@ public final class LangPreferences {
 		return context.getApplicationContext().getSharedPreferences(FILE, Context.MODE_PRIVATE);
 	}
 
+	/**
+	 * Стирает все данные о поддерживаемых языках.
+	 */
 	public static void clear(final Context context) {
 		getPreferences(context).edit().clear().commit();
 	}
 
+	/**
+	 * Записывает в {@link SharedPreferences} названия поддерживаемых языков
+	 * в виде пар ключ-значение, где ключом является двухбуквенный код языка.
+	 * */
 	public static void putReadebleLangWords(@NonNull final Context context,
 											@NonNull final Map<String, String> words) {
 		Guard.checkNotNull(words, "null == words");
@@ -47,6 +54,11 @@ public final class LangPreferences {
 		editor.commit();
 	}
 
+	/**
+	 * Возвращает название поддерживаемого языка.
+	 *
+	 * @param code - двухбуквенный код языка
+	 * */
 	public static String getReadableWord(@NonNull final Context context,
 										 @NonNull final String code) {
 		Guard.checkNotNull(code, "null == code");
@@ -54,6 +66,9 @@ public final class LangPreferences {
 		return getPreferences(context).getString(code, null);
 	}
 
+	/**
+	 * Записывает в {@link SharedPreferences} пары языков, которые поддерживаются Api словаря.
+	 * */
 	public static void putDictLangs(@NonNull final Context context,
 									@NonNull final Set<String> langs) {
 		Guard.checkNotNull(langs, "null == langs");
@@ -61,10 +76,16 @@ public final class LangPreferences {
 		getPreferences(context).edit().putStringSet(DICT_LANGS, langs).commit();
 	}
 
+	/**
+	 * Возвращает пары языков, которые поддерживаются Api словаря.
+	 * */
 	public static Set<String> getDictLangs(@NonNull final Context context) {
 		return getPreferences(context).getStringSet(DICT_LANGS, null);
 	}
 
+	/**
+	 * Записывает в {@link SharedPreferences} пары языков, которые поддерживаются Api переводчика.
+	 * */
 	public static void putTranslateLangs(@NonNull final Context context,
 										 @NonNull final Set<String> langs) {
 		Guard.checkNotNull(langs, "null == langs");
@@ -72,6 +93,9 @@ public final class LangPreferences {
 		getPreferences(context).edit().putStringSet(TRANSLATE_LANGS, langs).commit();
 	}
 
+	/**
+	 * Возвращает пары языков, которые поддерживаются Api переводчика.
+	 * */
 	public static Set<String> getTranslateLangs(@NonNull final Context context) {
 		return getPreferences(context).getStringSet(TRANSLATE_LANGS, null);
 	}

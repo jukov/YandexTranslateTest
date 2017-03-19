@@ -546,7 +546,7 @@
       <option name="questionString" value="is,can,has,should,could,will,shall,check,contains,equals,add,put,remove,startsWith,endsWith" />
     </inspection_tool>
     <inspection_tool class="BooleanParameter" enabled="false" level="ERROR" enabled_by_default="false" />
-    <inspection_tool class="BooleanVariableAlwaysNegated" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="BooleanVariableAlwaysNegated" enabled="false" level="ERROR" enabled_by_default="false" />
     <inspection_tool class="BoundFieldAssignment" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="BoxingBoxedValue" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="BpmnConfigDomInspection" enabled="true" level="ERROR" enabled_by_default="true" />
@@ -1836,7 +1836,7 @@
     <inspection_tool class="MethodNameSameAsParentName" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="MethodNameWithMistakes" enabled="false" level="INFO" enabled_by_default="true" />
     <inspection_tool class="MethodNamesDifferOnlyByCase" enabled="false" level="WARNING" enabled_by_default="false" />
-    <inspection_tool class="MethodOnlyUsedFromInnerClass" enabled="true" level="ERROR" enabled_by_default="true">
+    <inspection_tool class="MethodOnlyUsedFromInnerClass" enabled="false" level="ERROR" enabled_by_default="false">
       <option name="ignoreMethodsAccessedFromAnonymousClass" value="true" />
       <option name="ignoreStaticMethodsFromNonStaticInnerClass" value="false" />
       <option name="onlyReportStaticMethods" value="false" />
