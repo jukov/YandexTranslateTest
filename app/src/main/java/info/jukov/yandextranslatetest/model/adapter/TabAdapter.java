@@ -1,4 +1,4 @@
-package info.jukov.yandextranslatetest.ui;
+package info.jukov.yandextranslatetest.model.adapter;
 
 import android.content.Context;
 import android.support.annotation.StringRes;

@@ -23,7 +23,7 @@ import info.jukov.yandextranslatetest.R;
 import info.jukov.yandextranslatetest.model.network.ErrorCodes;
 import info.jukov.yandextranslatetest.presenter.ScreenMainPresenter;
 import info.jukov.yandextranslatetest.presenter.ScreenMainView;
-import info.jukov.yandextranslatetest.ui.TabAdapter;
+import info.jukov.yandextranslatetest.model.adapter.TabAdapter;
 import info.jukov.yandextranslatetest.ui.screen.fragment.FavoritesFragment;
 import info.jukov.yandextranslatetest.ui.screen.fragment.HistoryFragment;
 import info.jukov.yandextranslatetest.ui.screen.fragment.TranslateFragment;

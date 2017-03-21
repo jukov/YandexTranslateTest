@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<dimen name="margin_all_horizontal">16dp</dimen>
+
+	<dimen name="textsize_subheading">16sp</dimen>
+	<dimen name="textsize_body">14sp</dimen>
+
+	<dimen name="height_recycler_history">72dp</dimen>
+
+	<dimen name="height_spinner_lang">48dp</dimen>
+
+	<dimen name="height_divider">1dp</dimen>
+
+</resources>

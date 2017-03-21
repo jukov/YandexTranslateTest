@@ -17,6 +17,12 @@ public final class Guard {
 		}
 	}
 
+	public static void checkPreCondition(final boolean condition, final String onFailMessage) {
+		if (false == condition) {
+			throw new IllegalStateException(onFailMessage);
+		}
+	}
+
 	public static void checkNotNull(final Object target, final String onFailMessage) {
 		if (null == target) {
 			throw new IllegalStateException(onFailMessage);

@@ -17,4 +17,20 @@
 		<item name="android:background">@color/colorPrimary</item>
 	</style>
 
+	<style name="TextSubheading">
+		<item name="android:textSize">@dimen/textsize_subheading</item>
+		<item name="android:textColor">@color/text_all_black87</item>
+	</style>
+
+	<style name="TextBody">
+		<item name="android:textSize">@dimen/textsize_body</item>
+		<item name="android:textColor">@color/text_all_black54</item>
+	</style>
+
+	<style name="Divider">
+		<item name="android:layout_width">match_parent</item>
+		<item name="android:layout_height">@dimen/height_divider</item>
+		<item name="android:background">@color/divider_black12</item>
+	</style>
+
 </resources>
