@@ -1,5 +1,6 @@
 package info.jukov.yandextranslatetest.ui.screen.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -17,12 +18,16 @@ import butterknife.OnClick;
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import info.jukov.yandextranslatetest.R;
-import info.jukov.yandextranslatetest.model.adapter.LanguageSpinnerAdapter;
+import info.jukov.yandextranslatetest.model.adapter.LanguageAdapter;
 import info.jukov.yandextranslatetest.model.storage.Language;
+import info.jukov.yandextranslatetest.model.storage.Translation;
 import info.jukov.yandextranslatetest.model.storage.preferences.LangPreferences;
 import info.jukov.yandextranslatetest.presenter.TranslatePresenter;
 import info.jukov.yandextranslatetest.presenter.TranslateView;
+import info.jukov.yandextranslatetest.util.Log;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * User: jukov
@@ -32,7 +37,9 @@ import java.util.List;
 
 public final class TranslateFragment extends MvpAppCompatFragment implements TranslateView {
 
-	private static final String LANG_SELIMITER = "-";
+	private static final Log LOG = new Log(TranslateFragment.class);
+
+	private static final String LANG_DELIMITER = "-";
 
 	public static TranslateFragment newInstance() {
 
@@ -52,11 +59,10 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 	@BindView(R.id.textViewTranslated) TextView textViewTranslated;
 	@BindView(R.id.textViewDict) TextView textViewDict;
 
-	private LanguageSpinnerAdapter inputSpinnerAdapter;
-	private LanguageSpinnerAdapter outputSpinnerAdapter;
+	private LanguageAdapter inputSpinnerAdapter;
+	private LanguageAdapter outputSpinnerAdapter;
 
-	private int lastInputLangPosition = 0;
-	private int lastOutputLangPosition = 0;
+	private OnTextTranslatedListener onTextTranslatedListener;
 
 	@Override
 	public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container,
@@ -64,23 +70,34 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 		View view = inflater.inflate(R.layout.fragment_translate, null);
 		ButterKnife.bind(this, view);
 
+		initAdapters();
 		initSpinners();
 
 		return view;
 	}
 
-	private void initSpinners() {
+	@Override
+	public void onPause() {
+		super.onPause();
 
-		final List<Language> languages = LangPreferences.getReadableWords(getContext());
+		LangPreferences
+			.putMostUsedInputLangs(getContext(), inputSpinnerAdapter.getMostUsedLanguages());
+		LangPreferences
+			.putMostUsedOutputLangs(getContext(), outputSpinnerAdapter.getMostUsedLanguages());
+	}
 
-		if (languages == null) {
-			setContentEnabled(false);
-			return;
+	@Override
+	public void onAttach(final Context context) {
+		super.onAttach(context);
+
+		if (context instanceof OnTextTranslatedListener) {
+			onTextTranslatedListener = (OnTextTranslatedListener) context;
+		} else {
+			LOG.error("Fragment attached to unexpected activity");
 		}
+	}
 
-		inputSpinnerAdapter = new LanguageSpinnerAdapter(getContext(), languages);
-		outputSpinnerAdapter = new LanguageSpinnerAdapter(getContext(), languages);
-
+	private void initSpinners() {
 		spinnerInputLanguage.setAdapter(inputSpinnerAdapter);
 		spinnerOutputLanguage.setAdapter(outputSpinnerAdapter);
 
@@ -88,7 +105,7 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 			@Override
 			public void onItemSelected(final AdapterView<?> parent, final View view,
 									   final int position, final long id) {
-				if (0 != position) {
+				if (position != 0) {
 					inputSpinnerAdapter.pinItemToTop(position);
 					spinnerInputLanguage.setSelection(0);
 				}
@@ -104,9 +121,8 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 			@Override
 			public void onItemSelected(final AdapterView<?> parent, final View view,
 									   final int position, final long id) {
-				if (lastOutputLangPosition != position) {
+				if (position != 0) {
 					outputSpinnerAdapter.pinItemToTop(position);
-					lastOutputLangPosition = position;
 					spinnerOutputLanguage.setSelection(0);
 				}
 			}
@@ -118,19 +134,66 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 		});
 	}
 
+	private void initAdapters() {
+		final Set<Language> inputLangs = LangPreferences.getReadableWords(getContext());
+
+		if (inputLangs == null) {
+			setContentEnabled(false);
+			return;
+		}
+
+		final Set<Language> outputLangs = new HashSet<>(inputLangs);
+
+		final Set<Language> mostUsedInputLangs = LangPreferences
+			.getMostUsedInputLangs(getContext());
+		final Set<Language> mostUsedOutputLangs = LangPreferences
+			.getMostUsedOutputLangs(getContext());
+
+		if (mostUsedInputLangs != null && mostUsedInputLangs.size() > 0) {
+			inputLangs.removeAll(mostUsedInputLangs);
+			inputLangs.addAll(mostUsedInputLangs);
+		}
+
+		if (mostUsedOutputLangs != null && mostUsedOutputLangs.size() > 0) {
+			outputLangs.removeAll(mostUsedOutputLangs);
+			outputLangs.addAll(mostUsedOutputLangs);
+		}
+
+		inputSpinnerAdapter = new LanguageAdapter(getContext(), inputLangs);
+		outputSpinnerAdapter = new LanguageAdapter(getContext(), outputLangs);
+	}
+
 	@OnClick(R.id.buttonTranslate)
 	void onTranslateClick() {
-		presenter.translate(getLang(), editTextTranslatable.getText().toString());
+		presenter.translate(getLangForServer(), getTranslatableText());
 	}
 
 	@Override
 	public void setTranslatedText(final String text) {
 		textViewTranslated.setText(text);
+
+		onTextTranslatedListener.onTextTranslated(new Translation(getTranslatableText(),
+			getInputLang(), text, getOutputLang()));
 	}
 
 	@Override
 	public void setDictText(final String text) {
 		textViewDict.setText(text);
+	}
+
+	@Override
+	public void setTranslatedText(final List<String> translatedText) {
+
+		final StringBuilder formattedText = new StringBuilder();
+
+		for (final String text : translatedText) {
+			formattedText.append(text).append("\n");
+		}
+
+		textViewDict.setText(formattedText);
+
+		onTextTranslatedListener.onTextTranslated(new Translation(getTranslatableText(),
+			getInputLang(), formattedText.toString(), getOutputLang()));
 	}
 
 	private void setContentEnabled(final boolean enabled) {
@@ -140,9 +203,26 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 		buttonTranslate.setEnabled(enabled);
 	}
 
-	private String getLang() {
-		final String inputLang = inputSpinnerAdapter.getItem(spinnerInputLanguage.getSelectedItemPosition());
-		final String outputLang = outputSpinnerAdapter.getItem(spinnerOutputLanguage.getSelectedItemPosition());
-		return inputLang + LANG_SELIMITER + outputLang;
+	private String getLangForServer() {
+		final String inputLang = getInputLang();
+		final String outputLang = getOutputLang();
+		return inputLang + LANG_DELIMITER + outputLang;
+	}
+
+	private String getInputLang() {
+		return inputSpinnerAdapter.getItem(spinnerInputLanguage.getSelectedItemPosition());
+	}
+
+	private String getOutputLang() {
+		return outputSpinnerAdapter.getItem(spinnerOutputLanguage.getSelectedItemPosition());
+	}
+
+	private String getTranslatableText() {
+		return editTextTranslatable.getText().toString();
+	}
+
+	public interface OnTextTranslatedListener {
+
+		void onTextTranslated(Translation translation);
 	}
 }

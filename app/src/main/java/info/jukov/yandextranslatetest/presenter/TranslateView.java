@@ -1,6 +1,7 @@
 package info.jukov.yandextranslatetest.presenter;
 
 import com.arellomobile.mvp.MvpView;
+import java.util.List;
 
 /**
  * User: jukov
@@ -11,6 +12,8 @@ import com.arellomobile.mvp.MvpView;
 public interface TranslateView extends MvpView {
 
 	void setTranslatedText(String text);
+
+	void setTranslatedText(List<String> translatedText);
 
 	void setDictText(String text);
 

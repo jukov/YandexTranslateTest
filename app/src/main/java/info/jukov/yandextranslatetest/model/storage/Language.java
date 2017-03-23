@@ -8,15 +8,16 @@ package info.jukov.yandextranslatetest.model.storage;
 
 public class Language {
 
-	private final String code;
-	private final String readableLangWord;
+	private String code;
+	private String readableLangWord;
 	private int mostUsedPriority;
 
-	public Language(final String code, final String readableLangWord,
-					final int mostUsedPriority) {
+	public Language() {
+	}
+
+	public Language(final String code, final String readableLangWord) {
 		this.code = code;
 		this.readableLangWord = readableLangWord;
-		this.mostUsedPriority = mostUsedPriority;
 	}
 
 	public String getCode() {
@@ -42,5 +43,33 @@ public class Language {
 			", readableLangWord='" + readableLangWord + '\'' +
 			", mostUsedPriority=" + mostUsedPriority +
 			'}';
+	}
+
+	@Override
+	public boolean equals(final Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+
+		final Language language = (Language) o;
+
+		if (!getCode().equals(language.getCode())) {
+			return false;
+		}
+		if (!getReadableLangWord().equals(language.getReadableLangWord())) {
+			return false;
+		}
+
+		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = getCode().hashCode();
+		result = 31 * result + getReadableLangWord().hashCode();
+		return result;
 	}
 }

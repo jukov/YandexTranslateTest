@@ -1,16 +1,20 @@
 package info.jukov.yandextranslatetest.ui.screen.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import info.jukov.yandextranslatetest.R;
+import info.jukov.yandextranslatetest.model.adapter.HistoryAdapter;
+import info.jukov.yandextranslatetest.model.storage.Translation;
+import info.jukov.yandextranslatetest.util.Guard;
 
 /**
  * User: jukov
@@ -29,21 +33,32 @@ public final class HistoryFragment extends MvpAppCompatFragment {
 		return fragment;
 	}
 
-	@BindView(R.id.editTextTranslatable)
-	EditText editTextTranslatable;
+	@BindView(R.id.recyclerViewHistory) RecyclerView recyclerViewHistory;
 
-	@BindView(R.id.buttonTranslate)
-	Button buttonTranslate;
-
-	@BindView(R.id.textViewTranslated)
-	TextView textViewTranslated;
+	private HistoryAdapter historyAdapter;
 
 	@Override
 	public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container,
 							 @Nullable final Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.fragment_history, null);
+		ButterKnife.bind(this, view);
 
-		View view = inflater.inflate(R.layout.fragment_translate, null);
+		initRecycler();
 
 		return view;
+	}
+
+	private void initRecycler() {
+
+		historyAdapter = new HistoryAdapter(getContext());
+
+		recyclerViewHistory.setLayoutManager(new LinearLayoutManager(getContext()));
+		recyclerViewHistory.setAdapter(historyAdapter);
+	}
+
+	public void addTranslation(@NonNull final Translation translation) {
+		Guard.checkNotNull(translation, "null == translation");
+
+		historyAdapter.addTranslation(translation);
 	}
 }

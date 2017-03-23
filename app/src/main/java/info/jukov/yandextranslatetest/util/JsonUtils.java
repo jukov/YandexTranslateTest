@@ -2,6 +2,7 @@ package info.jukov.yandextranslatetest.util;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 
@@ -25,7 +26,21 @@ public final class JsonUtils {
 		try {
 			return objectMapper.readValue(json, clazz);
 		} catch (final IOException e) {
-			LOG.error(e.toString());
+			LOG.error("Error while deserializing object " + e);
+		}
+
+		return null;
+	}
+
+	@Nullable
+	public static String serialize(final Object target) {
+		if (objectMapper == null) {
+			objectMapper = new ObjectMapper();
+		}
+		try {
+			return objectMapper.writeValueAsString(target);
+		} catch (final JsonProcessingException e) {
+			LOG.error("Error while serializing object " + e);
 		}
 
 		return null;

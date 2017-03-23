@@ -1,6 +1,8 @@
 package info.jukov.yandextranslatetest.model.adapter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -20,10 +22,12 @@ public final class TabAdapter extends FragmentStatePagerAdapter {
 	private static final int EXPECTED_TAB_COUNT = 3;
 
 	private final ArrayList<TabWrapper> tabs;
+	private final Context context;
 
-	private TabAdapter(final FragmentManager fragmentManager) {
+	private TabAdapter(final Context context, final FragmentManager fragmentManager) {
 		super(fragmentManager);
-		Guard.checkNotNull(fragmentManager, "null == fragmentManager");
+
+		this.context = context;
 
 		tabs = new ArrayList<>(EXPECTED_TAB_COUNT);
 	}
@@ -38,6 +42,18 @@ public final class TabAdapter extends FragmentStatePagerAdapter {
 		return tabs.get(position).getFragment();
 	}
 
+	@Nullable
+	public MvpAppCompatFragment getItemByTitle(@StringRes final int titleRes) {
+
+		for (final TabWrapper tabWrapper : tabs) {
+			if (tabWrapper.getTitle().equals(context.getString(titleRes))) {
+				return tabWrapper.getFragment();
+			}
+		}
+
+		return null;
+	}
+
 	@Override
 	public int getCount() {
 		return tabs.size();
@@ -49,9 +65,12 @@ public final class TabAdapter extends FragmentStatePagerAdapter {
 
 		private final Context context;
 
-		public Builder(final Context context, final FragmentManager fm) {
+		public Builder(@NonNull final Context context, @NonNull final FragmentManager fragmentManager) {
+			Guard.checkNotNull(context, "null == context");
+			Guard.checkNotNull(fragmentManager, "null == fragmentManager");
+
 			this.context = context;
-			tabAdapter = new TabAdapter(fm);
+			tabAdapter = new TabAdapter(context, fragmentManager);
 		}
 
 		public Builder addTab(final MvpAppCompatFragment fragment, @StringRes final int titleRes) {

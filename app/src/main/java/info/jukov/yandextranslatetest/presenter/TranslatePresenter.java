@@ -42,7 +42,7 @@ public final class TranslatePresenter extends MvpPresenter<TranslateView> {
 			if (!lookupResponce.isEmpty()) {
 				getViewState().setTranslatedText(lookupResponce.toString());
 			} else {
-				getViewState().setTranslatedText(translateResponce.getText().toString());
+				getViewState().setTranslatedText(translateResponce.getText());
 			}
 		}
 	});

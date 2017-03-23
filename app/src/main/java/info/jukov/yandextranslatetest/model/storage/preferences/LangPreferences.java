@@ -7,8 +7,8 @@ import android.support.annotation.Nullable;
 import info.jukov.yandextranslatetest.model.storage.Language;
 import info.jukov.yandextranslatetest.util.ExtrasUtils;
 import info.jukov.yandextranslatetest.util.Guard;
+import info.jukov.yandextranslatetest.util.JsonUtils;
 import info.jukov.yandextranslatetest.util.Log;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -24,12 +24,14 @@ public final class LangPreferences {
 
 	private static final Log LOG = new Log(LangPreferences.class);
 
+	//@formatter:off
 	private static final String FILE = ExtrasUtils.createExtraName("FILE", LangPreferences.class);
-	private static final String READEBLE_LANG_WORDS = ExtrasUtils.createExtraName("LANG_", LangPreferences.class);
-	private static final String DICT_LANGS = ExtrasUtils
-		.createExtraName("FILE", LangPreferences.class);
-	private static final String TRANSLATE_LANGS = ExtrasUtils
-		.createExtraName("FILE", LangPreferences.class);
+	private static final String READEBLE_LANG_WORDS = ExtrasUtils.createExtraName("READEBLE_LANG_WORDS", LangPreferences.class);
+	private static final String DICT_LANGS = ExtrasUtils.createExtraName("DICT_LANGS", LangPreferences.class);
+	private static final String TRANSLATE_LANGS = ExtrasUtils.createExtraName("TRANSLATE_LANGS", LangPreferences.class);
+	private static final String MOST_USED_INPUT_LANGS = ExtrasUtils.createExtraName("MOST_USED_INPUT_LANGS", LangPreferences.class);
+	private static final String MOST_USED_OUTPUT_LANGS = ExtrasUtils.createExtraName("MOST_USED_OUTPUT_LANGS", LangPreferences.class);
+	//@formatter:on
 
 	private static final String LANG_DELIMITER = "-";
 
@@ -48,8 +50,7 @@ public final class LangPreferences {
 
 	/**
 	 * Записывает в {@link SharedPreferences} названия поддерживаемых языков
-	 * в виде строки "xx-NNNN-P", где xx - двухбуквенный код языка;
-	 * NNNN - читаемое название языка; p - позиция языка в списке частоиспользуемых.
+	 * в виде строки "xx-NNNN", где xx - двухбуквенный код языка, NNNN - читаемое название языка.
 	 * */
 	public static void putReadebleLangWords(@NonNull final Context context,
 											@NonNull final Map<String, String> words) {
@@ -58,7 +59,7 @@ public final class LangPreferences {
 		final Set<String> packedLangs = new HashSet<>();
 
 		for (final Map.Entry<String, String> word : words.entrySet()) {
-			packedLangs.add(word.getKey() + LANG_DELIMITER + word.getValue() + LANG_DELIMITER + "0");
+			packedLangs.add(word.getKey() + LANG_DELIMITER + word.getValue());
 		}
 
 		final SharedPreferences.Editor editor = getPreferences(context).edit()
@@ -71,7 +72,7 @@ public final class LangPreferences {
 	 * Возвращает поддерживаемые языки в виде листа объектов {@link Language}
 	 * */
 	@Nullable
-	public static List<Language> getReadableWords(@NonNull final Context context) {
+	public static Set<Language> getReadableWords(@NonNull final Context context) {
 
 		Set<String> packedLangs = getPreferences(context).getStringSet(READEBLE_LANG_WORDS, null);
 
@@ -79,27 +80,16 @@ public final class LangPreferences {
 			return null;
 		}
 
-		final List<Language> languages = new ArrayList<>();
+		final Set<Language> languages = new HashSet<>();
 
 		for (final String packedLang : packedLangs) {
-			final int firstDelimiterIndex = packedLang.indexOf(LANG_DELIMITER);
-			Guard.checkPreCondition(firstDelimiterIndex >= 0, "First delimiter not found");
+			final int delimiterIndex = packedLang.indexOf(LANG_DELIMITER);
+			Guard.checkPreCondition(delimiterIndex >= 0, "First delimiter not found");
 
-			final int secondDelimiterIndex = packedLang.indexOf(LANG_DELIMITER, firstDelimiterIndex + 1);
-			Guard.checkPreCondition(secondDelimiterIndex >= 0, "Second delimiter not found");
+			final String code = packedLang.substring(0, delimiterIndex);
+			final String readableLangWord = packedLang.substring(delimiterIndex + 1);
 
-			final String code = packedLang.substring(0, firstDelimiterIndex);
-			final String readableLangWord = packedLang.substring(firstDelimiterIndex + 1, secondDelimiterIndex);
-			final int positionInMostIsed;
-
-			try {
-				positionInMostIsed = Integer.valueOf(packedLang.substring(secondDelimiterIndex + 1));
-			} catch (final NumberFormatException e) {
-				LOG.error(e.toString());
-				return null;
-			}
-
-			languages.add(new Language(code, readableLangWord, positionInMostIsed));
+			languages.add(new Language(code, readableLangWord));
 		}
 
 		return languages;
@@ -139,6 +129,73 @@ public final class LangPreferences {
 	@Nullable
 	public static Set<String> getTranslateLangs(@NonNull final Context context) {
 		return getPreferences(context).getStringSet(TRANSLATE_LANGS, null);
+	}
+
+	/**
+	 * Записывает в {@link SharedPreferences} список самых используемых исходных языков
+	 */
+	public static void putMostUsedInputLangs(@NonNull final Context context,
+											 final List<Language> mostUsedlanguages) {
+		putMostUsedLangs(context, new HashSet<Language>(mostUsedlanguages), MOST_USED_INPUT_LANGS);
+	}
+
+	/**
+	 * Записывает в {@link SharedPreferences} список самых используемых переводящих языков
+	 */
+	public static void putMostUsedOutputLangs(@NonNull final Context context,
+											  final List<Language> mostUsedlanguages) {
+		putMostUsedLangs(context, new HashSet<Language>(mostUsedlanguages), MOST_USED_OUTPUT_LANGS);
+	}
+
+	/**
+	 * Возвращает список самых используемых исходных языков
+	 */
+	@Nullable
+	public static Set<Language> getMostUsedInputLangs(@NonNull final Context context) {
+		return getMostUsedLangs(context, MOST_USED_INPUT_LANGS);
+	}
+
+	/**
+	 * Возвращает список самых используемых переводящих языков
+	 */
+	@Nullable
+	public static Set<Language> getMostUsedOutputLangs(@NonNull final Context context) {
+		return getMostUsedLangs(context, MOST_USED_OUTPUT_LANGS);
+	}
+
+	private static void putMostUsedLangs(final Context context,
+										 final Set<Language> mostUsedlanguages, final String key) {
+
+		final Set<String> serializedLangs = new HashSet<>();
+
+		for (final Language language : mostUsedlanguages) {
+			serializedLangs.add(JsonUtils.serialize(language));
+		}
+
+		getPreferences(context).edit().putStringSet(key, serializedLangs)
+			.commit();
+	}
+
+	private static Set<Language> getMostUsedLangs(final Context context, final String key) {
+
+		Set<String> serializedLangs = getPreferences(context)
+			.getStringSet(key, null);
+
+		if (serializedLangs == null) {
+			return null;
+		}
+
+		final Set<Language> languages = new HashSet<>();
+
+		for (final String serializedLang : serializedLangs) {
+			final Language language = JsonUtils.deserialize(Language.class, serializedLang);
+
+			if (language != null) {
+				languages.add(language);
+			}
+		}
+
+		return languages;
 	}
 
 	private LangPreferences() {

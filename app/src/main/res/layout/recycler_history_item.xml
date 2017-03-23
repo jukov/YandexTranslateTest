@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="@dimen/height_recycler_history">
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_centerInParent="true"
+		android:orientation="vertical"
+		android:layout_marginLeft="@dimen/margin_all_horizontal"
+		android:layout_marginRight="@dimen/margin_all_horizontal">
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal">
+
+			<TextView
+				android:id="@+id/textViewInputLang"
+				style="@style/TextSubheading"
+				android:textStyle="bold"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginRight="@dimen/margin_all_between_content"
+				android:ellipsize="end"
+				android:lines="1"
+				tools:text="EN"/>
+
+			<TextView
+				android:id="@+id/textViewInput"
+				style="@style/TextSubheading"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:ellipsize="end"
+				android:lines="1"
+				tools:text="I sell my organs for buy videogames"/>
+
+		</LinearLayout>
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal">
+
+			<TextView
+				android:id="@+id/textViewOutputLang"
+				style="@style/TextSubheading"
+				android:textStyle="bold"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginRight="@dimen/margin_all_between_content"
+				android:ellipsize="end"
+				android:lines="1"
+				tools:text="RU"/>
+
+			<TextView
+				android:id="@+id/textViewOutput"
+				style="@style/TextBody"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:ellipsize="end"
+				android:lines="1"
+				tools:text="Я продаю свои органы чтобы купить видеоигры"/>
+
+		</LinearLayout>
+
+	</LinearLayout>
+
+	<View
+		style="@style/Divider"
+		android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>

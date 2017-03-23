@@ -18,15 +18,18 @@ import android.view.MenuItem;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.arellomobile.mvp.MvpAppCompatActivity;
+import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import info.jukov.yandextranslatetest.R;
 import info.jukov.yandextranslatetest.model.network.ErrorCodes;
+import info.jukov.yandextranslatetest.model.storage.Translation;
 import info.jukov.yandextranslatetest.presenter.ScreenMainPresenter;
 import info.jukov.yandextranslatetest.presenter.ScreenMainView;
 import info.jukov.yandextranslatetest.model.adapter.TabAdapter;
 import info.jukov.yandextranslatetest.ui.screen.fragment.FavoritesFragment;
 import info.jukov.yandextranslatetest.ui.screen.fragment.HistoryFragment;
 import info.jukov.yandextranslatetest.ui.screen.fragment.TranslateFragment;
+import info.jukov.yandextranslatetest.ui.screen.fragment.TranslateFragment.OnTextTranslatedListener;
 import info.jukov.yandextranslatetest.util.ExtrasUtils;
 import info.jukov.yandextranslatetest.util.Guard;
 import info.jukov.yandextranslatetest.util.Log;
@@ -37,7 +40,8 @@ import info.jukov.yandextranslatetest.util.Log;
  * Time: 21:47
  */
 
-public final class ScreenMainActivity extends MvpAppCompatActivity implements ScreenMainView {
+public final class ScreenMainActivity extends MvpAppCompatActivity
+	implements ScreenMainView, OnTextTranslatedListener {
 
 	public static final String ACTION_ERROR = ExtrasUtils
 		.createExtraName("ACTION_ERROR", ScreenMainActivity.class);
@@ -68,6 +72,8 @@ public final class ScreenMainActivity extends MvpAppCompatActivity implements Sc
 	@BindView(R.id.tabLayout) TabLayout tabLayout;
 
 	@BindView(R.id.viewPager) ViewPager viewPager;
+
+	private TabAdapter tabAdapter;
 
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
@@ -121,6 +127,20 @@ public final class ScreenMainActivity extends MvpAppCompatActivity implements Sc
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 
+	@Override
+	public void onTextTranslated(final Translation translation) {
+		MvpAppCompatFragment fragment = tabAdapter.getItemByTitle(R.string.fragmentHistory_title);
+
+		if (fragment instanceof HistoryFragment) {
+			HistoryFragment historyFragment = (HistoryFragment) fragment;
+
+			historyFragment.addTranslation(translation);
+
+		} else {
+			LOG.error("Unexpected fragment used with history fragment title");
+		}
+	}
+
 	private void handleIntent(@NonNull final Intent intent) {
 		if (ACTION_ERROR.equals(intent.getAction())) {
 			makeErrorDialog(intent.getIntExtra(EXTRA_ERROR_CODE, -1)).show();
@@ -129,13 +149,15 @@ public final class ScreenMainActivity extends MvpAppCompatActivity implements Sc
 
 	private void initTabLayout() {
 
-		final TabAdapter tabAdapter = new TabAdapter.Builder(this, getSupportFragmentManager())
+		tabAdapter = new TabAdapter.Builder(this, getSupportFragmentManager())
 			.addTab(TranslateFragment.newInstance(), R.string.fragmentTranslate_title)
 			.addTab(FavoritesFragment.newInstance(), R.string.fragmentFavorites_title)
 			.addTab(HistoryFragment.newInstance(), R.string.fragmentHistory_title)
 			.build();
 
 		viewPager.setAdapter(tabAdapter);
+		viewPager.setOffscreenPageLimit(3);
+
 		tabLayout.setupWithViewPager(viewPager);
 		tabAdapter.notifyDataSetChanged();
 	}

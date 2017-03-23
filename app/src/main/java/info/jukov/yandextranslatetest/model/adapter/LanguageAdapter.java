@@ -13,6 +13,7 @@ import info.jukov.yandextranslatetest.R;
 import info.jukov.yandextranslatetest.model.storage.Language;
 import info.jukov.yandextranslatetest.util.Log;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
@@ -22,9 +23,9 @@ import java.util.List;
  * Time: 16:33
  */
 
-public final class LanguageSpinnerAdapter extends BaseAdapter {
+public final class LanguageAdapter extends BaseAdapter {
 
-	private static final Log LOG = new Log(LanguageSpinnerAdapter.class);
+	private static final Log LOG = new Log(LanguageAdapter.class);
 
 	private static final int MOST_USED_ITEM_COUNT = 3;
 
@@ -40,7 +41,7 @@ public final class LanguageSpinnerAdapter extends BaseAdapter {
 		public int compare(final Language o1, final Language o2) {
 			//Если у одного из элементов указана позиция в топе, то сравниваем по позиции
 			if (o1.getMostUsedPriority() != 0 || o2.getMostUsedPriority() != 0) {
-				return o1.getMostUsedPriority() - o2.getMostUsedPriority();
+				return o2.getMostUsedPriority() - o1.getMostUsedPriority();
 
 				//Если позиция не указана, то сортируем по алфавиту
 			} else {
@@ -54,8 +55,8 @@ public final class LanguageSpinnerAdapter extends BaseAdapter {
 
 	private final LayoutInflater inflater;
 
-	public LanguageSpinnerAdapter(@NonNull final Context context,
-								  @NonNull final List<Language> languages) {
+	public LanguageAdapter(@NonNull final Context context,
+						   @NonNull final Collection<Language> languages) {
 
 		this.languages = new ArrayList<>(languages);
 
@@ -66,7 +67,7 @@ public final class LanguageSpinnerAdapter extends BaseAdapter {
 
 	/**
 	 * Закрепляет элемент с индексом {@code position} в верхнюю часть списка.
-	 * Если элементов больше, чем {@link LanguageSpinnerAdapter#MOST_USED_ITEM_COUNT}, то
+	 * Если элементов больше, чем {@link LanguageAdapter#MOST_USED_ITEM_COUNT}, то
 	 * самый старый закрепленный элемент открепляется.
 	 *
 	 * @param position индекс закрепляемого элемента
@@ -93,6 +94,28 @@ public final class LanguageSpinnerAdapter extends BaseAdapter {
 		}
 
 		notifyDataSetChanged();
+	}
+
+	/**
+	 * Возвращает список самых используемых языков
+	 */
+	public List<Language> getMostUsedLanguages() {
+
+		final List<Language> mostUsedLanguages = new ArrayList<>(MOST_USED_ITEM_COUNT);
+
+		for (int i = 0; i < (languages.size() > MOST_USED_ITEM_COUNT ?
+			MOST_USED_ITEM_COUNT : languages.size()); i++) {
+
+			final Language language = languages.get(i);
+
+			if (language.getMostUsedPriority() == 0) {
+				break;
+			}
+
+			mostUsedLanguages.add(language);
+		}
+
+		return mostUsedLanguages;
 	}
 
 	@Override
