@@ -69,7 +69,7 @@ public final class LangPreferences {
 	}
 
 	/**
-	 * Возвращает поддерживаемые языки в виде листа объектов {@link Language}
+	 * Возвращает поддерживаемые языки в виде набора объектов {@link Language}
 	 * */
 	@Nullable
 	public static Set<Language> getReadableWords(@NonNull final Context context) {

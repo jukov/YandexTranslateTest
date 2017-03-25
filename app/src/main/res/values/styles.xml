@@ -17,6 +17,11 @@
 		<item name="android:background">@color/colorPrimary</item>
 	</style>
 
+	<style name="TextTitle">
+		<item name="android:textSize">@dimen/textsize_title</item>
+		<item name="android:textColor">@color/text_all_black87</item>
+	</style>
+
 	<style name="TextSubheading">
 		<item name="android:textSize">@dimen/textsize_subheading</item>
 		<item name="android:textColor">@color/text_all_black87</item>

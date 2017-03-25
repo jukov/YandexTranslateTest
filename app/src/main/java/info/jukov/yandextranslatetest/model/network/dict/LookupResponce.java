@@ -20,26 +20,26 @@ import java.util.List;
 public final class LookupResponce {
 
 	@JsonProperty("def")
-	private List<Def> def = null;
+	private List<Definition> definition = null;
 
 	@JsonProperty("def")
-	public List<Def> getDef() {
-		return def;
+	public List<Definition> getDefinitions() {
+		return definition;
 	}
 
 	@JsonProperty("def")
-	public void setDef(final List<Def> def) {
-		this.def = def;
+	public void setDefinition(final List<Definition> definition) {
+		this.definition = definition;
 	}
 
 	public boolean isEmpty() {
-		return def == null || def.size() == 0;
+		return definition == null || definition.size() == 0;
 	}
 
 	@Override
 	public String toString() {
 		return "LookupResponce{" +
-			"def=" + def +
+			"definition=" + definition +
 			'}';
 	}
 
@@ -50,7 +50,7 @@ public final class LookupResponce {
 		"ts",
 		"tr"
 	})
-	public static final class Def {
+	public static final class Definition {
 
 		@JsonProperty("text")
 		private String text;
@@ -59,7 +59,7 @@ public final class LookupResponce {
 		@JsonProperty("ts")
 		private String ts;
 		@JsonProperty("tr")
-		private List<Tr> tr = null;
+		private List<Translation> translations = null;
 
 		@JsonProperty("text")
 		public String getText() {
@@ -72,7 +72,7 @@ public final class LookupResponce {
 		}
 
 		@JsonProperty("pos")
-		public String getPos() {
+		public String getPartOfSpeech() {
 			return pos;
 		}
 
@@ -92,22 +92,22 @@ public final class LookupResponce {
 		}
 
 		@JsonProperty("tr")
-		public List<Tr> getTr() {
-			return tr;
+		public List<Translation> getTranslations() {
+			return translations;
 		}
 
 		@JsonProperty("tr")
-		public void setTr(final List<Tr> tr) {
-			this.tr = tr;
+		public void setTranslations(final List<Translation> translations) {
+			this.translations = translations;
 		}
 
 		@Override
 		public String toString() {
-			return "Def{" +
+			return "Definition{" +
 				"text='" + text + '\'' +
 				", pos='" + pos + '\'' +
 				", ts='" + ts + '\'' +
-				", tr=" + tr +
+				", translations=" + translations +
 				'}';
 		}
 	}
@@ -117,7 +117,7 @@ public final class LookupResponce {
 		"text",
 		"tr"
 	})
-	public static final class Ex {
+	public static final class Example {
 
 		@JsonProperty("text")
 		private String text;
@@ -147,9 +147,9 @@ public final class LookupResponce {
 
 		@Override
 		public String toString() {
-			return "Ex{" +
+			return "Example{" +
 				"text='" + text + '\'' +
-				", tr=" + tr +
+				", translations=" + tr +
 				'}';
 		}
 	}
@@ -158,7 +158,7 @@ public final class LookupResponce {
 	@JsonPropertyOrder({
 		"text"
 	})
-	public static final class Mean {
+	public static final class Meaning {
 
 		@JsonProperty("text")
 		private String text;
@@ -175,7 +175,7 @@ public final class LookupResponce {
 
 		@Override
 		public String toString() {
-			return "Mean{" +
+			return "Meaning{" +
 				"text='" + text + '\'' +
 				'}';
 		}
@@ -258,7 +258,7 @@ public final class LookupResponce {
 		"ex",
 		"asp"
 	})
-	public static final class Tr {
+	public static final class Translation {
 
 		@JsonProperty("text")
 		private String text;
@@ -269,9 +269,9 @@ public final class LookupResponce {
 		@JsonProperty("syn")
 		private List<Syn> syn = null;
 		@JsonProperty("mean")
-		private List<Mean> mean = null;
+		private List<Meaning> meaning = null;
 		@JsonProperty("ex")
-		private List<Ex> ex = null;
+		private List<Example> examples = null;
 		@JsonProperty("asp")
 		private String asp;
 
@@ -286,7 +286,7 @@ public final class LookupResponce {
 		}
 
 		@JsonProperty("pos")
-		public String getPos() {
+		public String getPartOfSpeech() {
 			return pos;
 		}
 
@@ -306,7 +306,7 @@ public final class LookupResponce {
 		}
 
 		@JsonProperty("syn")
-		public List<Syn> getSyn() {
+		public List<Syn> getSynonyms() {
 			return syn;
 		}
 
@@ -316,23 +316,23 @@ public final class LookupResponce {
 		}
 
 		@JsonProperty("mean")
-		public List<Mean> getMean() {
-			return mean;
+		public List<Meaning> getMeanings() {
+			return meaning;
 		}
 
 		@JsonProperty("mean")
-		public void setMean(final List<Mean> mean) {
-			this.mean = mean;
+		public void setMeaning(final List<Meaning> meaning) {
+			this.meaning = meaning;
 		}
 
 		@JsonProperty("ex")
-		public List<Ex> getEx() {
-			return ex;
+		public List<Example> getExamples() {
+			return examples;
 		}
 
 		@JsonProperty("ex")
-		public void setEx(final List<Ex> ex) {
-			this.ex = ex;
+		public void setExamples(final List<Example> examples) {
+			this.examples = examples;
 		}
 
 		@JsonProperty("asp")
@@ -347,13 +347,13 @@ public final class LookupResponce {
 
 		@Override
 		public String toString() {
-			return "Tr{" +
+			return "Translation{" +
 				"text='" + text + '\'' +
 				", pos='" + pos + '\'' +
 				", gen='" + gen + '\'' +
 				", syn=" + syn +
-				", mean=" + mean +
-				", ex=" + ex +
+				", meaning=" + meaning +
+				", examples=" + examples +
 				", asp='" + asp + '\'' +
 				'}';
 		}

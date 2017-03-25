@@ -9,8 +9,8 @@
 		android:layout_height="wrap_content"
 		android:layout_centerInParent="true"
 		android:orientation="vertical"
-		android:layout_marginLeft="@dimen/margin_all_horizontal"
-		android:layout_marginRight="@dimen/margin_all_horizontal">
+		android:layout_marginLeft="@dimen/space_all_horizontal"
+		android:layout_marginRight="@dimen/space_all_horizontal">
 
 		<LinearLayout
 			android:layout_width="match_parent"
@@ -23,7 +23,7 @@
 				android:textStyle="bold"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:layout_marginRight="@dimen/margin_all_between_content"
+				android:layout_marginRight="@dimen/space_all_between_content"
 				android:ellipsize="end"
 				android:lines="1"
 				tools:text="EN"/>
@@ -50,7 +50,7 @@
 				android:textStyle="bold"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:layout_marginRight="@dimen/margin_all_between_content"
+				android:layout_marginRight="@dimen/space_all_between_content"
 				android:ellipsize="end"
 				android:lines="1"
 				tools:text="RU"/>

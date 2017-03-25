@@ -36,10 +36,10 @@
 		android:id="@+id/editTextTranslatable"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:inputType="text"
-		android:minLines="3"
 		android:layout_alignParentStart="true"
 		android:layout_below="@+id/divider"
+		android:inputType="text"
+		android:minLines="3"
 		tools:text="Привет"/>
 
 	<Button
@@ -52,18 +52,39 @@
 
 	<TextView
 		android:id="@+id/textViewTranslated"
+		style="@style/TextTitle"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_alignParentStart="true"
 		android:layout_below="@+id/buttonTranslate"
-		tools:text="Hi"/>
+		android:layout_marginLeft="@dimen/space_all_horizontal"
+		android:layout_marginRight="@dimen/space_all_horizontal"
+		android:layout_marginTop="@dimen/space_all_between_content"
+		tools:text="Время"/>
 
 	<TextView
 		android:id="@+id/textViewDict"
+		style="@style/TextTitle"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_alignParentStart="true"
 		android:layout_below="@+id/textViewTranslated"
-		tools:text="Hi"/>
+		android:layout_marginLeft="@dimen/space_all_horizontal"
+		android:layout_marginRight="@dimen/space_all_horizontal"
+		android:layout_marginTop="@dimen/space_all_between_content"
+		tools:text="Time (существительное) [taɪm]"/>
+
+	<ScrollView
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_below="@id/textViewDict">
+
+		<LinearLayout
+			android:id="@+id/containerDictResult"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"/>
+
+	</ScrollView>
 
 </RelativeLayout>

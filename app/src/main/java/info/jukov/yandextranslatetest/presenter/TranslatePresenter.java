@@ -40,9 +40,9 @@ public final class TranslatePresenter extends MvpPresenter<TranslateView> {
 		@Override
 		public void onTrue() {
 			if (!lookupResponce.isEmpty()) {
-				getViewState().setTranslatedText(lookupResponce.toString());
+				getViewState().setDictDefinition(lookupResponce);
 			} else {
-				getViewState().setTranslatedText(translateResponce.getText());
+				getViewState().setTranslation(translateResponce.getText());
 			}
 		}
 	});

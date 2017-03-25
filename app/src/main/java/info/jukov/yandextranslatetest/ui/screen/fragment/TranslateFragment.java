@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import butterknife.BindView;
@@ -19,11 +20,13 @@ import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import info.jukov.yandextranslatetest.R;
 import info.jukov.yandextranslatetest.model.adapter.LanguageAdapter;
+import info.jukov.yandextranslatetest.model.network.dict.LookupResponce;
 import info.jukov.yandextranslatetest.model.storage.Language;
 import info.jukov.yandextranslatetest.model.storage.Translation;
 import info.jukov.yandextranslatetest.model.storage.preferences.LangPreferences;
 import info.jukov.yandextranslatetest.presenter.TranslatePresenter;
 import info.jukov.yandextranslatetest.presenter.TranslateView;
+import info.jukov.yandextranslatetest.ui.format.DictionaryConstructor;
 import info.jukov.yandextranslatetest.util.Log;
 import java.util.HashSet;
 import java.util.List;
@@ -41,6 +44,20 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 
 	private static final String LANG_DELIMITER = "-";
 
+	@InjectPresenter TranslatePresenter presenter;
+	@BindView(R.id.spinnerInputLanguage) Spinner spinnerInputLanguage;
+	@BindView(R.id.spinnerOutputLanguage) Spinner spinnerOutputLanguage;
+	@BindView(R.id.editTextTranslatable) EditText editTextTranslatable;
+	@BindView(R.id.buttonTranslate) Button buttonTranslate;
+	@BindView(R.id.textViewTranslated) TextView textViewTranslated;
+	@BindView(R.id.textViewDict) TextView textViewDict;
+	@BindView(R.id.containerDictResult) LinearLayout containerDictResult;
+
+	private LanguageAdapter inputSpinnerAdapter;
+	private LanguageAdapter outputSpinnerAdapter;
+
+	private OnTextTranslatedListener onTextTranslatedListener;
+
 	public static TranslateFragment newInstance() {
 
 		Bundle args = new Bundle();
@@ -50,23 +67,9 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 		return fragment;
 	}
 
-	@InjectPresenter TranslatePresenter presenter;
-
-	@BindView(R.id.spinnerInputLanguage) Spinner spinnerInputLanguage;
-	@BindView(R.id.spinnerOutputLanguage) Spinner spinnerOutputLanguage;
-	@BindView(R.id.editTextTranslatable) EditText editTextTranslatable;
-	@BindView(R.id.buttonTranslate) Button buttonTranslate;
-	@BindView(R.id.textViewTranslated) TextView textViewTranslated;
-	@BindView(R.id.textViewDict) TextView textViewDict;
-
-	private LanguageAdapter inputSpinnerAdapter;
-	private LanguageAdapter outputSpinnerAdapter;
-
-	private OnTextTranslatedListener onTextTranslatedListener;
-
 	@Override
 	public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container,
-							 @Nullable final Bundle savedInstanceState) {
+		@Nullable final Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_translate, null);
 		ButterKnife.bind(this, view);
 
@@ -104,7 +107,7 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 		spinnerInputLanguage.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(final AdapterView<?> parent, final View view,
-									   final int position, final long id) {
+				final int position, final long id) {
 				if (position != 0) {
 					inputSpinnerAdapter.pinItemToTop(position);
 					spinnerInputLanguage.setSelection(0);
@@ -120,7 +123,7 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 		spinnerOutputLanguage.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(final AdapterView<?> parent, final View view,
-									   final int position, final long id) {
+				final int position, final long id) {
 				if (position != 0) {
 					outputSpinnerAdapter.pinItemToTop(position);
 					spinnerOutputLanguage.setSelection(0);
@@ -169,20 +172,7 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 	}
 
 	@Override
-	public void setTranslatedText(final String text) {
-		textViewTranslated.setText(text);
-
-		onTextTranslatedListener.onTextTranslated(new Translation(getTranslatableText(),
-			getInputLang(), text, getOutputLang()));
-	}
-
-	@Override
-	public void setDictText(final String text) {
-		textViewDict.setText(text);
-	}
-
-	@Override
-	public void setTranslatedText(final List<String> translatedText) {
+	public void setTranslation(final List<String> translatedText) {
 
 		final StringBuilder formattedText = new StringBuilder();
 
@@ -194,6 +184,15 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 
 		onTextTranslatedListener.onTextTranslated(new Translation(getTranslatableText(),
 			getInputLang(), formattedText.toString(), getOutputLang()));
+	}
+
+	@Override
+	public void setDictDefinition(final LookupResponce responce) {
+		textViewTranslated
+			.setText(responce.getDefinitions().get(0).getTranslations().get(0).getText());
+		textViewDict
+			.setText(DictionaryConstructor.formatDefinition(responce.getDefinitions().get(0)));
+		DictionaryConstructor.visualiseLookupResponce(getContext(), containerDictResult, responce);
 	}
 
 	private void setContentEnabled(final boolean enabled) {

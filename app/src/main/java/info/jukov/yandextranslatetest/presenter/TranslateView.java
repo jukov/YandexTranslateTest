@@ -1,6 +1,7 @@
 package info.jukov.yandextranslatetest.presenter;
 
 import com.arellomobile.mvp.MvpView;
+import info.jukov.yandextranslatetest.model.network.dict.LookupResponce;
 import java.util.List;
 
 /**
@@ -11,10 +12,8 @@ import java.util.List;
 
 public interface TranslateView extends MvpView {
 
-	void setTranslatedText(String text);
+	void setTranslation(List<String> translatedText);
 
-	void setTranslatedText(List<String> translatedText);
-
-	void setDictText(String text);
+	void setDictDefinition(LookupResponce responce);
 
 }
