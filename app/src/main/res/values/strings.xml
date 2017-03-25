@@ -1,7 +1,10 @@
 <resources>
 
-	<string name="app_name">YandexTranslateTest</string>
-	<string name="screen_main_buttonTranslate">Translate</string>
+	<string name="app_name">Yandex.Translate Test</string>
+
+	<!--TranslateFragment-->
+	<string name="translateFragment_buttonTranslate">Translate</string>
+	<string name="translateFragment_editTextInputHint">Enter text…</string>
 
 	<!--Current lang code-->
 	<string name="lang_code">en</string>

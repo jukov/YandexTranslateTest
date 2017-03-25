@@ -180,7 +180,11 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 			formattedText.append(text).append("\n");
 		}
 
-		textViewDict.setText(formattedText);
+		textViewTranslated.setText(formattedText);
+
+		textViewDict.setVisibility(View.GONE);
+		containerDictResult.setVisibility(View.GONE);
+		containerDictResult.removeAllViews();
 
 		onTextTranslatedListener.onTextTranslated(new Translation(getTranslatableText(),
 			getInputLang(), formattedText.toString(), getOutputLang()));
@@ -192,6 +196,10 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 			.setText(responce.getDefinitions().get(0).getTranslations().get(0).getText());
 		textViewDict
 			.setText(DictionaryConstructor.formatDefinition(responce.getDefinitions().get(0)));
+
+		textViewDict.setVisibility(View.VISIBLE);
+		containerDictResult.setVisibility(View.VISIBLE);
+		containerDictResult.removeAllViews();
 		DictionaryConstructor.visualiseLookupResponce(getContext(), containerDictResult, responce);
 	}
 

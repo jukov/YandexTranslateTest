@@ -1,90 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
-	android:layout_height="match_parent">
+	android:layout_height="match_parent"
+	android:clipToPadding="false">
 
-	<LinearLayout
-		android:id="@+id/spinnerContainer"
+	<android.support.design.widget.AppBarLayout
+		android:id="@+id/containerInput"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_alignParentTop="true"
-		android:orientation="horizontal">
-
-		<Spinner
-			android:id="@+id/spinnerInputLanguage"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_weight="1"/>
-
-		<Spinner
-			android:id="@+id/spinnerOutputLanguage"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_weight="1"/>
-
-	</LinearLayout>
-
-	<View
-		android:id="@+id/divider"
-		android:layout_width="match_parent"
-		android:layout_height="1dp"
-		android:layout_below="@id/spinnerContainer"
-		android:background="@color/divider_black12"/>
-
-	<EditText
-		android:id="@+id/editTextTranslatable"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_alignParentStart="true"
-		android:layout_below="@+id/divider"
-		android:inputType="text"
-		android:minLines="3"
-		tools:text="Привет"/>
-
-	<Button
-		android:id="@+id/buttonTranslate"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_alignParentStart="true"
-		android:layout_below="@+id/editTextTranslatable"
-		android:text="@string/screen_main_buttonTranslate"/>
-
-	<TextView
-		android:id="@+id/textViewTranslated"
-		style="@style/TextTitle"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_alignParentStart="true"
-		android:layout_below="@+id/buttonTranslate"
-		android:layout_marginLeft="@dimen/space_all_horizontal"
-		android:layout_marginRight="@dimen/space_all_horizontal"
-		android:layout_marginTop="@dimen/space_all_between_content"
-		tools:text="Время"/>
-
-	<TextView
-		android:id="@+id/textViewDict"
-		style="@style/TextTitle"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_alignParentStart="true"
-		android:layout_below="@+id/textViewTranslated"
-		android:layout_marginLeft="@dimen/space_all_horizontal"
-		android:layout_marginRight="@dimen/space_all_horizontal"
-		android:layout_marginTop="@dimen/space_all_between_content"
-		tools:text="Time (существительное) [taɪm]"/>
-
-	<ScrollView
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:layout_below="@id/textViewDict">
+		android:background="@color/background_white50"
+		android:stateListAnimator="@animator/appbar_elevated"
+		app:layout_scrollFlags="scroll">
 
 		<LinearLayout
-			android:id="@+id/containerDictResult"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:orientation="vertical"/>
+			android:orientation="vertical"
+			app:layout_collapseMode="parallax"
+			app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-	</ScrollView>
+			<LinearLayout
+				android:id="@+id/spinnerContainer"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="horizontal">
 
-</RelativeLayout>
+				<Spinner
+					android:id="@+id/spinnerInputLanguage"
+					android:layout_width="match_parent"
+					android:layout_height="@dimen/height_spinnerLang"
+					android:layout_weight="1"/>
+
+				<Spinner
+					android:id="@+id/spinnerOutputLanguage"
+					android:layout_width="match_parent"
+					android:layout_height="@dimen/height_spinnerLang"
+					android:layout_weight="1"/>
+
+			</LinearLayout>
+
+			<View
+				android:id="@+id/divider"
+				android:layout_width="match_parent"
+				android:layout_height="1dp"
+				android:background="@color/divider_black12"/>
+
+			<EditText
+				android:id="@+id/editTextTranslatable"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="@dimen/space_all_horizontal"
+				android:layout_marginRight="@dimen/space_all_horizontal"
+				android:gravity="top"
+				android:hint="@string/translateFragment_editTextInputHint"
+				android:maxLines="6"
+				android:minLines="3"/>
+
+			<Button
+				android:id="@+id/buttonTranslate"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="@dimen/space_all_horizontal"
+				android:layout_marginRight="@dimen/space_all_horizontal"
+				android:layout_marginBottom="@dimen/space_all_betweenContent"
+				android:text="@string/translateFragment_buttonTranslate"/>
+		</LinearLayout>
+
+	</android.support.design.widget.AppBarLayout>
+
+	<android.support.v4.widget.NestedScrollView
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_below="@id/containerInput"
+		app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical">
+
+			<TextView
+				android:id="@+id/textViewTranslated"
+				style="@style/TextTitle"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="@dimen/space_all_horizontal"
+				android:layout_marginRight="@dimen/space_all_horizontal"
+				android:layout_marginTop="@dimen/space_all_betweenContent"
+				tools:text="Время"/>
+
+			<TextView
+				android:id="@+id/textViewDict"
+				style="@style/TextSubheading"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="@dimen/space_all_horizontal"
+				android:layout_marginRight="@dimen/space_all_horizontal"
+				android:layout_marginTop="@dimen/space_all_betweenContent"
+				tools:text="Time [taɪm]"/>
+
+			<LinearLayout
+				android:id="@+id/containerDictResult"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="vertical"/>
+
+		</LinearLayout>
+
+	</android.support.v4.widget.NestedScrollView>
+
+</android.support.design.widget.CoordinatorLayout>

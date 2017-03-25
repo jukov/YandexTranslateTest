@@ -5,6 +5,6 @@
 	style="@style/TextSubheading"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
-	android:paddingLeft="@dimen/space_component_dict_horizontal_double"
+	android:paddingLeft="@dimen/space_componentDictHorizontal_double"
 	android:paddingRight="@dimen/space_all_horizontal"
 	tools:text="время, раз, момент, срок"/>

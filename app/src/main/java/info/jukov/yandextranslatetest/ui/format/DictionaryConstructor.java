@@ -41,7 +41,6 @@ public final class DictionaryConstructor {
 	public static void visualiseLookupResponce(@NonNull final Context context,
 		@NonNull final LinearLayout parent, @NonNull final LookupResponce responce) {
 
-		parent.removeAllViews();
 		final LayoutInflater inflater = LayoutInflater.from(context);
 
 		//Части речи

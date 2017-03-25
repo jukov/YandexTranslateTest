@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
-	android:layout_height="@dimen/height_recycler_history">
+	android:layout_height="@dimen/height_recyclerHistory">
 
 	<LinearLayout
 		android:layout_width="match_parent"
@@ -23,7 +23,7 @@
 				android:textStyle="bold"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:layout_marginRight="@dimen/space_all_between_content"
+				android:layout_marginRight="@dimen/space_all_betweenContent"
 				android:ellipsize="end"
 				android:lines="1"
 				tools:text="EN"/>
@@ -50,7 +50,7 @@
 				android:textStyle="bold"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:layout_marginRight="@dimen/space_all_between_content"
+				android:layout_marginRight="@dimen/space_all_betweenContent"
 				android:ellipsize="end"
 				android:lines="1"
 				tools:text="RU"/>

@@ -8,7 +8,7 @@
 	<TextView
 		android:id="@+id/textView"
 		android:layout_width="match_parent"
-		android:layout_height="@dimen/height_spinner_lang"
+		android:layout_height="@dimen/height_spinnerLang"
 		android:gravity="center_vertical"
 		style="@style/TextSubheading"
 		tools:text="English"
