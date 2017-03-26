@@ -16,6 +16,11 @@
 	<color name="text_all_black12">#1F000000</color>
 	<color name="text_all_black10">#1A000000</color>
 
+	<color name="text_all_title">@color/text_all_black87</color>
+	<color name="text_all_subheading">@color/text_all_black87</color>
+	<color name="text_all_body">@color/text_all_black54</color>
+	<color name="text_dictConstructor_secondaryItems">@color/text_all_black54</color>
+
 	<color name="colorPrimary">@color/deepPurple500</color>
 	<color name="colorPrimaryDark">@color/deepPurple700</color>
 	<color name="colorAccent">@color/orangeA200</color>

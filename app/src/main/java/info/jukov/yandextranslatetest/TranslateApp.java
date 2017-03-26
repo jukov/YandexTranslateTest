@@ -9,6 +9,7 @@ import info.jukov.yandextranslatetest.model.network.dict.DictApi;
 import info.jukov.yandextranslatetest.model.network.translate.TranslateApi;
 import info.jukov.yandextranslatetest.model.storage.dao.DaoMaster;
 import info.jukov.yandextranslatetest.model.storage.dao.DaoSession;
+import info.jukov.yandextranslatetest.ui.format.DictionaryConstructor;
 import org.greenrobot.greendao.database.Database;
 
 /**
@@ -40,6 +41,8 @@ public final class TranslateApp extends Application {
 		appComponent = buildComponent();
 
 		daoSession = openDatabase();
+
+		DictionaryConstructor.init(this);
 	}
 
 	private AppComponent buildComponent() {

@@ -5,6 +5,7 @@
 	style="@style/TextSubheading"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
+	android:paddingTop="@dimen/space_all_betweenContent"
 	android:paddingLeft="@dimen/space_componentDictHorizontal_double"
 	android:paddingRight="@dimen/space_all_horizontal"
-	tools:text="время, раз, момент, срок"/>
+	tools:text="1. время, раз, момент, срок"/>

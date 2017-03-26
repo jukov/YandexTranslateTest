@@ -83,6 +83,16 @@
 			android:orientation="vertical">
 
 			<TextView
+				android:id="@+id/textViewCopyright"
+				style="@style/TextSubheading"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="@dimen/space_all_horizontal"
+				android:layout_marginRight="@dimen/space_all_horizontal"
+				android:layout_marginTop="@dimen/space_all_betweenContent"
+				android:text="@string/translateFragment_copyright"/>
+
+			<TextView
 				android:id="@+id/textViewTranslated"
 				style="@style/TextTitle"
 				android:layout_width="match_parent"
@@ -103,6 +113,7 @@
 				tools:text="Time [taɪm]"/>
 
 			<LinearLayout
+				android:layout_marginTop="@dimen/space_all_betweenContent"
 				android:id="@+id/containerDictResult"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"

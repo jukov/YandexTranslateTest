@@ -6,6 +6,8 @@
 	<string name="translateFragment_buttonTranslate">Translate</string>
 	<string name="translateFragment_editTextInputHint">Enter text…</string>
 
+	<string name="translateFragment_copyright">Realized with help of services “Yandex.Translate” and “Yandex.Dictionary”.</string>
+
 	<!--Current lang code-->
 	<string name="lang_code">en</string>
 

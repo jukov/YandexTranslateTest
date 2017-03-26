@@ -1,8 +1,16 @@
 package info.jukov.yandextranslatetest.ui.format;
 
+import static android.graphics.Typeface.BOLD;
+import static android.graphics.Typeface.ITALIC;
+import static android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE;
+import static android.text.Spanned.SPAN_EXCLUSIVE_INCLUSIVE;
+
 import android.content.Context;
+import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -13,6 +21,7 @@ import info.jukov.yandextranslatetest.model.network.dict.LookupResponce.Example;
 import info.jukov.yandextranslatetest.model.network.dict.LookupResponce.Meaning;
 import info.jukov.yandextranslatetest.model.network.dict.LookupResponce.Syn;
 import info.jukov.yandextranslatetest.model.network.dict.LookupResponce.Translation;
+import info.jukov.yandextranslatetest.util.Guard;
 import info.jukov.yandextranslatetest.util.StringUtils;
 import java.util.Iterator;
 import java.util.List;
@@ -25,6 +34,7 @@ import java.util.List;
 
 public final class DictionaryConstructor {
 
+	private static final String EMPTY = "";
 	private static final String SPACE = " ";
 	private static final String DOT = ".";
 	private static final String COMMA = ",";
@@ -34,12 +44,21 @@ public final class DictionaryConstructor {
 	private static final String OPEN_BRACE = "[";
 	private static final String CLOSE_BRACE = "]";
 
+	@ColorInt private static int secondaryItemsColor;
+
+	public static void init(@NonNull final Context context) {
+		secondaryItemsColor = context.getResources()
+			.getColor(R.color.text_dictConstructor_secondaryItems);
+	}
+
 	/**
 	 * Прикрепляет к {@code parent} набор {@link android.view.View},
 	 * которые визуализируют объект {@link LookupResponce}
 	 */
-	public static void visualiseLookupResponce(@NonNull final Context context,
+	public static void makeLookupResponce(@NonNull final Context context,
 		@NonNull final LinearLayout parent, @NonNull final LookupResponce responce) {
+
+		Guard.checkPreCondition(secondaryItemsColor != 0, "Call method init before use this class");
 
 		final LayoutInflater inflater = LayoutInflater.from(context);
 
@@ -54,12 +73,12 @@ public final class DictionaryConstructor {
 
 			//Варианты перевода
 			if (definition.getTranslations() != null) {
-				visualiseTranslations(parent, inflater, definition.getTranslations());
+				makeTranslations(parent, inflater, definition.getTranslations());
 			}
 		}
 	}
 
-	private static void visualiseTranslations(@NonNull final LinearLayout parent,
+	private static void makeTranslations(@NonNull final LinearLayout parent,
 		@NonNull final LayoutInflater inflater, @NonNull final List<Translation> translations) {
 
 		int translationCount = 0;
@@ -68,18 +87,43 @@ public final class DictionaryConstructor {
 
 			translationCount++;
 
+			String count = Integer.toString(translationCount);
+
 			final TextView textViewDefinitions = (TextView) inflater
 				.inflate(R.layout.component_dict_item_definition, null);
 			parent.addView(textViewDefinitions);
 
-			final StringBuilder stringBuilderDefinitions = new StringBuilder();
-			stringBuilderDefinitions.append(translationCount).append(DOT).append(SPACE);
+			final SpannableStringBuilder stringBuilderDefinitions = new SpannableStringBuilder();
+			stringBuilderDefinitions
+				.append(count, new StyleSpan(BOLD), SPAN_EXCLUSIVE_EXCLUSIVE)
+				.append(DOT, new StyleSpan(BOLD), SPAN_EXCLUSIVE_EXCLUSIVE)
+				.append(SPACE);
 
 			if (translation.getText() != null) {
 				stringBuilderDefinitions.append(translation.getText());
 
 				if (translation.getGen() != null) {
-					stringBuilderDefinitions.append(SPACE).append(translation.getGen());
+					stringBuilderDefinitions.append(SPACE)
+						.append(translation.getGen(), new StyleSpan(ITALIC),
+							SPAN_EXCLUSIVE_EXCLUSIVE);
+
+					final int genStart = stringBuilderDefinitions.length() - translation.getGen().length();
+					final int genEnd = stringBuilderDefinitions.length();
+
+					stringBuilderDefinitions.setSpan(new ForegroundColorSpan(secondaryItemsColor),
+						genStart, genEnd, SPAN_EXCLUSIVE_EXCLUSIVE);
+				}
+
+				if (translation.getAsp() != null) {
+					stringBuilderDefinitions.append(SPACE)
+						.append(translation.getAsp(), new StyleSpan(ITALIC),
+							SPAN_EXCLUSIVE_EXCLUSIVE);
+
+					final int aspStart = stringBuilderDefinitions.length() - translation.getAsp().length();
+					final int aspEnd = stringBuilderDefinitions.length();
+
+					stringBuilderDefinitions.setSpan(new ForegroundColorSpan(secondaryItemsColor),
+						aspStart, aspEnd, SPAN_EXCLUSIVE_EXCLUSIVE);
 				}
 			}
 
@@ -91,27 +135,47 @@ public final class DictionaryConstructor {
 							.append(syn.getText());
 
 						if (syn.getGen() != null) {
-							stringBuilderDefinitions.append(SPACE).append(syn.getGen());
+							stringBuilderDefinitions.append(SPACE)
+								.append(syn.getGen(), new StyleSpan(ITALIC),
+									SPAN_EXCLUSIVE_EXCLUSIVE);
+
+							final int genStart = stringBuilderDefinitions.length() - translation.getGen().length();
+							final int genEnd = stringBuilderDefinitions.length();
+
+							stringBuilderDefinitions.setSpan(new ForegroundColorSpan(secondaryItemsColor),
+								genStart, genEnd, SPAN_EXCLUSIVE_EXCLUSIVE);
+						}
+
+						if (syn.getAsp() != null) {
+							stringBuilderDefinitions.append(SPACE)
+								.append(syn.getAsp(), new StyleSpan(ITALIC),
+									SPAN_EXCLUSIVE_EXCLUSIVE);
+
+							final int aspStart = stringBuilderDefinitions.length() - translation.getAsp().length();
+							final int aspEnd = stringBuilderDefinitions.length();
+
+							stringBuilderDefinitions.setSpan(new ForegroundColorSpan(secondaryItemsColor),
+								aspStart, aspEnd, SPAN_EXCLUSIVE_EXCLUSIVE);
 						}
 					}
 				}
 			}
 
-			textViewDefinitions.setText(stringBuilderDefinitions.toString());
+			textViewDefinitions.setText(stringBuilderDefinitions);
 
 			//Синонимы на исходном языке
 			if (translation.getMeanings() != null) {
-				visualiseMeanings(parent, inflater, translation.getMeanings());
+				makeMeanings(parent, inflater, translation.getMeanings());
 			}
 
 			//Примеры употребления
 			if (translation.getExamples() != null) {
-				visualiseExamples(parent, inflater, translation.getExamples());
+				makeExamples(parent, inflater, translation.getExamples());
 			}
 		}
 	}
 
-	private static void visualiseMeanings(@NonNull final LinearLayout parent,
+	private static void makeMeanings(@NonNull final LinearLayout parent,
 		@NonNull final LayoutInflater inflater, @NonNull final List<Meaning> meanings) {
 
 		final TextView textViewMeaning = (TextView) inflater
@@ -137,10 +201,12 @@ public final class DictionaryConstructor {
 		textViewMeaning.setText(stringBuilderMeanings.toString());
 	}
 
-	private static void visualiseExamples(@NonNull final LinearLayout parent,
+	private static void makeExamples(@NonNull final LinearLayout parent,
 		@NonNull final LayoutInflater inflater, @NonNull final List<Example> examples) {
 
-		final StringBuilder stringBuilderExample = new StringBuilder();
+		Guard.checkPreCondition(secondaryItemsColor != 0, "Call method init before use this class");
+
+		final SpannableStringBuilder stringBuilderExample = new SpannableStringBuilder();
 
 		for (final Example example : examples) {
 
@@ -148,7 +214,7 @@ public final class DictionaryConstructor {
 				.inflate(R.layout.component_dict_item_example, null);
 			parent.addView(textViewExample);
 
-			stringBuilderExample.setLength(0);
+			stringBuilderExample.clear();
 
 			stringBuilderExample
 				.append(example.getText());
@@ -158,30 +224,47 @@ public final class DictionaryConstructor {
 					.append(example.getTr().get(0).getText());
 			}
 
-			textViewExample.setText(stringBuilderExample.toString());
+			stringBuilderExample.setSpan(new StyleSpan(ITALIC), 0, stringBuilderExample.length(),
+				SPAN_EXCLUSIVE_EXCLUSIVE);
+
+			textViewExample.setText(stringBuilderExample);
 		}
 	}
 
 	/**
-	* Возвращает строку и информацией о транскрипции слова.
-	* */
-	public static CharSequence formatDefinition(
-		@NonNull final LookupResponce.Definition definition) {
+	 * Возвращает строку и информацией о транскрипции слова.
+	 */
+	public static CharSequence formatDefinition(@NonNull final LookupResponce responce) {
 
-		final SpannableStringBuilder formattedDefinition = new SpannableStringBuilder();
+		Guard.checkPreCondition(secondaryItemsColor != 0, "Call method init before use this class");
 
-		formattedDefinition
-			.append(definition.getText());
+		if (responce.getDefinitions() != null) {
 
-		if (!StringUtils.isNullOrEmpty(definition.getTs())) {
+			final SpannableStringBuilder formattedDefinition = new SpannableStringBuilder();
+
 			formattedDefinition
-				.append(SPACE)
-				.append(OPEN_BRACE)
-				.append(definition.getTs())
-				.append(CLOSE_BRACE);
-		}
+				.append(responce.getDefinitions().get(0).getText());
 
-		return formattedDefinition;
+			if (!StringUtils.isNullOrEmpty(responce.getDefinitions().get(0).getTs())) {
+				formattedDefinition
+					.append(SPACE)
+					.append(OPEN_BRACE,
+						new ForegroundColorSpan(secondaryItemsColor), SPAN_EXCLUSIVE_INCLUSIVE)
+					.append(responce.getDefinitions().get(0).getTs())
+					.append(CLOSE_BRACE);
+			}
+
+			return formattedDefinition;
+		}
+		return EMPTY;
+	}
+
+	public static String formatTranslate(@NonNull final LookupResponce responce) {
+		if (responce.getDefinitions() != null &&
+			responce.getDefinitions().get(0).getTranslations() != null) {
+			return responce.getDefinitions().get(0).getTranslations().get(0).getText();
+		}
+		return EMPTY;
 	}
 
 	private DictionaryConstructor() {

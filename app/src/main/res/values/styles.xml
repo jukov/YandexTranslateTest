@@ -22,17 +22,17 @@
 
 	<style name="TextTitle">
 		<item name="android:textSize">@dimen/textsize_title</item>
-		<item name="android:textColor">@color/text_all_black87</item>
+		<item name="android:textColor">@color/text_all_title</item>
 	</style>
 
 	<style name="TextSubheading">
 		<item name="android:textSize">@dimen/textsize_subheading</item>
-		<item name="android:textColor">@color/text_all_black87</item>
+		<item name="android:textColor">@color/text_all_subheading</item>
 	</style>
 
 	<style name="TextBody">
 		<item name="android:textSize">@dimen/textsize_body</item>
-		<item name="android:textColor">@color/text_all_black54</item>
+		<item name="android:textColor">@color/text_all_body</item>
 	</style>
 
 	<style name="Divider">

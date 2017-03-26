@@ -192,15 +192,13 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 
 	@Override
 	public void setDictDefinition(final LookupResponce responce) {
-		textViewTranslated
-			.setText(responce.getDefinitions().get(0).getTranslations().get(0).getText());
-		textViewDict
-			.setText(DictionaryConstructor.formatDefinition(responce.getDefinitions().get(0)));
+		textViewTranslated.setText(DictionaryConstructor.formatTranslate(responce));
+		textViewDict.setText(DictionaryConstructor.formatDefinition(responce));
 
 		textViewDict.setVisibility(View.VISIBLE);
 		containerDictResult.setVisibility(View.VISIBLE);
 		containerDictResult.removeAllViews();
-		DictionaryConstructor.visualiseLookupResponce(getContext(), containerDictResult, responce);
+		DictionaryConstructor.makeLookupResponce(getContext(), containerDictResult, responce);
 	}
 
 	private void setContentEnabled(final boolean enabled) {
