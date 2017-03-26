@@ -11,21 +11,18 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AlertDialog.Builder;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.MvpAppCompatFragment;
-import com.arellomobile.mvp.presenter.InjectPresenter;
 import info.jukov.yandextranslatetest.R;
+import info.jukov.yandextranslatetest.model.adapter.TabAdapter;
 import info.jukov.yandextranslatetest.model.network.ErrorCodes;
 import info.jukov.yandextranslatetest.model.storage.Translation;
-import info.jukov.yandextranslatetest.presenter.ScreenMainPresenter;
-import info.jukov.yandextranslatetest.presenter.ScreenMainView;
-import info.jukov.yandextranslatetest.model.adapter.TabAdapter;
 import info.jukov.yandextranslatetest.ui.screen.fragment.FavoritesFragment;
 import info.jukov.yandextranslatetest.ui.screen.fragment.HistoryFragment;
 import info.jukov.yandextranslatetest.ui.screen.fragment.TranslateFragment;
@@ -40,8 +37,8 @@ import info.jukov.yandextranslatetest.util.Log;
  * Time: 21:47
  */
 
-public final class ScreenMainActivity extends MvpAppCompatActivity
-	implements ScreenMainView, OnTextTranslatedListener {
+public final class ScreenMainActivity extends AppCompatActivity implements
+																OnTextTranslatedListener {
 
 	public static final String ACTION_ERROR = ExtrasUtils
 		.createExtraName("ACTION_ERROR", ScreenMainActivity.class);
@@ -49,6 +46,10 @@ public final class ScreenMainActivity extends MvpAppCompatActivity
 		.createExtraName("EXTRA_ERROR_CODE", ScreenMainActivity.class);
 
 	private static final Log LOG = new Log(ScreenMainActivity.class);
+	@BindView(R.id.toolbar) Toolbar toolbar;
+	@BindView(R.id.tabLayout) TabLayout tabLayout;
+	@BindView(R.id.viewPager) ViewPager viewPager;
+	private TabAdapter tabAdapter;
 
 	public static void start(@NonNull final Context context) {
 		Guard.checkNotNull(context, "null == context");
@@ -65,15 +66,6 @@ public final class ScreenMainActivity extends MvpAppCompatActivity
 		starter.putExtra(EXTRA_ERROR_CODE, errorCode);
 		context.startActivity(starter);
 	}
-
-	@InjectPresenter
-	ScreenMainPresenter presenter;
-	@BindView(R.id.toolbar) Toolbar toolbar;
-	@BindView(R.id.tabLayout) TabLayout tabLayout;
-
-	@BindView(R.id.viewPager) ViewPager viewPager;
-
-	private TabAdapter tabAdapter;
 
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
@@ -117,7 +109,7 @@ public final class ScreenMainActivity extends MvpAppCompatActivity
 
 	@Override
 	protected void onActivityResult(final int requestCode, final int resultCode,
-									final Intent data) {
+		final Intent data) {
 
 		if (requestCode == ScreenSettingsActivity.REQUEST_CODE_RESTART_AFTER_API_KEY_CHANGE &&
 			resultCode == RESULT_OK) {
@@ -194,31 +186,31 @@ public final class ScreenMainActivity extends MvpAppCompatActivity
 				builder.setTitle(R.string.alertDialogInvalidKeys_wrongKeys_title)
 					.setMessage(R.string.alertDialogInvalidKeys_wrongKeys_text)
 					.setPositiveButton(R.string.alertDialogInvalidKeys_goToSettings_button,
-									   openSettingsListener);
+						openSettingsListener);
 				break;
 			case ErrorCodes.BANNED_API_KEY:
 				builder.setTitle(R.string.alertDialogInvalidKeys_bannedKeys_title)
 					.setMessage(R.string.alertDialogInvalidKeys_bannedKeys_text)
 					.setPositiveButton(R.string.alertDialogInvalidKeys_goToSettings_button,
-									   openSettingsListener);
+						openSettingsListener);
 				break;
 			case ErrorCodes.DAILY_LIMIT_EXCEEDED:
 				builder.setTitle(R.string.alertDialogInvalidKeys_exceededDailyLimit_title)
 					.setMessage(R.string.alertDialogInvalidKeys_exceededDailyLimit_text)
 					.setPositiveButton(R.string.alertDialogInvalidKeys_goToSettings_button,
-									   openSettingsListener);
+						openSettingsListener);
 				break;
 			case ErrorCodes.KEYS_NOT_SET_CUSTOM:
 				builder.setTitle(R.string.alertDialogInvalidKeys_keysNotSet_title)
 					.setMessage(R.string.alertDialogInvalidKeys_keysNotSet_text)
 					.setPositiveButton(R.string.alertDialogInvalidKeys_goToSettings_button,
-									   openSettingsListener);
+						openSettingsListener);
 				break;
 			case ErrorCodes.NETWORK_ERROR_CUSTOM:
 				builder.setTitle(R.string.alertDialogInvalidKeys_networkError_title)
 					.setMessage(R.string.alertDialogInvalidKeys_networkError_text)
 					.setPositiveButton(R.string.alertDialogInvalidKeys_tryAgain_button,
-									   restartListener);
+						restartListener);
 				break;
 			default:
 				LOG.warning("Unexpected error code");

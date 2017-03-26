@@ -40,9 +40,9 @@ public final class TranslatePresenter extends MvpPresenter<TranslateView> {
 		@Override
 		public void onTrue() {
 			if (!lookupResponce.isEmpty()) {
-				getViewState().setDictDefinition(lookupResponce);
+				getViewState().onDictDefinition(lookupResponce);
 			} else {
-				getViewState().setTranslation(translateResponce.getText());
+				getViewState().onTranslation(translateResponce.getText());
 			}
 		}
 	});
@@ -55,6 +55,11 @@ public final class TranslatePresenter extends MvpPresenter<TranslateView> {
 	public void translate(@NonNull final String lang, @NonNull final String text) {
 		Guard.checkNotNull(lang, "null == lang");
 		Guard.checkNotNull(text, "null == text");
+
+		if (text.isEmpty()) {
+			getViewState().onEmptyInput();
+			return;
+		}
 
 		allQueriesLoaded.reset();
 		apiModule.getTranslateApi().use(new TranslateCallback(null), null).translate(lang, text);

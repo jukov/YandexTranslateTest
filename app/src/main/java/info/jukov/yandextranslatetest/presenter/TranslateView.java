@@ -12,8 +12,10 @@ import java.util.List;
 
 public interface TranslateView extends MvpView {
 
-	void setTranslation(List<String> translatedText);
+	void onTranslation(List<String> translatedText);
 
-	void setDictDefinition(LookupResponce responce);
+	void onDictDefinition(LookupResponce responce);
+
+	void onEmptyInput();
 
 }

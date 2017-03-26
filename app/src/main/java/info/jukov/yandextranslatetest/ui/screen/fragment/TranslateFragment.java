@@ -28,6 +28,7 @@ import info.jukov.yandextranslatetest.presenter.TranslatePresenter;
 import info.jukov.yandextranslatetest.presenter.TranslateView;
 import info.jukov.yandextranslatetest.ui.format.DictionaryConstructor;
 import info.jukov.yandextranslatetest.util.Log;
+import info.jukov.yandextranslatetest.util.ToastUtils;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -55,6 +56,9 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 
 	private LanguageAdapter inputSpinnerAdapter;
 	private LanguageAdapter outputSpinnerAdapter;
+
+	private String previousInputLangCode;
+	private String previousOutputLangCode;
 
 	private OnTextTranslatedListener onTextTranslatedListener;
 
@@ -115,9 +119,7 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 			}
 
 			@Override
-			public void onNothingSelected(final AdapterView<?> parent) {
-
-			}
+			public void onNothingSelected(final AdapterView<?> parent) {}
 		});
 
 		spinnerOutputLanguage.setOnItemSelectedListener(new OnItemSelectedListener() {
@@ -131,9 +133,7 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 			}
 
 			@Override
-			public void onNothingSelected(final AdapterView<?> parent) {
-
-			}
+			public void onNothingSelected(final AdapterView<?> parent) {}
 		});
 	}
 
@@ -172,7 +172,7 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 	}
 
 	@Override
-	public void setTranslation(final List<String> translatedText) {
+	public void onTranslation(final List<String> translatedText) {
 
 		final StringBuilder formattedText = new StringBuilder();
 
@@ -191,7 +191,7 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 	}
 
 	@Override
-	public void setDictDefinition(final LookupResponce responce) {
+	public void onDictDefinition(final LookupResponce responce) {
 		textViewTranslated.setText(DictionaryConstructor.formatTranslate(responce));
 		textViewDict.setText(DictionaryConstructor.formatDefinition(responce));
 
@@ -199,6 +199,11 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 		containerDictResult.setVisibility(View.VISIBLE);
 		containerDictResult.removeAllViews();
 		DictionaryConstructor.makeLookupResponce(getContext(), containerDictResult, responce);
+	}
+
+	@Override
+	public void onEmptyInput() {
+		ToastUtils.shortToast(getContext(), R.string.translateFragment_errorNothingToTranslate);
 	}
 
 	private void setContentEnabled(final boolean enabled) {

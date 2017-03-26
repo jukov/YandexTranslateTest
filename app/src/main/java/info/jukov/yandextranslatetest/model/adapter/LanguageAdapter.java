@@ -11,6 +11,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import info.jukov.yandextranslatetest.R;
 import info.jukov.yandextranslatetest.model.storage.Language;
+import info.jukov.yandextranslatetest.util.Guard;
 import info.jukov.yandextranslatetest.util.Log;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -66,13 +67,35 @@ public final class LanguageAdapter extends BaseAdapter {
 	}
 
 	/**
+	 * Закрепляет элемент с кодом языка {@code code} в верхнюю часть списка.
+	 *
+	 * @param code код языка закрепляемого элемента.
+	 * @return true - если элемент был найден и прикреплен. false - если элемент найден не был.
+	 */
+	public boolean pinItemToTop(@NonNull final String code) {
+
+		Guard.checkPreCondition(code.length() == 2, "Code must contain exactly two letters");
+
+		for (int i = 0; i < languages.size(); i++) {
+			if (languages.get(i).getCode().equals(code)) {
+				pinItemToTop(i);
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
 	 * Закрепляет элемент с индексом {@code position} в верхнюю часть списка.
 	 * Если элементов больше, чем {@link LanguageAdapter#MOST_USED_ITEM_COUNT}, то
 	 * самый старый закрепленный элемент открепляется.
 	 *
-	 * @param position индекс закрепляемого элемента
+	 * @param position индекс закрепляемого элемента.
 	 */
 	public void pinItemToTop(final int position) {
+
+		Guard.checkPreCondition(position < languages.size(), "Position too big");
+		Guard.checkPreCondition(position >= 0, "Position too small");
 
 		//Лист отсортирован по приоритету - проверяя первое значение
 		//узнаем количество прикрепленных объектов
@@ -97,7 +120,7 @@ public final class LanguageAdapter extends BaseAdapter {
 	}
 
 	/**
-	 * Возвращает список самых используемых языков
+	 * Возвращает список самых используемых языков.
 	 */
 	public List<Language> getMostUsedLanguages() {
 

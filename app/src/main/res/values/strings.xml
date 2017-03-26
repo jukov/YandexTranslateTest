@@ -8,6 +8,8 @@
 
 	<string name="translateFragment_copyright">Realized with help of services “Yandex.Translate” and “Yandex.Dictionary”.</string>
 
+	<string name="translateFragment_errorNothingToTranslate">Nothing to translate</string>
+
 	<!--Current lang code-->
 	<string name="lang_code">en</string>
 
