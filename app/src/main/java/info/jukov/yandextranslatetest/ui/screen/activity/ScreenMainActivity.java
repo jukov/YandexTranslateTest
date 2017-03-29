@@ -18,15 +18,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.arellomobile.mvp.MvpAppCompatFragment;
 import info.jukov.yandextranslatetest.R;
 import info.jukov.yandextranslatetest.model.adapter.TabAdapter;
 import info.jukov.yandextranslatetest.model.network.ErrorCodes;
-import info.jukov.yandextranslatetest.model.storage.Translation;
+import info.jukov.yandextranslatetest.model.storage.dao.History;
+import info.jukov.yandextranslatetest.ui.base.OnTextTranslatedListener;
+import info.jukov.yandextranslatetest.ui.base.OnFavoriteStatusChangeListener;
 import info.jukov.yandextranslatetest.ui.screen.fragment.FavoritesFragment;
 import info.jukov.yandextranslatetest.ui.screen.fragment.HistoryFragment;
 import info.jukov.yandextranslatetest.ui.screen.fragment.TranslateFragment;
-import info.jukov.yandextranslatetest.ui.screen.fragment.TranslateFragment.OnTextTranslatedListener;
 import info.jukov.yandextranslatetest.util.ExtrasUtils;
 import info.jukov.yandextranslatetest.util.Guard;
 import info.jukov.yandextranslatetest.util.Log;
@@ -38,7 +38,7 @@ import info.jukov.yandextranslatetest.util.Log;
  */
 
 public final class ScreenMainActivity extends AppCompatActivity implements
-																OnTextTranslatedListener {
+																OnTextTranslatedListener, OnFavoriteStatusChangeListener {
 
 	public static final String ACTION_ERROR = ExtrasUtils
 		.createExtraName("ACTION_ERROR", ScreenMainActivity.class);
@@ -50,6 +50,10 @@ public final class ScreenMainActivity extends AppCompatActivity implements
 	@BindView(R.id.tabLayout) TabLayout tabLayout;
 	@BindView(R.id.viewPager) ViewPager viewPager;
 	private TabAdapter tabAdapter;
+
+	private final TranslateFragment translateFragment = TranslateFragment.newInstance();
+	private final FavoritesFragment favoritesFragment = FavoritesFragment.newInstance();
+	private final HistoryFragment historyFragment = HistoryFragment.newInstance();
 
 	public static void start(@NonNull final Context context) {
 		Guard.checkNotNull(context, "null == context");
@@ -84,7 +88,6 @@ public final class ScreenMainActivity extends AppCompatActivity implements
 
 	@Override
 	public boolean onCreateOptionsMenu(final Menu menu) {
-
 		final MenuInflater menuInflater = getMenuInflater();
 		menuInflater.inflate(R.menu.toolbar_menu, menu);
 
@@ -93,7 +96,6 @@ public final class ScreenMainActivity extends AppCompatActivity implements
 
 	@Override
 	public boolean onOptionsItemSelected(final MenuItem item) {
-
 		switch (item.getItemId()) {
 			case R.id.toolbarMenuSetttings:
 				ScreenSettingsActivity.start(this);
@@ -120,17 +122,14 @@ public final class ScreenMainActivity extends AppCompatActivity implements
 	}
 
 	@Override
-	public void onTextTranslated(final Translation translation) {
-		MvpAppCompatFragment fragment = tabAdapter.getItemByTitle(R.string.fragmentHistory_title);
+	public void onTextTranslated(final History history) {
+		historyFragment.addOrUpdateTranslation(history);
+	}
 
-		if (fragment instanceof HistoryFragment) {
-			HistoryFragment historyFragment = (HistoryFragment) fragment;
-
-			historyFragment.addTranslation(translation);
-
-		} else {
-			LOG.error("Unexpected fragment used with history fragment title");
-		}
+	@Override
+	public void onFavoriteStatusChange(final History history) {
+		favoritesFragment.onFavoriteStatusChange(history);
+		historyFragment.addOrUpdateTranslation(history);
 	}
 
 	private void handleIntent(@NonNull final Intent intent) {
@@ -142,9 +141,9 @@ public final class ScreenMainActivity extends AppCompatActivity implements
 	private void initTabLayout() {
 
 		tabAdapter = new TabAdapter.Builder(this, getSupportFragmentManager())
-			.addTab(TranslateFragment.newInstance(), R.string.fragmentTranslate_title)
-			.addTab(FavoritesFragment.newInstance(), R.string.fragmentFavorites_title)
-			.addTab(HistoryFragment.newInstance(), R.string.fragmentHistory_title)
+			.addTab(translateFragment, R.string.fragmentTranslate_title)
+			.addTab(favoritesFragment, R.string.fragmentFavorites_title)
+			.addTab(historyFragment, R.string.fragmentHistory_title)
 			.build();
 
 		viewPager.setAdapter(tabAdapter);
@@ -220,6 +219,10 @@ public final class ScreenMainActivity extends AppCompatActivity implements
 
 		builder.setNegativeButton(R.string.alertDialogInvalidKeys_exit_button, exitListener);
 
-		return builder.create();
+		final Dialog dialog = builder.create();
+
+		dialog.setCanceledOnTouchOutside(false);
+
+		return dialog;
 	}
 }

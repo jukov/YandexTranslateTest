@@ -5,66 +5,82 @@
 	android:layout_height="@dimen/height_recyclerHistory">
 
 	<LinearLayout
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
 		android:layout_centerInParent="true"
-		android:orientation="vertical"
-		android:layout_marginLeft="@dimen/space_all_horizontal"
-		android:layout_marginRight="@dimen/space_all_horizontal">
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		android:gravity="center_vertical">
 
 		<LinearLayout
-			android:layout_width="match_parent"
+			android:id="@+id/containerText"
+			android:layout_width="0dp"
+			android:layout_weight="1"
 			android:layout_height="wrap_content"
-			android:orientation="horizontal">
+			android:layout_marginLeft="@dimen/space_all_horizontal"
+			android:orientation="vertical">
 
-			<TextView
-				android:id="@+id/textViewInputLang"
-				style="@style/TextSubheading"
-				android:textStyle="bold"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_marginRight="@dimen/space_all_betweenContent"
-				android:ellipsize="end"
-				android:lines="1"
-				tools:text="EN"/>
-
-			<TextView
-				android:id="@+id/textViewInput"
-				style="@style/TextSubheading"
+			<LinearLayout
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:ellipsize="end"
-				android:lines="1"
-				tools:text="I sell my organs for buy videogames"/>
+				android:orientation="horizontal">
+
+				<TextView
+					android:id="@+id/textViewInputLang"
+					style="@style/TextSubheading"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginRight="@dimen/space_all_betweenContent"
+					android:ellipsize="end"
+					android:lines="1"
+					android:textStyle="bold"
+					tools:text="EN"/>
+
+				<TextView
+					android:id="@+id/textViewInput"
+					style="@style/TextSubheading"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:ellipsize="end"
+					android:lines="1"
+					tools:text="I sell my organs for buy videogames"/>
+
+			</LinearLayout>
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="horizontal">
+
+				<TextView
+					android:id="@+id/textViewOutputLang"
+					style="@style/TextSubheading"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginRight="@dimen/space_all_betweenContent"
+					android:ellipsize="end"
+					android:lines="1"
+					android:textStyle="bold"
+					tools:text="RU"/>
+
+				<TextView
+					android:id="@+id/textViewOutput"
+					style="@style/TextBody"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:ellipsize="end"
+					android:lines="1"
+					tools:text="Я продаю свои органы чтобы купить видеоигры"/>
+
+			</LinearLayout>
 
 		</LinearLayout>
 
-		<LinearLayout
-			android:layout_width="match_parent"
+		<ImageView
+			android:id="@+id/imageViewFavorite"
+			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:orientation="horizontal">
-
-			<TextView
-				android:id="@+id/textViewOutputLang"
-				style="@style/TextSubheading"
-				android:textStyle="bold"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_marginRight="@dimen/space_all_betweenContent"
-				android:ellipsize="end"
-				android:lines="1"
-				tools:text="RU"/>
-
-			<TextView
-				android:id="@+id/textViewOutput"
-				style="@style/TextBody"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:ellipsize="end"
-				android:lines="1"
-				tools:text="Я продаю свои органы чтобы купить видеоигры"/>
-
-		</LinearLayout>
+			android:padding="@dimen/space_all_horizontal"
+			android:src="@drawable/ic_heart_outline"/>
 
 	</LinearLayout>
 

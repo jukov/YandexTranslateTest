@@ -9,8 +9,10 @@ import info.jukov.yandextranslatetest.model.CallbackWithProgress;
 import info.jukov.yandextranslatetest.model.module.ApiModule;
 import info.jukov.yandextranslatetest.model.network.dict.LookupResponce;
 import info.jukov.yandextranslatetest.model.network.translate.TranslateResponce;
+import info.jukov.yandextranslatetest.model.storage.dao.History;
 import info.jukov.yandextranslatetest.ui.base.Progressable;
 import info.jukov.yandextranslatetest.util.Guard;
+import info.jukov.yandextranslatetest.util.JsonUtils;
 import info.jukov.yandextranslatetest.util.MultiSetBoolean;
 import info.jukov.yandextranslatetest.util.MultiSetBoolean.OnValueTrueListener;
 import javax.inject.Inject;
@@ -35,15 +37,37 @@ public final class TranslatePresenter extends MvpPresenter<TranslateView> {
 	private TranslateResponce translateResponce;
 	private LookupResponce lookupResponce;
 
+	private String lang;
+	private String text;
+
+	private History history;
+
 	private final MultiSetBoolean<Queries> allQueriesLoaded = new MultiSetBoolean<>(
 		Queries.values().length, new OnValueTrueListener() {
 		@Override
 		public void onTrue() {
+
+			history = new History();
+
 			if (!lookupResponce.isEmpty()) {
 				getViewState().onDictDefinition(lookupResponce);
+
+				history.setDictionatyResponse(JsonUtils.serialize(lookupResponce));
+				history.setText(text);
+				history.setLang(lang);
+
 			} else {
 				getViewState().onTranslation(translateResponce.getText());
+
+				history.setDictionatyResponse(JsonUtils.serialize(lookupResponce));
+				history.setText(text);
+				history.setLang(lang);
 			}
+
+			getViewState().onTextTranslated(history);
+
+			lang = null;
+			text = null;
 		}
 	});
 
@@ -61,9 +85,23 @@ public final class TranslatePresenter extends MvpPresenter<TranslateView> {
 			return;
 		}
 
+		this.lang = lang;
+		this.text = text;
+
+		translateResponce = null;
+		lookupResponce = null;
+
 		allQueriesLoaded.reset();
 		apiModule.getTranslateApi().use(new TranslateCallback(null), null).translate(lang, text);
 		apiModule.getDictApi().use(new DictCallback(null), null).lookup(lang, text, null, null);
+	}
+
+	public void addToFavorites() {
+		if (history != null) {
+			getViewState().onTranslateAddedToFavorites(history);
+		} else {
+			getViewState().onNothingToAddToFavorite();
+		}
 	}
 
 	private final class TranslateCallback extends CallbackWithProgress<TranslateResponce> {

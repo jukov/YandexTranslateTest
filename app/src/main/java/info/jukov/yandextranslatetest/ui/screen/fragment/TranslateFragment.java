@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -22,11 +23,14 @@ import info.jukov.yandextranslatetest.R;
 import info.jukov.yandextranslatetest.model.adapter.LanguageAdapter;
 import info.jukov.yandextranslatetest.model.network.dict.LookupResponce;
 import info.jukov.yandextranslatetest.model.storage.Language;
-import info.jukov.yandextranslatetest.model.storage.Translation;
+import info.jukov.yandextranslatetest.model.storage.dao.History;
 import info.jukov.yandextranslatetest.model.storage.preferences.LangPreferences;
 import info.jukov.yandextranslatetest.presenter.TranslatePresenter;
 import info.jukov.yandextranslatetest.presenter.TranslateView;
+import info.jukov.yandextranslatetest.ui.base.OnTextTranslatedListener;
+import info.jukov.yandextranslatetest.ui.base.OnFavoriteStatusChangeListener;
 import info.jukov.yandextranslatetest.ui.format.DictionaryConstructor;
+import info.jukov.yandextranslatetest.ui.screen.activity.ScreenMainActivity;
 import info.jukov.yandextranslatetest.util.Log;
 import info.jukov.yandextranslatetest.util.ToastUtils;
 import java.util.HashSet;
@@ -46,10 +50,12 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 	private static final String LANG_DELIMITER = "-";
 
 	@InjectPresenter TranslatePresenter presenter;
+
 	@BindView(R.id.spinnerInputLanguage) Spinner spinnerInputLanguage;
 	@BindView(R.id.spinnerOutputLanguage) Spinner spinnerOutputLanguage;
 	@BindView(R.id.editTextTranslatable) EditText editTextTranslatable;
 	@BindView(R.id.buttonTranslate) Button buttonTranslate;
+	@BindView(R.id.buttonFavorite) ImageButton buttonFavorite;
 	@BindView(R.id.textViewTranslated) TextView textViewTranslated;
 	@BindView(R.id.textViewDict) TextView textViewDict;
 	@BindView(R.id.containerDictResult) LinearLayout containerDictResult;
@@ -61,6 +67,7 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 	private String previousOutputLangCode;
 
 	private OnTextTranslatedListener onTextTranslatedListener;
+	private OnFavoriteStatusChangeListener onFavoriteStatusChangeListener;
 
 	public static TranslateFragment newInstance() {
 
@@ -97,8 +104,9 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 	public void onAttach(final Context context) {
 		super.onAttach(context);
 
-		if (context instanceof OnTextTranslatedListener) {
-			onTextTranslatedListener = (OnTextTranslatedListener) context;
+		if (context instanceof ScreenMainActivity) {
+			onTextTranslatedListener = (ScreenMainActivity) context;
+			onFavoriteStatusChangeListener = (ScreenMainActivity) context;
 		} else {
 			LOG.error("Fragment attached to unexpected activity");
 		}
@@ -171,6 +179,11 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 		presenter.translate(getLangForServer(), getTranslatableText());
 	}
 
+	@OnClick(R.id.buttonFavorite)
+	void onFavoriteClick() {
+		presenter.addToFavorites();
+	}
+
 	@Override
 	public void onTranslation(final List<String> translatedText) {
 
@@ -185,9 +198,6 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 		textViewDict.setVisibility(View.GONE);
 		containerDictResult.setVisibility(View.GONE);
 		containerDictResult.removeAllViews();
-
-		onTextTranslatedListener.onTextTranslated(new Translation(getTranslatableText(),
-			getInputLang(), formattedText.toString(), getOutputLang()));
 	}
 
 	@Override
@@ -204,6 +214,21 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 	@Override
 	public void onEmptyInput() {
 		ToastUtils.shortToast(getContext(), R.string.translateFragment_errorNothingToTranslate);
+	}
+
+	@Override
+	public void onTextTranslated(final History history) {
+		onTextTranslatedListener.onTextTranslated(history);
+	}
+
+	@Override
+	public void onTranslateAddedToFavorites(final History history) {
+		onFavoriteStatusChangeListener.onFavoriteStatusChange(history);
+	}
+
+	@Override
+	public void onNothingToAddToFavorite() {
+		ToastUtils.shortToast(getContext(), R.string.translateFragment_errorNothingToAddToFavorite);
 	}
 
 	private void setContentEnabled(final boolean enabled) {
@@ -229,10 +254,5 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 
 	private String getTranslatableText() {
 		return editTextTranslatable.getText().toString();
-	}
-
-	public interface OnTextTranslatedListener {
-
-		void onTextTranslated(Translation translation);
 	}
 }

@@ -2,75 +2,76 @@ package info.jukov.yandextranslatetest.model.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import info.jukov.yandextranslatetest.R;
-import info.jukov.yandextranslatetest.model.storage.Translation;
-import java.util.ArrayList;
+import info.jukov.yandextranslatetest.model.adapter.HistoryAdapter.HistoryViewHolder;
+import info.jukov.yandextranslatetest.model.storage.dao.History;
+import info.jukov.yandextranslatetest.model.storage.dao.HistoryDao;
+import info.jukov.yandextranslatetest.ui.base.OnFavoriteStatusChangeListener;
+import info.jukov.yandextranslatetest.util.Guard;
 import java.util.List;
 
 /**
  * User: jukov
- * Date: 21.03.2017
- * Time: 22:36
+ * Date: 28.03.2017
+ * Time: 22:34
  */
 
-public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
+public final class HistoryAdapter extends AbstractHistoryAdapter<HistoryViewHolder> {
 
-	private final List<Translation> translations;
+	public HistoryAdapter(@NonNull final Context context, @NonNull final HistoryDao historyDao,
+		@Nullable final List list, @NonNull final OnFavoriteStatusChangeListener listener) {
+		super(context, historyDao, list, listener);
 
-	private final LayoutInflater inflater;
+	}
 
-	public HistoryAdapter(@NonNull final Context content) {
-		translations = new ArrayList<>();
+	public void addOrUpdateHistoryItem(@NonNull final History history) {
 
-		inflater = LayoutInflater.from(content);
+		final int itemIndex = historyList.indexOf(history);
+
+		if (itemIndex != -1) {
+			historyList.remove(history);
+			historyList.add(itemIndex, history);
+
+			notifyItemChanged(itemIndex);
+
+		} else {
+			historyList.add(history);
+
+			historyDao.insert(history);
+
+			notifyDataSetChanged();
+		}
 	}
 
 	@Override
-	public ViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
+	public HistoryViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
 
 		final View view = inflater.inflate(R.layout.recycler_history_item, parent, false);
 
-		final ViewHolder viewHolder = new ViewHolder(view);
+		final HistoryViewHolder viewHolder = new HistoryViewHolder(view);
 
 		return viewHolder;
 	}
 
-	@Override
-	public void onBindViewHolder(final ViewHolder holder, final int position) {
-		holder.textViewInput.setText(translations.get(position).getInputText());
-		holder.textViewOutput.setText(translations.get(position).getOutputText());
-		holder.textViewInputLang.setText(translations.get(position).getInputLang());
-		holder.textViewOutputLang.setText(translations.get(position).getOutputLang());
-	}
+	public class HistoryViewHolder extends AbstractHistoryAdapter.ViewHolder {
 
-	@Override
-	public int getItemCount() {
-		return translations.size();
-	}
-
-	public void addTranslation(@NonNull final Translation translation) {
-		translations.add(translation);
-
-		notifyDataSetChanged();
-	}
-
-	public static class ViewHolder extends RecyclerView.ViewHolder {
-
-		@BindView(R.id.textViewInput) TextView textViewInput;
-		@BindView(R.id.textViewOutput) TextView textViewOutput;
-		@BindView(R.id.textViewInputLang) TextView textViewInputLang;
-		@BindView(R.id.textViewOutputLang) TextView textViewOutputLang;
-
-		public ViewHolder(final View itemView) {
+		public HistoryViewHolder(final View itemView) {
 			super(itemView);
-			ButterKnife.bind(this, itemView);
+		}
+
+		@Override
+		public void onFavoriteClick() {
+			final History history = historyList.get(getHolderPosition());
+			history.setIsFavorite(!history.getIsFavorite());
+
+			setFavorite(history.getIsFavorite());
+
+			listener.onFavoriteStatusChange(history);
+
+			historyDao.update(history);
 		}
 	}
 }
