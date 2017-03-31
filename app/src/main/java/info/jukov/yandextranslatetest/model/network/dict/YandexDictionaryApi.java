@@ -24,7 +24,7 @@ interface YandexDictionaryApi {
 
 	@FormUrlEncoded
 	@POST(LOOKUP)
-	Call<LookupResponce> lookup(@Query("key") String key, @Query("lang") String lang,
+	Call<LookupResponse> lookup(@Query("key") String key, @Query("lang") String lang,
 								@Field("text") String text, @Query("ui") String ui,
 								@Query("flags") String flags);
 

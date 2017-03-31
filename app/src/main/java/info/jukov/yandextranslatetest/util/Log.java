@@ -18,8 +18,12 @@ public final class Log {
 		tag = clazz.getName();
 	}
 
+	public void verbose(@Nullable final String msg) {
+		android.util.Log.v(tag, msg);
+	}
+
 	public void info(@Nullable final String msg) {
-		android.util.Log.d(tag, msg);
+		android.util.Log.i(tag, msg);
 	}
 
 	public void warning(@Nullable final String msg) {

@@ -22,6 +22,8 @@ import java.util.List;
  * User: jukov
  * Date: 19.03.2017
  * Time: 16:33
+ *
+ * Адаптер для вывода списка языков в спиннер.
  */
 
 public final class LanguageAdapter extends BaseAdapter {

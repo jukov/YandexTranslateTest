@@ -6,7 +6,7 @@ package info.jukov.yandextranslatetest.model.network;
  * Time: 14:59
  */
 
-public class ErrorResponce {
+public class ErrorResponse {
 
 	private int code;
 	private String message;

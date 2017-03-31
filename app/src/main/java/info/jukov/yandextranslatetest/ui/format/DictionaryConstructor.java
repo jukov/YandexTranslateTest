@@ -15,12 +15,12 @@ import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import info.jukov.yandextranslatetest.R;
-import info.jukov.yandextranslatetest.model.network.dict.LookupResponce;
-import info.jukov.yandextranslatetest.model.network.dict.LookupResponce.Definition;
-import info.jukov.yandextranslatetest.model.network.dict.LookupResponce.Example;
-import info.jukov.yandextranslatetest.model.network.dict.LookupResponce.Meaning;
-import info.jukov.yandextranslatetest.model.network.dict.LookupResponce.Syn;
-import info.jukov.yandextranslatetest.model.network.dict.LookupResponce.Translation;
+import info.jukov.yandextranslatetest.model.network.dict.LookupResponse;
+import info.jukov.yandextranslatetest.model.network.dict.LookupResponse.Definition;
+import info.jukov.yandextranslatetest.model.network.dict.LookupResponse.Example;
+import info.jukov.yandextranslatetest.model.network.dict.LookupResponse.Meaning;
+import info.jukov.yandextranslatetest.model.network.dict.LookupResponse.Syn;
+import info.jukov.yandextranslatetest.model.network.dict.LookupResponse.Translation;
 import info.jukov.yandextranslatetest.util.Guard;
 import info.jukov.yandextranslatetest.util.StringUtils;
 import java.util.Iterator;
@@ -53,17 +53,17 @@ public final class DictionaryConstructor {
 
 	/**
 	 * Прикрепляет к {@code parent} набор {@link android.view.View},
-	 * которые визуализируют объект {@link LookupResponce}
+	 * которые визуализируют объект {@link LookupResponse}
 	 */
-	public static void makeLookupResponce(@NonNull final Context context,
-		@NonNull final LinearLayout parent, @NonNull final LookupResponce responce) {
+	public static void makeLookupResponse(@NonNull final Context context,
+		@NonNull final LinearLayout parent, @NonNull final LookupResponse response) {
 
 		Guard.checkPreCondition(secondaryItemsColor != 0, "Call method init before use this class");
 
 		final LayoutInflater inflater = LayoutInflater.from(context);
 
 		//Части речи
-		for (final Definition definition : responce.getDefinitions()) {
+		for (final Definition definition : response.getDefinitions()) {
 
 			final TextView textViewPartOfSpeech = (TextView) inflater
 				.inflate(R.layout.component_dict_item_part_or_speech, null);
@@ -139,7 +139,7 @@ public final class DictionaryConstructor {
 								.append(syn.getGen(), new StyleSpan(ITALIC),
 									SPAN_EXCLUSIVE_EXCLUSIVE);
 
-							final int genStart = stringBuilderDefinitions.length() - translation.getGen().length();
+							final int genStart = stringBuilderDefinitions.length() - syn.getGen().length();
 							final int genEnd = stringBuilderDefinitions.length();
 
 							stringBuilderDefinitions.setSpan(new ForegroundColorSpan(secondaryItemsColor),
@@ -151,7 +151,7 @@ public final class DictionaryConstructor {
 								.append(syn.getAsp(), new StyleSpan(ITALIC),
 									SPAN_EXCLUSIVE_EXCLUSIVE);
 
-							final int aspStart = stringBuilderDefinitions.length() - translation.getAsp().length();
+							final int aspStart = stringBuilderDefinitions.length() - syn.getAsp().length();
 							final int aspEnd = stringBuilderDefinitions.length();
 
 							stringBuilderDefinitions.setSpan(new ForegroundColorSpan(secondaryItemsColor),
@@ -234,23 +234,23 @@ public final class DictionaryConstructor {
 	/**
 	 * Возвращает строку и информацией о транскрипции слова.
 	 */
-	public static CharSequence formatDefinition(@NonNull final LookupResponce responce) {
+	public static CharSequence formatDefinition(@NonNull final LookupResponse response) {
 
 		Guard.checkPreCondition(secondaryItemsColor != 0, "Call method init before use this class");
 
-		if (responce.getDefinitions() != null) {
+		if (response.getDefinitions() != null) {
 
 			final SpannableStringBuilder formattedDefinition = new SpannableStringBuilder();
 
 			formattedDefinition
-				.append(responce.getDefinitions().get(0).getText());
+				.append(response.getDefinitions().get(0).getText());
 
-			if (!StringUtils.isNullOrEmpty(responce.getDefinitions().get(0).getTs())) {
+			if (!StringUtils.isNullOrEmpty(response.getDefinitions().get(0).getTs())) {
 				formattedDefinition
 					.append(SPACE)
 					.append(OPEN_BRACE,
 						new ForegroundColorSpan(secondaryItemsColor), SPAN_EXCLUSIVE_INCLUSIVE)
-					.append(responce.getDefinitions().get(0).getTs())
+					.append(response.getDefinitions().get(0).getTs())
 					.append(CLOSE_BRACE);
 			}
 
@@ -259,10 +259,10 @@ public final class DictionaryConstructor {
 		return EMPTY;
 	}
 
-	public static String formatTranslate(@NonNull final LookupResponce responce) {
-		if (responce.getDefinitions() != null &&
-			responce.getDefinitions().get(0).getTranslations() != null) {
-			return responce.getDefinitions().get(0).getTranslations().get(0).getText();
+	public static String formatTranslate(@NonNull final LookupResponse response) {
+		if (response.getDefinitions() != null &&
+			response.getDefinitions().get(0).getTranslations() != null) {
+			return response.getDefinitions().get(0).getTranslations().get(0).getText();
 		}
 		return EMPTY;
 	}

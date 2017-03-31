@@ -1,4 +1,4 @@
-package info.jukov.yandextranslatetest.model;
+package info.jukov.yandextranslatetest.model.network;
 
 import info.jukov.yandextranslatetest.util.Log;
 import java.io.IOException;

@@ -1,12 +1,7 @@
 package info.jukov.yandextranslatetest.presenter;
 
 import com.arellomobile.mvp.MvpView;
-import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy;
-import com.arellomobile.mvp.viewstate.strategy.SingleStateStrategy;
-import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
-import info.jukov.yandextranslatetest.model.network.dict.LookupResponce;
-import info.jukov.yandextranslatetest.model.storage.dao.History;
-import java.util.List;
+import info.jukov.yandextranslatetest.model.network.dict.LookupResponse;
 
 /**
  * User: jukov
@@ -16,16 +11,13 @@ import java.util.List;
 
 public interface TranslateView extends MvpView {
 
-	void onTranslation(List<String> translatedText);
+	void onTranslation(String translatedText);
 
-	void onDictDefinition(LookupResponce responce);
+	void onDictDefinition(LookupResponse response);
 
 	void onEmptyInput();
 
-	@StateStrategyType(OneExecutionStateStrategy.class)
-	void onTextTranslated(History history);
-
-	void onTranslateAddedToFavorites(History history);
-
 	void onNothingToAddToFavorite();
+
+	void onFavoritesAction(final boolean added);
 }

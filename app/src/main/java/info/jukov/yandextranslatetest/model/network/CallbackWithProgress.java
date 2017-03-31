@@ -1,4 +1,4 @@
-package info.jukov.yandextranslatetest.model;
+package info.jukov.yandextranslatetest.model.network;
 
 import android.support.annotation.Nullable;
 import info.jukov.yandextranslatetest.ui.base.Progressable;

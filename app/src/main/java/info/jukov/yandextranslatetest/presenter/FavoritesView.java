@@ -1,6 +1,8 @@
 package info.jukov.yandextranslatetest.presenter;
 
 import com.arellomobile.mvp.MvpView;
+import info.jukov.yandextranslatetest.model.storage.dao.Translation;
+import java.util.List;
 
 /**
  * User: jukov
@@ -9,5 +11,9 @@ import com.arellomobile.mvp.MvpView;
  */
 
 public interface FavoritesView extends MvpView {
+
+	void onFavoritesFromDatabase(List<Translation> translationList);
+
+	void onNewFavorite(Translation translation);
 
 }

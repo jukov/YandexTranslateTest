@@ -8,7 +8,7 @@ import java.util.List;
  * Time: 23:02
  */
 
-public final class TranslateResponce {
+public final class TranslateResponse {
 
 	private int code;
 	private String lang;
@@ -30,8 +30,13 @@ public final class TranslateResponce {
 		this.lang = lang;
 	}
 
-	public List<String> getText() {
-		return text;
+	public String getText() {
+		final StringBuilder formattedText = new StringBuilder();
+
+		for (final String text : this.text) {
+			formattedText.append(text).append("\n");
+		}
+		return formattedText.toString();
 	}
 
 	public void setText(final List<String> text) {
@@ -40,7 +45,7 @@ public final class TranslateResponce {
 
 	@Override
 	public String toString() {
-		return "TranslateResponce{" +
+		return "TranslateResponse{" +
 			"code=" + code +
 			", lang='" + lang + '\'' +
 			", text=" + text +

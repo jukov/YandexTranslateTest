@@ -21,9 +21,9 @@ interface YandexTranslateApi {
 
 	@FormUrlEncoded
 	@POST(TRANSLATE)
-	Call<TranslateResponce> translate(@Query("key") String key, @Query("lang") String lang,
+	Call<TranslateResponse> translate(@Query("key") String key, @Query("lang") String lang,
 									  @Field("text") String text);
 
 	@GET(GET_LANGS)
-	Call<GetLangsResponce> getLangs(@Query("key") String key, @Query("ui") String ui);
+	Call<GetLangsResponse> getLangs(@Query("key") String key, @Query("ui") String ui);
 }

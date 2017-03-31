@@ -5,11 +5,13 @@ import android.support.annotation.Nullable;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import info.jukov.yandextranslatetest.TranslateApp;
-import info.jukov.yandextranslatetest.model.CallbackWithProgress;
+import info.jukov.yandextranslatetest.model.network.CallbackWithProgress;
 import info.jukov.yandextranslatetest.model.module.ApiModule;
-import info.jukov.yandextranslatetest.model.network.dict.LookupResponce;
-import info.jukov.yandextranslatetest.model.network.translate.TranslateResponce;
-import info.jukov.yandextranslatetest.model.storage.dao.History;
+import info.jukov.yandextranslatetest.model.module.DatabaseModule;
+import info.jukov.yandextranslatetest.model.network.dict.LookupResponse;
+import info.jukov.yandextranslatetest.model.network.translate.TranslateResponse;
+import info.jukov.yandextranslatetest.model.storage.dao.DatabaseManager.OnTranslateProcessedListener;
+import info.jukov.yandextranslatetest.model.storage.dao.Translation;
 import info.jukov.yandextranslatetest.ui.base.Progressable;
 import info.jukov.yandextranslatetest.util.Guard;
 import info.jukov.yandextranslatetest.util.JsonUtils;
@@ -25,7 +27,7 @@ import retrofit2.Response;
  * Time: 19:35
  */
 @InjectViewState
-public final class TranslatePresenter extends MvpPresenter<TranslateView> {
+public final class TranslatePresenter extends MvpPresenter<TranslateView> implements OnTranslateProcessedListener {
 
 	private enum Queries {
 		TRANSLATE,
@@ -33,47 +35,58 @@ public final class TranslatePresenter extends MvpPresenter<TranslateView> {
 	}
 
 	@Inject ApiModule apiModule;
+	@Inject DatabaseModule databaseModule;
 
-	private TranslateResponce translateResponce;
-	private LookupResponce lookupResponce;
+	private TranslateResponse translateResponse;
+	private LookupResponse lookupResponse;
 
 	private String lang;
 	private String text;
 
-	private History history;
+	private Translation translation;
 
-	private final MultiSetBoolean<Queries> allQueriesLoaded = new MultiSetBoolean<>(
-		Queries.values().length, new OnValueTrueListener() {
+	private final MultiSetBoolean<Queries> allQueriesLoaded = new MultiSetBoolean<>(Queries.values().length, new OnValueTrueListener() {
 		@Override
 		public void onTrue() {
 
-			history = new History();
+			translation = new Translation();
 
-			if (!lookupResponce.isEmpty()) {
-				getViewState().onDictDefinition(lookupResponce);
+			if (lookupResponse != null && !lookupResponse.isEmpty()) {
+				getViewState().onDictDefinition(lookupResponse);
 
-				history.setDictionatyResponse(JsonUtils.serialize(lookupResponce));
-				history.setText(text);
-				history.setLang(lang);
+				translation.setDictionatyResponse(JsonUtils.serialize(lookupResponse));
+				translation.setText(text);
+				translation.setLang(lang);
 
-			} else {
-				getViewState().onTranslation(translateResponce.getText());
+			} else if (translateResponse != null){
+				getViewState().onTranslation(translateResponse.getText());
 
-				history.setDictionatyResponse(JsonUtils.serialize(lookupResponce));
-				history.setText(text);
-				history.setLang(lang);
+				translation.setTranslateResponse(translateResponse.getText());
+				translation.setText(text);
+				translation.setLang(lang);
 			}
-
-			getViewState().onTextTranslated(history);
 
 			lang = null;
 			text = null;
+
+			databaseModule.getDatabaseManager().processTranslate(translation);
 		}
 	});
 
 	@Override
 	protected void onFirstViewAttach() {
 		TranslateApp.getAppComponent().inject(this);
+
+		databaseModule.getDatabaseManager().addOnTranslateAddedListener(this);
+	}
+
+	@Override
+	public void onTranslateProcessed(@NonNull final Translation translation) {
+		Guard.checkNotNull(translation, "null == translation");
+
+		if (translation.equals(this.translation)) {
+			getViewState().onFavoritesAction(translation.getIsFavorite());
+		}
 	}
 
 	public void translate(@NonNull final String lang, @NonNull final String text) {
@@ -85,11 +98,23 @@ public final class TranslatePresenter extends MvpPresenter<TranslateView> {
 			return;
 		}
 
+		translation = databaseModule.getDatabaseManager().getTranslateFromDatabase(lang, text);
+
+		if (translation != null) {
+			if (translation.getTranslateResponse() != null) {
+				getViewState().onTranslation(translation.getTranslateResponse());
+			} else if (translation.getDictionatyResponse() != null) {
+				getViewState().onDictDefinition(JsonUtils.deserialize(LookupResponse.class, translation.getDictionatyResponse()));
+			}
+			getViewState().onFavoritesAction(translation.getIsFavorite());
+			return;
+		}
+
 		this.lang = lang;
 		this.text = text;
 
-		translateResponce = null;
-		lookupResponce = null;
+		translateResponse = null;
+		lookupResponse = null;
 
 		allQueriesLoaded.reset();
 		apiModule.getTranslateApi().use(new TranslateCallback(null), null).translate(lang, text);
@@ -97,55 +122,58 @@ public final class TranslatePresenter extends MvpPresenter<TranslateView> {
 	}
 
 	public void addToFavorites() {
-		if (history != null) {
-			getViewState().onTranslateAddedToFavorites(history);
+		if (translation != null) {
+			translation.setIsFavorite(!translation.getIsFavorite());
+
+			databaseModule.getDatabaseManager().processTranslate(translation);
+
+			getViewState().onFavoritesAction(translation.getIsFavorite());
 		} else {
 			getViewState().onNothingToAddToFavorite();
 		}
 	}
 
-	private final class TranslateCallback extends CallbackWithProgress<TranslateResponce> {
+	private final class TranslateCallback extends CallbackWithProgress<TranslateResponse> {
 
 		private TranslateCallback(@Nullable final Progressable progressable) {
 			super(progressable);
 		}
 
 		@Override
-		public void onResponse(final Call<TranslateResponce> call,
-							   final Response<TranslateResponce> response) {
+		public void onResponse(final Call<TranslateResponse> call,
+							   final Response<TranslateResponse> response) {
 			super.onResponse(call, response);
 			if (response.body() != null) {
-				translateResponce = response.body();
-				allQueriesLoaded.set(Queries.TRANSLATE);
+				translateResponse = response.body();
 			}
+			allQueriesLoaded.set(Queries.TRANSLATE);
 		}
 
 		@Override
-		public void onFailure(final Call<TranslateResponce> call, final Throwable t) {
+		public void onFailure(final Call<TranslateResponse> call, final Throwable t) {
 			super.onFailure(call, t);
-			allQueriesLoaded.set(Queries.DICT);
-
+			allQueriesLoaded.set(Queries.TRANSLATE);
 		}
 	}
 
-	private final class DictCallback extends CallbackWithProgress<LookupResponce> {
+	private final class DictCallback extends CallbackWithProgress<LookupResponse> {
 
 		private DictCallback(@Nullable final Progressable progressable) {
 			super(progressable);
 		}
 
 		@Override
-		public void onResponse(final Call<LookupResponce> call,
-							   final Response<LookupResponce> response) {
+		public void onResponse(final Call<LookupResponse> call,
+							   final Response<LookupResponse> response) {
 			super.onResponse(call, response);
 			if (response.body() != null) {
-				lookupResponce = response.body();
-				allQueriesLoaded.set(Queries.DICT);
+				lookupResponse = response.body();
 			}
+			allQueriesLoaded.set(Queries.DICT);
 		}
 
 		@Override
-		public void onFailure(final Call<LookupResponce> call, final Throwable t) {
+		public void onFailure(final Call<LookupResponse> call, final Throwable t) {
 			super.onFailure(call, t);
 			allQueriesLoaded.set(Queries.DICT);
 		}

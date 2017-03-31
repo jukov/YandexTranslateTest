@@ -2,56 +2,58 @@ package info.jukov.yandextranslatetest.model.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
 import info.jukov.yandextranslatetest.R;
 import info.jukov.yandextranslatetest.model.adapter.FavoritesAdapter.FavoritesViewHolder;
-import info.jukov.yandextranslatetest.model.storage.dao.History;
-import info.jukov.yandextranslatetest.model.storage.dao.HistoryDao;
-import info.jukov.yandextranslatetest.ui.base.OnFavoriteStatusChangeListener;
+import info.jukov.yandextranslatetest.model.storage.dao.DatabaseManager;
+import info.jukov.yandextranslatetest.model.storage.dao.Translation;
 import info.jukov.yandextranslatetest.util.Guard;
 import info.jukov.yandextranslatetest.util.Log;
-import java.util.List;
 
 /**
  * User: jukov
  * Date: 28.03.2017
  * Time: 22:32
+ *
+ * Адаптер для отображения избранных переводов.
  */
+public final class FavoritesAdapter extends AbstractTranslateHistoryAdapter<FavoritesViewHolder> {
 
-public final class FavoritesAdapter extends AbstractHistoryAdapter<FavoritesViewHolder> {
+	private static final Log LOG = new Log(FavoritesAdapter.class);
 
-	private static final Log LOG = new Log(AbstractHistoryAdapter.class);
-
-	public FavoritesAdapter(@NonNull final Context context, @NonNull final HistoryDao historyDao,
-		@Nullable final List<History> historyList, @NonNull final OnFavoriteStatusChangeListener listener) {
-		super(context, historyDao, historyList, listener);
+	public FavoritesAdapter(@NonNull final Context context, @NonNull final DatabaseManager databaseManager) {
+		super(context, databaseManager);
 	}
 
-	public void addOrRemoveFavorite(@NonNull final History history) {
-		Guard.checkNotNull(history, "null == history");
+	public void processFavorite(@NonNull final Translation translation) {
+		Guard.checkNotNull(translation, "null == translation");
 
-		final int itemIndex = historyList.indexOf(history);
+		final int itemIndex = translationList.indexOf(translation);
 
-		if (history.getIsFavorite() == true) {
+		if (translation.getIsFavorite() == true) {
 			if (itemIndex != -1) {
-				historyList.get(itemIndex).setIsFavorite(true);
+				translationList.get(itemIndex).setIsFavorite(true);
+
+				LOG.verbose("Updated; Size: " + translationList.size() + "; Text: " + translation.getText());
+
 				notifyItemChanged(itemIndex);
 
-			} else {
-				historyList.add(history);
+				LOG.verbose("Updated; Size: " + translationList.size() + "; Text: " + translation.getText());
 
-				historyDao.update(history);
+			} else {
+				translationList.add(translation);
 
 				notifyDataSetChanged();
+
+				LOG.verbose("Added; Size: " + translationList.size() + "; Text: " + translation.getText());
 			}
 		} else {
 			if (itemIndex != -1) {
-				historyList.remove(itemIndex);
+				translationList.remove(itemIndex);
 				notifyItemRemoved(itemIndex);
 
-				LOG.warning("Non favorite item in favorite list");
+				LOG.verbose("Removed; Size: " + translationList.size() + "; Text: " + translation.getText());
 			}
 		}
 	}
@@ -66,7 +68,7 @@ public final class FavoritesAdapter extends AbstractHistoryAdapter<FavoritesView
 		return viewHolder;
 	}
 
-	public class FavoritesViewHolder extends AbstractHistoryAdapter.ViewHolder {
+	public class FavoritesViewHolder extends AbstractTranslateHistoryAdapter.ViewHolder {
 
 		public FavoritesViewHolder(final View itemView) {
 			super(itemView);
@@ -74,19 +76,9 @@ public final class FavoritesAdapter extends AbstractHistoryAdapter<FavoritesView
 
 		@Override
 		public void onFavoriteClick() {
-			final History history = historyList.get(getHolderPosition());
 
-			if (history.getIsFavorite() == true) {
-				listener.onFavoriteStatusChange(historyList.get(getHolderPosition()));
-				historyList.remove(getHolderPosition());
-				notifyItemRemoved(getHolderPosition());
-			} else {
-				LOG.warning("Non favorite item in favorite list");
-				setFavorite(history.getIsFavorite());
-			}
-
-			history.setIsFavorite(!history.getIsFavorite());
-			historyDao.update(history);
+			getTranslation().setIsFavorite(!getTranslation().getIsFavorite());
+			super.onFavoriteClick();
 		}
 	}
 }

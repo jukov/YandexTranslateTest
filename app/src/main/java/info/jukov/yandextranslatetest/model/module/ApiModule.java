@@ -25,14 +25,12 @@ public class ApiModule {
 		this.translateApi = translateApi;
 	}
 
-	@Provides
-	@Singleton
+	@Provides @Singleton
 	public DictApi getDictApi() {
 		return dictApi;
 	}
 
-	@Provides
-	@Singleton
+	@Provides @Singleton
 	public TranslateApi getTranslateApi() {
 		return translateApi;
 	}

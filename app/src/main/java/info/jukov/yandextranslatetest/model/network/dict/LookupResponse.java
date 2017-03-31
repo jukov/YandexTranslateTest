@@ -17,10 +17,12 @@ import java.util.List;
 	"def"
 })
 @JsonIgnoreProperties({"head"})
-public final class LookupResponce {
+public final class LookupResponse {
 
 	@JsonProperty("def")
 	private List<Definition> definition = null;
+
+	private boolean empty;
 
 	@JsonProperty("def")
 	public List<Definition> getDefinitions() {
@@ -32,13 +34,17 @@ public final class LookupResponce {
 		this.definition = definition;
 	}
 
+	public void setEmpty(final boolean empty) {
+		this.empty = empty;
+	}
+
 	public boolean isEmpty() {
 		return definition == null || definition.size() == 0;
 	}
 
 	@Override
 	public String toString() {
-		return "LookupResponce{" +
+		return "LookupResponse{" +
 			"definition=" + definition +
 			'}';
 	}

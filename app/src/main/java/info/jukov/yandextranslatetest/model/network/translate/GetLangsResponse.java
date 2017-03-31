@@ -9,7 +9,7 @@ import java.util.Set;
  * Time: 11:29
  */
 
-public final class GetLangsResponce {
+public final class GetLangsResponse {
 
 	Set<String> dirs;
 	Map<String, String> langs;
@@ -32,7 +32,7 @@ public final class GetLangsResponce {
 
 	@Override
 	public String toString() {
-		return "GetLangsResponce{" +
+		return "GetLangsResponse{" +
 			"dirs=" + dirs +
 			", langs=" + langs +
 			'}';

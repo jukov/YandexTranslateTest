@@ -4,12 +4,12 @@ import android.support.annotation.NonNull;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import info.jukov.yandextranslatetest.TranslateApp;
-import info.jukov.yandextranslatetest.model.CallbackWithLog;
+import info.jukov.yandextranslatetest.model.network.CallbackWithLog;
 import info.jukov.yandextranslatetest.model.module.ApiModule;
 import info.jukov.yandextranslatetest.model.module.ContextModule;
 import info.jukov.yandextranslatetest.model.network.ErrorCodes;
-import info.jukov.yandextranslatetest.model.network.ErrorResponce;
-import info.jukov.yandextranslatetest.model.network.translate.GetLangsResponce;
+import info.jukov.yandextranslatetest.model.network.ErrorResponse;
+import info.jukov.yandextranslatetest.model.network.translate.GetLangsResponse;
 import info.jukov.yandextranslatetest.model.storage.preferences.LangPreferences;
 import info.jukov.yandextranslatetest.util.Guard;
 import info.jukov.yandextranslatetest.util.JsonUtils;
@@ -107,10 +107,10 @@ public final class LangsLoaderPresenter extends MvpPresenter<LangsLoaderView> {
 			}
 
 			if (getErrorBody() != null) {//Получено тело запроса с содержанием ошибки
-				ErrorResponce errorResponce = JsonUtils
-					.deserialize(ErrorResponce.class, getErrorBody());
-				if (errorResponce != null) {
-					reportLoadFailed(errorResponce.getCode());
+				ErrorResponse errorResponse = JsonUtils
+					.deserialize(ErrorResponse.class, getErrorBody());
+				if (errorResponse != null) {
+					reportLoadFailed(errorResponse.getCode());
 					return;
 				}
 			}
@@ -126,11 +126,11 @@ public final class LangsLoaderPresenter extends MvpPresenter<LangsLoaderView> {
 		}
 	}
 
-	private final class TranslateLangsCallback extends CallbackWithLog<GetLangsResponce> {
+	private final class TranslateLangsCallback extends CallbackWithLog<GetLangsResponse> {
 
 		@Override
-		public void onResponse(final Call<GetLangsResponce> call,
-							   final Response<GetLangsResponce> response) {
+		public void onResponse(final Call<GetLangsResponse> call,
+							   final Response<GetLangsResponse> response) {
 			super.onResponse(call, response);
 
 			if (response.body() != null) {//Тело запроса получено, всё хорошо
@@ -139,10 +139,10 @@ public final class LangsLoaderPresenter extends MvpPresenter<LangsLoaderView> {
 			}
 
 			if (getErrorBody() != null) {//Получено тело запроса с содержанием ошибки
-				ErrorResponce errorResponce = JsonUtils
-					.deserialize(ErrorResponce.class, getErrorBody());
-				if (errorResponce != null) {
-					reportLoadFailed(errorResponce.getCode());
+				ErrorResponse errorResponse = JsonUtils
+					.deserialize(ErrorResponse.class, getErrorBody());
+				if (errorResponse != null) {
+					reportLoadFailed(errorResponse.getCode());
 					return;
 				}
 			}
@@ -151,7 +151,7 @@ public final class LangsLoaderPresenter extends MvpPresenter<LangsLoaderView> {
 		}
 
 		@Override
-		public void onFailure(final Call<GetLangsResponce> call, final Throwable t) {
+		public void onFailure(final Call<GetLangsResponse> call, final Throwable t) {
 			super.onFailure(call, t);
 			//Сетевая ошибка
 			reportLoadFailed(ErrorCodes.NETWORK_ERROR_CUSTOM);

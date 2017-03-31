@@ -12,8 +12,8 @@ import org.greenrobot.greendao.annotation.NotNull;
  * Time: 21:30
  */
 @SuppressWarnings("LocalCanBeFinal")
-@Entity(nameInDb = "history")
-public final class History {
+@Entity(nameInDb = "translation")
+public final class Translation {
 
 	@Id private Long _id;
 
@@ -25,8 +25,8 @@ public final class History {
 
 	@NonNull private boolean isFavorite;
 
-	@Generated(hash = 1265441618)
-	public History(Long _id, @NotNull String text, @NotNull String lang,
+	@Generated(hash = 576816271)
+	public Translation(Long _id, @NotNull String text, @NotNull String lang,
 									String translateResponse, String dictionatyResponse,
 									boolean isFavorite) {
 					this._id = _id;
@@ -37,8 +37,8 @@ public final class History {
 					this.isFavorite = isFavorite;
 	}
 
-	@Generated(hash = 869423138)
-	public History() {
+	@Generated(hash = 321689573)
+	public Translation() {
 	}
 
 	public Long get_id() {
@@ -98,23 +98,23 @@ public final class History {
 			return false;
 		}
 
-		final History history = (History) o;
+		final Translation that = (Translation) o;
 
-		if (!get_id().equals(history.get_id())) {
+		if (get_id() != null ? !get_id().equals(that.get_id()) : that.get_id() != null) {
 			return false;
 		}
-		if (!getText().equals(history.getText())) {
+		if (!getText().equals(that.getText())) {
 			return false;
 		}
-		if (!getLang().equals(history.getLang())) {
+		if (!getLang().equals(that.getLang())) {
 			return false;
 		}
-		if (getTranslateResponse() != null ? !getTranslateResponse().equals(history.getTranslateResponse())
-			: history.getTranslateResponse() != null) {
+		if (getTranslateResponse() != null ? !getTranslateResponse().equals(that.getTranslateResponse())
+			: that.getTranslateResponse() != null) {
 			return false;
 		}
-		if (getDictionatyResponse() != null ? !getDictionatyResponse().equals(history.getDictionatyResponse())
-			: history.getDictionatyResponse() != null) {
+		if (getDictionatyResponse() != null ? !getDictionatyResponse().equals(that.getDictionatyResponse())
+			: that.getDictionatyResponse() != null) {
 			return false;
 		}
 
@@ -123,7 +123,7 @@ public final class History {
 
 	@Override
 	public int hashCode() {
-		int result = get_id().hashCode();
+		int result = get_id() != null ? get_id().hashCode() : 0;
 		result = 31 * result + getText().hashCode();
 		result = 31 * result + getLang().hashCode();
 		result = 31 * result + (getTranslateResponse() != null ? getTranslateResponse().hashCode() : 0);

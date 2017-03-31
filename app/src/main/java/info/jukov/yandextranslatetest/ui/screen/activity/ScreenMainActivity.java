@@ -21,9 +21,6 @@ import butterknife.ButterKnife;
 import info.jukov.yandextranslatetest.R;
 import info.jukov.yandextranslatetest.model.adapter.TabAdapter;
 import info.jukov.yandextranslatetest.model.network.ErrorCodes;
-import info.jukov.yandextranslatetest.model.storage.dao.History;
-import info.jukov.yandextranslatetest.ui.base.OnTextTranslatedListener;
-import info.jukov.yandextranslatetest.ui.base.OnFavoriteStatusChangeListener;
 import info.jukov.yandextranslatetest.ui.screen.fragment.FavoritesFragment;
 import info.jukov.yandextranslatetest.ui.screen.fragment.HistoryFragment;
 import info.jukov.yandextranslatetest.ui.screen.fragment.TranslateFragment;
@@ -37,23 +34,16 @@ import info.jukov.yandextranslatetest.util.Log;
  * Time: 21:47
  */
 
-public final class ScreenMainActivity extends AppCompatActivity implements
-																OnTextTranslatedListener, OnFavoriteStatusChangeListener {
+public final class ScreenMainActivity extends AppCompatActivity {
 
-	public static final String ACTION_ERROR = ExtrasUtils
-		.createExtraName("ACTION_ERROR", ScreenMainActivity.class);
-	public static final String EXTRA_ERROR_CODE = ExtrasUtils
-		.createExtraName("EXTRA_ERROR_CODE", ScreenMainActivity.class);
+	public static final String ACTION_ERROR = ExtrasUtils.createExtraName("ACTION_ERROR", ScreenMainActivity.class);
+	public static final String EXTRA_ERROR_CODE = ExtrasUtils.createExtraName("EXTRA_ERROR_CODE", ScreenMainActivity.class);
 
 	private static final Log LOG = new Log(ScreenMainActivity.class);
+
 	@BindView(R.id.toolbar) Toolbar toolbar;
 	@BindView(R.id.tabLayout) TabLayout tabLayout;
 	@BindView(R.id.viewPager) ViewPager viewPager;
-	private TabAdapter tabAdapter;
-
-	private final TranslateFragment translateFragment = TranslateFragment.newInstance();
-	private final FavoritesFragment favoritesFragment = FavoritesFragment.newInstance();
-	private final HistoryFragment historyFragment = HistoryFragment.newInstance();
 
 	public static void start(@NonNull final Context context) {
 		Guard.checkNotNull(context, "null == context");
@@ -121,17 +111,6 @@ public final class ScreenMainActivity extends AppCompatActivity implements
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 
-	@Override
-	public void onTextTranslated(final History history) {
-		historyFragment.addOrUpdateTranslation(history);
-	}
-
-	@Override
-	public void onFavoriteStatusChange(final History history) {
-		favoritesFragment.onFavoriteStatusChange(history);
-		historyFragment.addOrUpdateTranslation(history);
-	}
-
 	private void handleIntent(@NonNull final Intent intent) {
 		if (ACTION_ERROR.equals(intent.getAction())) {
 			makeErrorDialog(intent.getIntExtra(EXTRA_ERROR_CODE, -1)).show();
@@ -140,10 +119,10 @@ public final class ScreenMainActivity extends AppCompatActivity implements
 
 	private void initTabLayout() {
 
-		tabAdapter = new TabAdapter.Builder(this, getSupportFragmentManager())
-			.addTab(translateFragment, R.string.fragmentTranslate_title)
-			.addTab(favoritesFragment, R.string.fragmentFavorites_title)
-			.addTab(historyFragment, R.string.fragmentHistory_title)
+		final TabAdapter tabAdapter = new TabAdapter.Builder(this, getSupportFragmentManager())
+			.addTab(TranslateFragment.newInstance(), R.string.fragmentTranslate_title)
+			.addTab(FavoritesFragment.newInstance(), R.string.fragmentFavorites_title)
+			.addTab(HistoryFragment.newInstance(), R.string.fragmentHistory_title)
 			.build();
 
 		viewPager.setAdapter(tabAdapter);

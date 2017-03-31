@@ -1,6 +1,5 @@
 package info.jukov.yandextranslatetest.ui.screen.fragment;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,16 +11,18 @@ import android.view.ViewGroup;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.arellomobile.mvp.MvpAppCompatFragment;
+import com.arellomobile.mvp.presenter.InjectPresenter;
 import info.jukov.yandextranslatetest.R;
 import info.jukov.yandextranslatetest.TranslateApp;
 import info.jukov.yandextranslatetest.model.adapter.FavoritesAdapter;
-import info.jukov.yandextranslatetest.model.storage.dao.History;
-import info.jukov.yandextranslatetest.model.storage.dao.HistoryDao.Properties;
-import info.jukov.yandextranslatetest.ui.base.OnFavoriteStatusChangeListener;
-import info.jukov.yandextranslatetest.ui.screen.activity.ScreenMainActivity;
+import info.jukov.yandextranslatetest.model.module.DatabaseModule;
+import info.jukov.yandextranslatetest.model.storage.dao.Translation;
+import info.jukov.yandextranslatetest.presenter.FavoritesPresenter;
+import info.jukov.yandextranslatetest.presenter.FavoritesView;
 import info.jukov.yandextranslatetest.util.Guard;
 import info.jukov.yandextranslatetest.util.Log;
 import java.util.List;
+import javax.inject.Inject;
 
 /**
  * User: jukov
@@ -29,14 +30,17 @@ import java.util.List;
  * Time: 19:31
  */
 
-public final class FavoritesFragment extends MvpAppCompatFragment {
+public final class FavoritesFragment extends MvpAppCompatFragment implements FavoritesView {
 
 	private static final Log LOG = new Log(HistoryFragment.class);
 
 	@BindView(R.id.recyclerViewHistory) RecyclerView recyclerViewHistory;
+
 	private FavoritesAdapter favoritesAdapter;
 
-	private OnFavoriteStatusChangeListener onFavoriteStatusChangeListener;
+	@Inject DatabaseModule databaseModule;
+
+	@InjectPresenter FavoritesPresenter presenter;
 
 	public static FavoritesFragment newInstance() {
 
@@ -52,6 +56,7 @@ public final class FavoritesFragment extends MvpAppCompatFragment {
 		@Nullable final Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_history, null);
 		ButterKnife.bind(this, view);
+		TranslateApp.getAppComponent().inject(this);
 
 		initRecycler();
 
@@ -59,29 +64,24 @@ public final class FavoritesFragment extends MvpAppCompatFragment {
 	}
 
 	@Override
-	public void onAttach(final Context context) {
-		super.onAttach(context);
-
-		if (context instanceof ScreenMainActivity) {
-			onFavoriteStatusChangeListener = (ScreenMainActivity) context;
-		} else {
-			LOG.error("Fragment attached to unexpected activity");
-		}
+	public void onFavoritesFromDatabase(final List<Translation> translationList) {
+		favoritesAdapter.setTranslations(translationList);
 	}
 
-	public void onFavoriteStatusChange(@NonNull final History history) {
-		Guard.checkNotNull(history, "null == history");
+	@Override
+	public void onNewFavorite(final Translation translation) {
+		favoritesAdapter.processFavorite(translation);
+	}
 
-		favoritesAdapter.addOrRemoveFavorite(history);
+	public void onFavoriteStatusChange(@NonNull final Translation translation) {
+		Guard.checkNotNull(translation, "null == translation");
+
+		favoritesAdapter.processFavorite(translation);
 	}
 
 	private void initRecycler() {
 
-		final List<History> historyList = TranslateApp.getDaoSession().getHistoryDao().queryBuilder()
-			.where(Properties.IsFavorite.eq(Boolean.TRUE))
-			.list();
-
-		favoritesAdapter = new FavoritesAdapter(getContext(), TranslateApp.getDaoSession().getHistoryDao(), historyList, onFavoriteStatusChangeListener);
+		favoritesAdapter = new FavoritesAdapter(getContext(), databaseModule.getDatabaseManager());
 
 		recyclerViewHistory.setLayoutManager(new LinearLayoutManager(getContext()));
 		recyclerViewHistory.setAdapter(favoritesAdapter);
