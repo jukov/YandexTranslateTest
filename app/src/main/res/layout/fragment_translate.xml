@@ -55,6 +55,7 @@
 				android:layout_marginLeft="@dimen/space_all_horizontal"
 				android:layout_marginRight="@dimen/space_all_horizontal"
 				android:gravity="top"
+				android:imeOptions="actionDone"
 				android:hint="@string/translateFragment_editTextInputHint"
 				android:maxLines="6"
 				android:minLines="3"/>

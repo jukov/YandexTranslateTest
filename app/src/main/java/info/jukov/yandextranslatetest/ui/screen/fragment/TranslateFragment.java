@@ -2,6 +2,7 @@ package info.jukov.yandextranslatetest.ui.screen.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -26,6 +28,7 @@ import info.jukov.yandextranslatetest.model.storage.preferences.LangPreferences;
 import info.jukov.yandextranslatetest.presenter.TranslatePresenter;
 import info.jukov.yandextranslatetest.presenter.TranslateView;
 import info.jukov.yandextranslatetest.ui.format.DictionaryConstructor;
+import info.jukov.yandextranslatetest.util.KeyboardUtils;
 import info.jukov.yandextranslatetest.util.Log;
 import info.jukov.yandextranslatetest.util.ToastUtils;
 import java.util.HashSet;
@@ -75,6 +78,7 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 		View view = inflater.inflate(R.layout.fragment_translate, null);
 		ButterKnife.bind(this, view);
 
+		initEditText();
 		initAdapters();
 		initSpinners();
 
@@ -89,6 +93,19 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 			LangPreferences.putMostUsedInputLangs(getContext(), inputSpinnerAdapter.getMostUsedLanguages());
 			LangPreferences.putMostUsedOutputLangs(getContext(), outputSpinnerAdapter.getMostUsedLanguages());
 		}
+	}
+
+	private void initEditText() {
+		editTextTranslatable.setOnEditorActionListener(new OnEditorActionListener() {
+			@Override
+			public boolean onEditorAction(final TextView v, final int actionId, final KeyEvent event) {
+				KeyboardUtils.hideSoftInput(getActivity());
+
+				presenter.translate(getLangForServer(), getTranslatableText());
+
+				return true;
+			}
+		});
 	}
 
 	private void initAdapters() {
@@ -153,13 +170,12 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 		});
 	}
 
-	@OnClick(R.id.buttonTranslate)
-	void onTranslateClick() {
+	@OnClick(R.id.buttonTranslate) void onTranslateClick() {
+		KeyboardUtils.hideSoftInput(getActivity());
 		presenter.translate(getLangForServer(), getTranslatableText());
 	}
 
-	@OnClick(R.id.buttonFavorite)
-	void onFavoriteClick() {
+	@OnClick(R.id.buttonFavorite) void onFavoriteClick() {
 		presenter.addToFavorites();
 	}
 
