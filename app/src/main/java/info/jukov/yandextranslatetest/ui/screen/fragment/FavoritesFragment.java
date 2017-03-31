@@ -73,6 +73,11 @@ public final class FavoritesFragment extends MvpAppCompatFragment implements Fav
 		favoritesAdapter.processFavorite(translation);
 	}
 
+	@Override
+	public void deleteFavorites() {
+		favoritesAdapter.deleteFavorites();
+	}
+
 	public void onFavoriteStatusChange(@NonNull final Translation translation) {
 		Guard.checkNotNull(translation, "null == translation");
 

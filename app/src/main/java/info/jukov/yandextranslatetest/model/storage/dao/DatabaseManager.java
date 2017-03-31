@@ -24,7 +24,7 @@ public class DatabaseManager {
 
 	private final List<Translation> translationList;
 
-	private final List<OnTranslateProcessedListener> listenerList;
+	private final List<DatabaseListener> listenerList;
 
 	public DatabaseManager(final TranslationDao translationDao) {
 		this.translationDao = translationDao;
@@ -37,7 +37,7 @@ public class DatabaseManager {
 
 	/**
 	 * Возвращает все имеющиеся переводы.
-	 * */
+	 */
 	public List<Translation> getTranslationList() {
 		return translationList;
 	}
@@ -65,7 +65,7 @@ public class DatabaseManager {
 	 * Если объект уже был в списке, подразумевается что изменился его {@link Translation#getIsFavorite()}.
 	 * В этом случае объект перезаписывается в список и обновляется в базе данных.
 	 *
-	 * О добавлении поступлении нового объекта оповещаются все {@link OnTranslateProcessedListener}.
+	 * О добавлении поступлении нового объекта оповещаются все {@link DatabaseListener}.
 	 */
 	public void processTranslate(@NonNull final Translation translation) {
 
@@ -82,10 +82,10 @@ public class DatabaseManager {
 			translationDao.insert(translation);
 		}
 
-		notifyListeners(translation);
+		notifyTranslateProcessed(translation);
 	}
 
-	public void addOnTranslateAddedListener(@NonNull final OnTranslateProcessedListener listener) {
+	public void addOnTranslateAddedListener(@NonNull final DatabaseListener listener) {
 		listenerList.add(listener);
 	}
 
@@ -107,16 +107,52 @@ public class DatabaseManager {
 		return null;
 	}
 
-	private void notifyListeners(@NonNull final Translation translation) {
-		for (final OnTranslateProcessedListener listener : listenerList) {
+	public void deleteHistory() {
+		translationDao.queryBuilder()
+			.where(TranslationDao.Properties.IsFavorite.eq(Boolean.FALSE))
+			.buildDelete().executeDeleteWithoutDetachingEntities();
+
+		notifyHistoryDeleted();
+	}
+
+	public void deleteFavorites() {
+		translationDao.queryBuilder()
+			.where(TranslationDao.Properties.IsFavorite.eq(Boolean.TRUE))
+			.buildDelete().executeDeleteWithoutDetachingEntities();
+
+		notifyFavoritesDeleted();
+	}
+
+	private void notifyTranslateProcessed(@NonNull final Translation translation) {
+		for (final DatabaseListener listener : listenerList) {
 			if (listener != null) {
 				listener.onTranslateProcessed(translation);
 			}
 		}
 	}
 
-	public interface OnTranslateProcessedListener {
+	private void notifyHistoryDeleted() {
+		for (final DatabaseListener listener : listenerList) {
+			if (listener != null) {
+				listener.onHistoryDeleted();
+			}
+		}
+	}
+
+	private void notifyFavoritesDeleted() {
+		for (final DatabaseListener listener : listenerList) {
+			if (listener != null) {
+				listener.onFavoritesDeleted();
+			}
+		}
+	}
+
+	public interface DatabaseListener {
 
 		void onTranslateProcessed(final Translation translation);
+
+		void onHistoryDeleted();
+
+		void onFavoritesDeleted();
 	}
 }

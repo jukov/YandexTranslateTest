@@ -9,6 +9,7 @@ import info.jukov.yandextranslatetest.model.adapter.HistoryAdapter.HistoryViewHo
 import info.jukov.yandextranslatetest.model.storage.dao.DatabaseManager;
 import info.jukov.yandextranslatetest.model.storage.dao.Translation;
 import info.jukov.yandextranslatetest.util.Log;
+import java.util.Iterator;
 
 /**
  * User: jukov
@@ -44,6 +45,26 @@ public final class HistoryAdapter extends AbstractTranslateHistoryAdapter<Histor
 
 			LOG.verbose("Added; Size: " + translationList.size() + "; Text: " + translation.getText());
 		}
+	}
+
+	public void deleteFavorites() {
+		for (final Iterator<Translation> iterator = translationList.iterator(); iterator.hasNext(); ) {
+			if (iterator.next().getIsFavorite() == true) {
+				iterator.remove();
+			}
+		}
+
+		notifyDataSetChanged();
+	}
+
+	public void deleteHistory() {
+		for (final Iterator<Translation> iterator = translationList.iterator(); iterator.hasNext(); ) {
+			if (iterator.next().getIsFavorite() == false) {
+				iterator.remove();
+			}
+		}
+
+		notifyDataSetChanged();
 	}
 
 	@Override

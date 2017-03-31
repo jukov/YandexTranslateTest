@@ -1,15 +1,25 @@
 package info.jukov.yandextranslatetest.ui.screen.fragment;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.StringRes;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AlertDialog.Builder;
 import android.support.v7.preference.EditTextPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceGroup;
 import info.jukov.yandextranslatetest.R;
+import info.jukov.yandextranslatetest.TranslateApp;
+import info.jukov.yandextranslatetest.model.module.DatabaseModule;
 import info.jukov.yandextranslatetest.util.ExtrasUtils;
 import info.jukov.yandextranslatetest.util.StringUtils;
+import javax.inject.Inject;
 
 /**
  * User: jukov
@@ -17,10 +27,55 @@ import info.jukov.yandextranslatetest.util.StringUtils;
  * Time: 8:01
  */
 
-public final class SettingsFragment extends PreferenceFragmentCompat
-	implements OnSharedPreferenceChangeListener {
+public final class SettingsFragment extends PreferenceFragmentCompat implements OnSharedPreferenceChangeListener {
 
 	public static final String FRAGMENT_TAG = ExtrasUtils.createExtraName("FRAGMENT_TAG", SettingsFragment.class);
+
+	private enum ConfirmablePreference {
+		DELETE_HISTORY(
+			R.string.alertDialogConfirmation_youSure_title,
+			R.string.alertDialogConfirmation_deletingHistoryCannotBeUndone_title,
+			R.string.alertDialogConfirmation_delete_button,
+			R.string.alertDialogConfirmation_cancel_button),
+		DELETE_FAVORITES(
+			R.string.alertDialogConfirmation_youSure_title,
+			R.string.alertDialogConfirmation_deletingFavoritesCannotBeUndone_title,
+			R.string.alertDialogConfirmation_delete_button,
+			R.string.alertDialogConfirmation_cancel_button);
+
+		@StringRes final int titleRes;
+		@StringRes final int messageRes;
+		@StringRes final int positiveButtonTitleRes;
+		@StringRes final int negativeButtonTitleRes;
+
+		ConfirmablePreference(final int titleRes, final int messageRes, final int positiveButtonTitleRes,
+			final int negativeButtonTitleRes) {
+			this.titleRes = titleRes;
+			this.messageRes = messageRes;
+			this.positiveButtonTitleRes = positiveButtonTitleRes;
+			this.negativeButtonTitleRes = negativeButtonTitleRes;
+		}
+
+		public int getTitleRes() {
+			return titleRes;
+		}
+
+		public int getMessageRes() {
+			return messageRes;
+		}
+
+		public int getPositiveButtonTitleRes() {
+			return positiveButtonTitleRes;
+		}
+
+		public int getNegativeButtonTitleRes() {
+			return negativeButtonTitleRes;
+		}
+	}
+
+	@Inject DatabaseModule databaseModule;
+
+	private boolean apiKeysChanged = false;
 
 	public static SettingsFragment newInstance() {
 		SettingsFragment fragment = new SettingsFragment();
@@ -49,14 +104,14 @@ public final class SettingsFragment extends PreferenceFragmentCompat
 		}
 	}
 
-	private boolean apiKeysChanged = false;
-
 	public boolean isApiKeysChanged() {
 		return apiKeysChanged;
 	}
 
 	@Override
 	public void onCreatePreferences(final Bundle savedInstanceState, final String rootKey) {
+		TranslateApp.getAppComponent().inject(this);
+
 		addPreferencesFromResource(R.xml.preferences);
 		initSummary(getPreferenceScreen());
 	}
@@ -77,11 +132,50 @@ public final class SettingsFragment extends PreferenceFragmentCompat
 
 	@Override
 	public void onSharedPreferenceChanged(final SharedPreferences sharedPreferences,
-										  final String key) {
-		if (getString(R.string.preferenceKey_translateApiKey).equals(key) ||
-			getString(R.string.preferenceKey_dictApiKey).equals(key)) {
+		final String key) {
+		if (getString(R.string.preferenceKey_translateApiKey).equals(key) || getString(R.string.preferenceKey_dictApiKey).equals(key)) {
 			apiKeysChanged = true;
+			updatePreferenceSummary(findPreference(key));
 		}
-		updatePreferenceSummary(findPreference(key));
+	}
+
+	@Override
+	public boolean onPreferenceTreeClick(final Preference preference) {
+
+		if (getString(R.string.preferenceKey_deleteHistory).equals(preference.getKey())) {
+			makeConfirmDialog(ConfirmablePreference.DELETE_HISTORY).show();
+		} else if (getString(R.string.preferenceKey_deleteFavorites).equals(preference.getKey())) {
+			makeConfirmDialog(ConfirmablePreference.DELETE_FAVORITES).show();
+		}
+
+		return true;
+	}
+
+	private Dialog makeConfirmDialog(@NonNull final ConfirmablePreference confirmablePreference) {
+
+		final AlertDialog.Builder builder = new Builder(getContext())
+			.setTitle(confirmablePreference.getTitleRes())
+			.setMessage(confirmablePreference.getMessageRes())
+			.setPositiveButton(confirmablePreference.getPositiveButtonTitleRes(), new OnClickListener() {
+				@Override
+				public void onClick(final DialogInterface dialog, final int which) {
+					switch (confirmablePreference) {
+						case DELETE_HISTORY:
+							databaseModule.getDatabaseManager().deleteHistory();
+							break;
+						case DELETE_FAVORITES:
+							databaseModule.getDatabaseManager().deleteFavorites();
+							break;
+					}
+				}
+			})
+			.setNegativeButton(confirmablePreference.getNegativeButtonTitleRes(), new OnClickListener() {
+				@Override
+				public void onClick(final DialogInterface dialog, final int which) {
+
+				}
+			});
+
+		return builder.create();
 	}
 }

@@ -58,6 +58,12 @@ public final class FavoritesAdapter extends AbstractTranslateHistoryAdapter<Favo
 		}
 	}
 
+	public void deleteFavorites() {
+		translationList.clear();
+
+		notifyDataSetChanged();
+	}
+
 	@Override
 	public FavoritesViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
 

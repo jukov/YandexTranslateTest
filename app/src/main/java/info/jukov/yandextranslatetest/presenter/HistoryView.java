@@ -16,4 +16,7 @@ public interface HistoryView extends MvpView {
 
 	void onNewTranslation(Translation translation);
 
+	void onHistoryDeleted();
+
+	void onFavoritesDeleted();
 }

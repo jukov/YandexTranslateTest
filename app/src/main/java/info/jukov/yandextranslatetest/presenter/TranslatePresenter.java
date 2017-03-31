@@ -10,7 +10,7 @@ import info.jukov.yandextranslatetest.model.module.ApiModule;
 import info.jukov.yandextranslatetest.model.module.DatabaseModule;
 import info.jukov.yandextranslatetest.model.network.dict.LookupResponse;
 import info.jukov.yandextranslatetest.model.network.translate.TranslateResponse;
-import info.jukov.yandextranslatetest.model.storage.dao.DatabaseManager.OnTranslateProcessedListener;
+import info.jukov.yandextranslatetest.model.storage.dao.DatabaseManager.DatabaseListener;
 import info.jukov.yandextranslatetest.model.storage.dao.Translation;
 import info.jukov.yandextranslatetest.ui.base.Progressable;
 import info.jukov.yandextranslatetest.util.Guard;
@@ -27,7 +27,7 @@ import retrofit2.Response;
  * Time: 19:35
  */
 @InjectViewState
-public final class TranslatePresenter extends MvpPresenter<TranslateView> implements OnTranslateProcessedListener {
+public final class TranslatePresenter extends MvpPresenter<TranslateView> implements DatabaseListener {
 
 	private enum Queries {
 		TRANSLATE,
@@ -87,6 +87,18 @@ public final class TranslatePresenter extends MvpPresenter<TranslateView> implem
 		if (translation.equals(this.translation)) {
 			getViewState().onFavoritesAction(translation.getIsFavorite());
 		}
+	}
+
+	@Override
+	public void onHistoryDeleted() {
+		//unused
+	}
+
+	@Override
+	public void onFavoritesDeleted() {
+		translation = null;
+
+		getViewState().onFavoritesAction(false);
 	}
 
 	public void translate(@NonNull final String lang, @NonNull final String text) {

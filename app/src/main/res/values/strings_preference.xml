@@ -4,4 +4,7 @@
 	<string name="preferenceKey_translateApiKey">editTextPreference_translateApiKey</string>
 	<string name="preferenceKey_dictApiKey">editTextPreference_dictApiKey</string>
 
+	<string name="preferenceKey_deleteHistory">editTextPreference_deleteHistory</string>
+	<string name="preferenceKey_deleteFavorites">editTextPreference_deleteFavorites</string>
+
 </resources>

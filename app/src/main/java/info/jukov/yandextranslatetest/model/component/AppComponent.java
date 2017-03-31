@@ -11,6 +11,7 @@ import info.jukov.yandextranslatetest.presenter.LangsLoaderPresenter;
 import info.jukov.yandextranslatetest.presenter.TranslatePresenter;
 import info.jukov.yandextranslatetest.ui.screen.fragment.FavoritesFragment;
 import info.jukov.yandextranslatetest.ui.screen.fragment.HistoryFragment;
+import info.jukov.yandextranslatetest.ui.screen.fragment.SettingsFragment;
 import javax.inject.Singleton;
 
 /**
@@ -35,4 +36,7 @@ public interface AppComponent {
 	void inject(HistoryFragment target);
 
 	void inject(FavoritesFragment target);
+
+	void inject(SettingsFragment target);
+
 }

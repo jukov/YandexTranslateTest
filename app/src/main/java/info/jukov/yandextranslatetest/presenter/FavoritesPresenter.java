@@ -4,7 +4,7 @@ import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import info.jukov.yandextranslatetest.TranslateApp;
 import info.jukov.yandextranslatetest.model.module.DatabaseModule;
-import info.jukov.yandextranslatetest.model.storage.dao.DatabaseManager.OnTranslateProcessedListener;
+import info.jukov.yandextranslatetest.model.storage.dao.DatabaseManager.DatabaseListener;
 import info.jukov.yandextranslatetest.model.storage.dao.Translation;
 import javax.inject.Inject;
 
@@ -14,7 +14,7 @@ import javax.inject.Inject;
  * Time: 19:35
  */
 @InjectViewState
-public final class FavoritesPresenter extends MvpPresenter<FavoritesView> implements OnTranslateProcessedListener {
+public final class FavoritesPresenter extends MvpPresenter<FavoritesView> implements DatabaseListener {
 
 	@Inject DatabaseModule databaseModule;
 
@@ -30,5 +30,15 @@ public final class FavoritesPresenter extends MvpPresenter<FavoritesView> implem
 	@Override
 	public void onTranslateProcessed(final Translation translation) {
 		getViewState().onNewFavorite(translation);
+	}
+
+	@Override
+	public void onFavoritesDeleted() {
+		getViewState().deleteFavorites();
+	}
+
+	@Override
+	public void onHistoryDeleted() {
+		//Unused
 	}
 }

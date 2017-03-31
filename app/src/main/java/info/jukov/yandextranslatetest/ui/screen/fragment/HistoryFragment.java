@@ -72,6 +72,16 @@ public final class HistoryFragment extends MvpAppCompatFragment implements Histo
 		historyAdapter.processTranslation(translation);
 	}
 
+	@Override
+	public void onHistoryDeleted() {
+		historyAdapter.deleteHistory();
+	}
+
+	@Override
+	public void onFavoritesDeleted() {
+		historyAdapter.deleteFavorites();
+	}
+
 	private void initRecycler() {
 
 		historyAdapter = new HistoryAdapter(getContext(), databaseModule.getDatabaseManager());

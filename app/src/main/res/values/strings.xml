@@ -38,6 +38,11 @@
 	<string name="activityPreference_getTranslateKeyUrl">https://tech.yandex.ru/keys/get/?service=trnsl</string>
 	<string name="activityPreference_notSet">Not set</string>
 
+	<string name="activityPreference_translations_title">Translations</string>
+
+	<string name="activityPreference_deleteHistory_title">Delete history</string>
+	<string name="activityPreference_deleteFavorites_title">Delete favorites</string>
+
 	<!--AlertDialog about invalid keys-->
 	<string name="alertDialogInvalidKeys_keysNotSet_title">API Keys not set</string>
 	<string name="alertDialogInvalidKeys_keysNotSet_text">For use translate, you need to enter API keys for Yandex.Translate and Yandex.Dictionary in settings.</string>
@@ -60,5 +65,15 @@
 	<string name="alertDialogInvalidKeys_exit_button">Exit</string>
 	<string name="alertDialogInvalidKeys_tryAgain_button">Try again</string>
 	<string name="alertDialogInvalidKeys_goToSettings_button">Go to settings</string>
+
+	<!--AlertDialog for delete confirmation -->
+
+	<string name="alertDialogConfirmation_youSure_title">You sure?</string>
+
+	<string name="alertDialogConfirmation_deletingHistoryCannotBeUndone_title">Deleting history cannot be undone</string>
+	<string name="alertDialogConfirmation_deletingFavoritesCannotBeUndone_title">Deleting favorites cannot be undone</string>
+
+	<string name="alertDialogConfirmation_delete_button">Delete</string>
+	<string name="alertDialogConfirmation_cancel_button">Cancel</string>
 
 </resources>
