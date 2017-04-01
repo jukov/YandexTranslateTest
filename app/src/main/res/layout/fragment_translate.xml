@@ -64,7 +64,6 @@
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:orientation="horizontal"
-				android:layout_marginBottom="@dimen/space_all_betweenContent"
 				android:layout_marginLeft="@dimen/space_all_horizontal"
 				android:layout_marginRight="@dimen/space_all_horizontal">
 
@@ -83,11 +82,32 @@
 
 			</LinearLayout>
 
+			<TextView
+				android:id="@+id/textViewCopyright"
+				style="@style/TextSubheading"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginBottom="@dimen/space_all_vertical"
+				android:layout_marginLeft="@dimen/space_all_horizontal"
+				android:layout_marginRight="@dimen/space_all_horizontal"
+				android:layout_marginTop="@dimen/space_all_betweenContent"
+				android:text="@string/translateFragment_copyright"/>
+
 		</LinearLayout>
 
 	</android.support.design.widget.AppBarLayout>
 
+	<ProgressBar
+		android:id="@+id/progressBar"
+		android:layout_gravity="center"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:paddingTop="@dimen/space_progressBar_vertical"
+		android:visibility="invisible"
+		style="@style/Base.Widget.AppCompat.ProgressBar"/>
+
 	<android.support.v4.widget.NestedScrollView
+		android:id="@+id/containerTranslateResult"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
 		android:layout_below="@id/containerInput"
@@ -97,16 +117,6 @@
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:orientation="vertical">
-
-			<TextView
-				android:id="@+id/textViewCopyright"
-				style="@style/TextSubheading"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginLeft="@dimen/space_all_horizontal"
-				android:layout_marginRight="@dimen/space_all_horizontal"
-				android:layout_marginTop="@dimen/space_all_betweenContent"
-				android:text="@string/translateFragment_copyright"/>
 
 			<TextView
 				android:id="@+id/textViewTranslated"

@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<dimen name="space_all_horizontal">16dp</dimen>
+	<dimen name="space_all_vertical">16dp</dimen>
 	<dimen name="space_all_betweenContent">8dp</dimen>
+
+	<dimen name="space_progressBar_vertical">32dp</dimen>
 
 	<dimen name="space_componentDictHorizontal_double">32dp</dimen>
 	<dimen name="space_componentDiciHorizontal_triple">48dp</dimen>

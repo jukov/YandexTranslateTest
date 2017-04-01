@@ -5,6 +5,8 @@
 	<color name="deepPurple700">#512DA8</color>
 	<color name="orangeA200">#FFAB40</color>
 
+	<color name="grey600">#757575</color>
+
 	<color name="background_white50">#FAFAFA</color>
 
 	<color name="divider_black12">#1F000000</color>
@@ -20,6 +22,8 @@
 	<color name="text_all_subheading">@color/text_all_black87</color>
 	<color name="text_all_body">@color/text_all_black54</color>
 	<color name="text_dictConstructor_secondaryItems">@color/text_all_black54</color>
+
+	<color name="favoriteDisabled">@color/grey600</color>
 
 	<color name="colorPrimary">@color/deepPurple500</color>
 	<color name="colorPrimaryDark">@color/deepPurple700</color>

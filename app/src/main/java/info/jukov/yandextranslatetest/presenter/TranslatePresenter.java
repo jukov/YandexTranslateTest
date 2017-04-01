@@ -101,7 +101,7 @@ public final class TranslatePresenter extends MvpPresenter<TranslateView> implem
 		getViewState().onFavoritesAction(false);
 	}
 
-	public void translate(@NonNull final String lang, @NonNull final String text) {
+	public void translate(@NonNull final String lang, @NonNull final String text, @NonNull final Progressable progressable) {
 		Guard.checkNotNull(lang, "null == lang");
 		Guard.checkNotNull(text, "null == text");
 
@@ -129,8 +129,8 @@ public final class TranslatePresenter extends MvpPresenter<TranslateView> implem
 		lookupResponse = null;
 
 		allQueriesLoaded.reset();
-		apiModule.getTranslateApi().use(new TranslateCallback(null), null).translate(lang, text);
-		apiModule.getDictApi().use(new DictCallback(null), null).lookup(lang, text, null, null);
+		apiModule.getTranslateApi().use(new TranslateCallback(progressable), progressable).translate(lang, text);
+		apiModule.getDictApi().use(new DictCallback(progressable), progressable).lookup(lang, text, null, null);
 	}
 
 	public void addToFavorites() {

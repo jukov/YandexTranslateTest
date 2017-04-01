@@ -2,6 +2,8 @@ package info.jukov.yandextranslatetest.ui.screen.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
@@ -27,6 +30,7 @@ import info.jukov.yandextranslatetest.model.storage.Language;
 import info.jukov.yandextranslatetest.model.storage.preferences.LangPreferences;
 import info.jukov.yandextranslatetest.presenter.TranslatePresenter;
 import info.jukov.yandextranslatetest.presenter.TranslateView;
+import info.jukov.yandextranslatetest.ui.base.Progressable;
 import info.jukov.yandextranslatetest.ui.format.DictionaryConstructor;
 import info.jukov.yandextranslatetest.util.KeyboardUtils;
 import info.jukov.yandextranslatetest.util.Log;
@@ -40,7 +44,7 @@ import java.util.Set;
  * Time: 19:31
  */
 
-public final class TranslateFragment extends MvpAppCompatFragment implements TranslateView {
+public final class TranslateFragment extends MvpAppCompatFragment implements TranslateView, Progressable {
 
 	private static final Log LOG = new Log(TranslateFragment.class);
 
@@ -56,12 +60,15 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 	@BindView(R.id.textViewTranslated) TextView textViewTranslated;
 	@BindView(R.id.textViewDict) TextView textViewDict;
 	@BindView(R.id.containerDictResult) LinearLayout containerDictResult;
+	@BindView(R.id.progressBar) ProgressBar progressBar;
 
 	private LanguageAdapter inputSpinnerAdapter;
 	private LanguageAdapter outputSpinnerAdapter;
 
 	private String previousInputLangCode;
 	private String previousOutputLangCode;
+
+	private int progressableTasksCount = 0;
 
 	public static TranslateFragment newInstance() {
 
@@ -101,7 +108,7 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 			public boolean onEditorAction(final TextView v, final int actionId, final KeyEvent event) {
 				KeyboardUtils.hideSoftInput(getActivity());
 
-				presenter.translate(getLangForServer(), getTranslatableText());
+				presenter.translate(getLangForServer(), getTranslatableText(), TranslateFragment.this);
 
 				return true;
 			}
@@ -172,7 +179,7 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 
 	@OnClick(R.id.buttonTranslate) void onTranslateClick() {
 		KeyboardUtils.hideSoftInput(getActivity());
-		presenter.translate(getLangForServer(), getTranslatableText());
+		presenter.translate(getLangForServer(), getTranslatableText(), this);
 	}
 
 	@OnClick(R.id.buttonFavorite) void onFavoriteClick() {
@@ -219,11 +226,38 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 		ToastUtils.shortToast(getContext(), R.string.translateFragment_toast_errorNothingToAddToFavorites);
 	}
 
+	@Override
+	public void startProgress() {
+		progressBar.setVisibility(View.VISIBLE);
+
+		setContentEnabled(false);
+
+		progressableTasksCount++;
+	}
+
+	@Override
+	public void stopProgress() {
+		progressableTasksCount--;
+		if (progressableTasksCount <= 0) {
+
+			progressBar.setVisibility(View.INVISIBLE);
+
+			setContentEnabled(true);
+		}
+	}
+
 	private void setContentEnabled(final boolean enabled) {
 		spinnerInputLanguage.setEnabled(enabled);
 		spinnerOutputLanguage.setEnabled(enabled);
 		editTextTranslatable.setEnabled(enabled);
 		buttonTranslate.setEnabled(enabled);
+		buttonFavorite.setEnabled(enabled);
+
+		if (enabled) {
+			DrawableCompat.setTint(buttonFavorite.getDrawable(), ContextCompat.getColor(getContext(), R.color.colorAccent));
+		} else {
+			DrawableCompat.setTint(buttonFavorite.getDrawable(), ContextCompat.getColor(getContext(), R.color.favoriteDisabled));
+		}
 	}
 
 	private String getLangForServer() {
