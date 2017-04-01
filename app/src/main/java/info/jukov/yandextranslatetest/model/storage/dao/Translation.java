@@ -1,10 +1,14 @@
 package info.jukov.yandextranslatetest.model.storage.dao;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import info.jukov.yandextranslatetest.model.network.dict.LookupResponse;
+import info.jukov.yandextranslatetest.util.JsonUtils;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.NotNull;
+import org.greenrobot.greendao.annotation.Transient;
 
 /**
  * User: jukov
@@ -20,21 +24,23 @@ public final class Translation {
 	@NotNull private String text;
 	@NotNull private String lang;
 
-	private String translateResponse;
+	@NonNull private String translateResponse;
 	private String dictionatyResponse;
 
 	@NonNull private boolean isFavorite;
 
-	@Generated(hash = 576816271)
+	@Transient private LookupResponse lookupResponse;
+
+	@Generated(hash = 857362517)
 	public Translation(Long _id, @NotNull String text, @NotNull String lang,
-									String translateResponse, String dictionatyResponse,
-									boolean isFavorite) {
-					this._id = _id;
-					this.text = text;
-					this.lang = lang;
-					this.translateResponse = translateResponse;
-					this.dictionatyResponse = dictionatyResponse;
-					this.isFavorite = isFavorite;
+			@NotNull String translateResponse, String dictionatyResponse,
+			boolean isFavorite) {
+		this._id = _id;
+		this.text = text;
+		this.lang = lang;
+		this.translateResponse = translateResponse;
+		this.dictionatyResponse = dictionatyResponse;
+		this.isFavorite = isFavorite;
 	}
 
 	@Generated(hash = 321689573)
@@ -89,6 +95,17 @@ public final class Translation {
 					this.isFavorite = isFavorite;
 	}
 
+	@Nullable
+	public LookupResponse getLookupResponse() {
+		if (lookupResponse == null) {
+			if (dictionatyResponse != null) {
+				lookupResponse = JsonUtils.deserialize(LookupResponse.class, dictionatyResponse);
+			}
+		}
+
+		return lookupResponse;
+	}
+
 	@Override
 	public boolean equals(final Object o) {
 		if (this == o) {
@@ -100,17 +117,13 @@ public final class Translation {
 
 		final Translation that = (Translation) o;
 
-		if (get_id() != null ? !get_id().equals(that.get_id()) : that.get_id() != null) {
-			return false;
-		}
 		if (!getText().equals(that.getText())) {
 			return false;
 		}
 		if (!getLang().equals(that.getLang())) {
 			return false;
 		}
-		if (getTranslateResponse() != null ? !getTranslateResponse().equals(that.getTranslateResponse())
-			: that.getTranslateResponse() != null) {
+		if (!getTranslateResponse().equals(that.getTranslateResponse())) {
 			return false;
 		}
 		if (getDictionatyResponse() != null ? !getDictionatyResponse().equals(that.getDictionatyResponse())
@@ -123,10 +136,9 @@ public final class Translation {
 
 	@Override
 	public int hashCode() {
-		int result = get_id() != null ? get_id().hashCode() : 0;
-		result = 31 * result + getText().hashCode();
+		int result = getText().hashCode();
 		result = 31 * result + getLang().hashCode();
-		result = 31 * result + (getTranslateResponse() != null ? getTranslateResponse().hashCode() : 0);
+		result = 31 * result + getTranslateResponse().hashCode();
 		result = 31 * result + (getDictionatyResponse() != null ? getDictionatyResponse().hashCode() : 0);
 		return result;
 	}

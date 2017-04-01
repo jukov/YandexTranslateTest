@@ -1,7 +1,7 @@
 package info.jukov.yandextranslatetest.presenter;
 
 import com.arellomobile.mvp.MvpView;
-import info.jukov.yandextranslatetest.model.network.dict.LookupResponse;
+import info.jukov.yandextranslatetest.model.storage.dao.Translation;
 
 /**
  * User: jukov
@@ -11,9 +11,7 @@ import info.jukov.yandextranslatetest.model.network.dict.LookupResponse;
 
 public interface TranslateView extends MvpView {
 
-	void onTranslation(String translatedText);
-
-	void onDictDefinition(LookupResponse response);
+	void onTranslation(Translation translation);
 
 	void onEmptyInput();
 

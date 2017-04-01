@@ -1,6 +1,7 @@
 package info.jukov.yandextranslatetest.ui.screen.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
@@ -27,6 +28,7 @@ import info.jukov.yandextranslatetest.R;
 import info.jukov.yandextranslatetest.model.adapter.LanguageAdapter;
 import info.jukov.yandextranslatetest.model.network.dict.LookupResponse;
 import info.jukov.yandextranslatetest.model.storage.Language;
+import info.jukov.yandextranslatetest.model.storage.dao.Translation;
 import info.jukov.yandextranslatetest.model.storage.preferences.LangPreferences;
 import info.jukov.yandextranslatetest.presenter.TranslatePresenter;
 import info.jukov.yandextranslatetest.presenter.TranslateView;
@@ -187,24 +189,26 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 	}
 
 	@Override
-	public void onTranslation(final String translatedText) {
+	public void onTranslation(@NonNull final Translation translation) {
 
-		textViewTranslated.setText(translatedText);
+		textViewTranslated.setText(translation.getTranslateResponse());
 
-		textViewDict.setVisibility(View.GONE);
-		containerDictResult.setVisibility(View.GONE);
-		containerDictResult.removeAllViews();
-	}
+		final LookupResponse lookupResponse = translation.getLookupResponse();
 
-	@Override
-	public void onDictDefinition(final LookupResponse response) {
-		textViewTranslated.setText(DictionaryConstructor.formatTranslate(response));
-		textViewDict.setText(DictionaryConstructor.formatDefinition(response));
+		if (lookupResponse != null) {
+			textViewDict.setText(DictionaryConstructor.formatDefinition(lookupResponse));
 
-		textViewDict.setVisibility(View.VISIBLE);
-		containerDictResult.setVisibility(View.VISIBLE);
-		containerDictResult.removeAllViews();
-		DictionaryConstructor.makeLookupResponse(getContext(), containerDictResult, response);
+			containerDictResult.removeAllViews();
+
+			textViewDict.setVisibility(View.VISIBLE);
+			containerDictResult.setVisibility(View.VISIBLE);
+
+			DictionaryConstructor.makeLookupResponse(getContext(), containerDictResult, lookupResponse);
+
+		} else {
+			textViewDict.setVisibility(View.GONE);
+			containerDictResult.setVisibility(View.GONE);
+		}
 	}
 
 	@Override

@@ -51,20 +51,18 @@ public final class TranslatePresenter extends MvpPresenter<TranslateView> implem
 
 			translation = new Translation();
 
-			if (lookupResponse != null && !lookupResponse.isEmpty()) {
-				getViewState().onDictDefinition(lookupResponse);
-
-				translation.setDictionatyResponse(JsonUtils.serialize(lookupResponse));
-				translation.setText(text);
-				translation.setLang(lang);
-
-			} else if (translateResponse != null){
-				getViewState().onTranslation(translateResponse.getText());
-
+			if (translateResponse != null){
 				translation.setTranslateResponse(translateResponse.getText());
-				translation.setText(text);
-				translation.setLang(lang);
 			}
+
+			if (lookupResponse != null && !lookupResponse.isEmpty()) {
+				translation.setDictionatyResponse(JsonUtils.serialize(lookupResponse));
+			}
+
+			translation.setText(text);
+			translation.setLang(lang);
+
+			getViewState().onTranslation(translation);
 
 			lang = null;
 			text = null;
@@ -113,11 +111,7 @@ public final class TranslatePresenter extends MvpPresenter<TranslateView> implem
 		translation = databaseModule.getDatabaseManager().getTranslateFromDatabase(lang, text);
 
 		if (translation != null) {
-			if (translation.getTranslateResponse() != null) {
-				getViewState().onTranslation(translation.getTranslateResponse());
-			} else if (translation.getDictionatyResponse() != null) {
-				getViewState().onDictDefinition(JsonUtils.deserialize(LookupResponse.class, translation.getDictionatyResponse()));
-			}
+			getViewState().onTranslation(translation);
 			getViewState().onFavoritesAction(translation.getIsFavorite());
 			return;
 		}

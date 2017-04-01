@@ -31,12 +31,11 @@ public final class TranslateResponse {
 	}
 
 	public String getText() {
-		final StringBuilder formattedText = new StringBuilder();
-
-		for (final String text : this.text) {
-			formattedText.append(text).append("\n");
+		if (text.size() > 1) {
+			return text.get(0);
 		}
-		return formattedText.toString();
+
+		return null;
 	}
 
 	public void setText(final List<String> text) {

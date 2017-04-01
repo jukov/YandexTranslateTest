@@ -107,8 +107,7 @@ public final class LangsLoaderPresenter extends MvpPresenter<LangsLoaderView> {
 			}
 
 			if (getErrorBody() != null) {//Получено тело запроса с содержанием ошибки
-				ErrorResponse errorResponse = JsonUtils
-					.deserialize(ErrorResponse.class, getErrorBody());
+				ErrorResponse errorResponse = JsonUtils.deserialize(ErrorResponse.class, getErrorBody());
 				if (errorResponse != null) {
 					reportLoadFailed(errorResponse.getCode());
 					return;
@@ -139,8 +138,7 @@ public final class LangsLoaderPresenter extends MvpPresenter<LangsLoaderView> {
 			}
 
 			if (getErrorBody() != null) {//Получено тело запроса с содержанием ошибки
-				ErrorResponse errorResponse = JsonUtils
-					.deserialize(ErrorResponse.class, getErrorBody());
+				ErrorResponse errorResponse = JsonUtils.deserialize(ErrorResponse.class, getErrorBody());
 				if (errorResponse != null) {
 					reportLoadFailed(errorResponse.getCode());
 					return;

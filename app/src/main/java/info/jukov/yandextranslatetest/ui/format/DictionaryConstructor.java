@@ -259,14 +259,6 @@ public final class DictionaryConstructor {
 		return EMPTY;
 	}
 
-	public static String formatTranslate(@NonNull final LookupResponse response) {
-		if (response.getDefinitions() != null &&
-			response.getDefinitions().get(0).getTranslations() != null) {
-			return response.getDefinitions().get(0).getTranslations().get(0).getText();
-		}
-		return EMPTY;
-	}
-
 	private DictionaryConstructor() {
 	}
 }
