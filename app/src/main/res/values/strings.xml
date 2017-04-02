@@ -34,8 +34,8 @@
 
 	<string name="activityPreference_getKey_summary">Required Yandex account</string>
 
-	<string name="activityPreference_getDictKeyUrl">https://tech.yandex.ru/keys/get/?service=dict</string>
-	<string name="activityPreference_getTranslateKeyUrl">https://tech.yandex.ru/keys/get/?service=trnsl</string>
+	<string name="activityPreference_getDictKeyUrl" translatable="false">https://tech.yandex.ru/keys/get/?service=dict</string>
+	<string name="activityPreference_getTranslateKeyUrl" translatable="false">https://tech.yandex.ru/keys/get/?service=trnsl</string>
 	<string name="activityPreference_notSet">Not set</string>
 
 	<string name="activityPreference_translations_title">Translations</string>
@@ -44,7 +44,7 @@
 	<string name="activityPreference_deleteFavorites_title">Delete favorites</string>
 
 	<!--AlertDialog about invalid keys-->
-	<string name="alertDialogInvalidKeys_keysNotSet_title">API Keys not set</string>
+	<string name="alertDialogInvalidKeys_keysNotSet_title">API keys not set</string>
 	<string name="alertDialogInvalidKeys_keysNotSet_text">For use translate, you need to enter API keys for Yandex.Translate and Yandex.Dictionary in settings.</string>
 
 	<string name="alertDialogInvalidKeys_wrongKeys_title">Wrong API keys</string>

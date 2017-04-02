@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">Yandex.Translate Test</string>
+	<string name="activityPreference_apiKeysCategory_title">API ключи</string>
+	<string name="activityPreference_deleteFavorites_title">Удалить избранное</string>
+	<string name="activityPreference_deleteHistory_title">Удалить историю</string>
+	<string name="activityPreference_dictApiKey_title">API ключ Яндекс.Словаря</string>
+	<string name="activityPreference_getDictKey_title">Получить API ключ Яндекс.Словаря</string>
+	<string name="activityPreference_getKey_summary">Требуется Яндекс аккаунт</string>
+	<string name="activityPreference_getTranslateKey_title">Получить API ключ Яндекс.Переводчика</string>
+	<string name="activityPreference_notSet">Не установлен</string>
+	<string name="activityPreference_translateApiKey_title">API ключ Яндекс.Переводчика</string>
+	<string name="activityPreference_translations_title">Переводы</string>
+	<string name="alertDialogConfirmation_cancel_button">Отмена</string>
+	<string name="alertDialogConfirmation_delete_button">Удалить</string>
+	<string name="alertDialogConfirmation_deletingFavoritesCannotBeUndone_title">Удаление избранного не может быть отменено</string>
+	<string name="alertDialogConfirmation_deletingHistoryCannotBeUndone_title">Удаление истории не может быть отменено</string>
+	<string name="alertDialogConfirmation_youSure_title">Вы уверены?</string>
+	<string name="alertDialogInvalidKeys_bannedKeys_text">Ранее введеные вами ключи были заблокированы. Для использования словаря вам нужно ввести действительные API ключи в настройках.</string>
+	<string name="alertDialogInvalidKeys_bannedKeys_title">API ключи заблокированы</string>
+	<string name="alertDialogInvalidKeys_exceededDailyLimit_text">Вы исчерпали дневной лимит на использование сервиса. Вы можете попробовать позже или ввести другие API ключи в настройках.</string>
+	<string name="alertDialogInvalidKeys_exceededDailyLimit_title">Дневной лимит исчерпан</string>
+	<string name="alertDialogInvalidKeys_exit_button">Выход</string>
+	<string name="alertDialogInvalidKeys_goToSettings_button">Перейти к настройкам</string>
+	<string name="alertDialogInvalidKeys_keysNotSet_text">Для использования переводчика вам нужно ввести API ключи для Яндекс.Переводчика и Яндекс.Словаря в настройках.</string>
+	<string name="alertDialogInvalidKeys_keysNotSet_title">API ключи не истановлены</string>
+	<string name="alertDialogInvalidKeys_networkError_text">Произошла сетевая ошибка. Проверьте, доступно ли интернет-соединение и попробуйте позже.</string>
+	<string name="alertDialogInvalidKeys_networkError_title">Сетевая ошибка</string>
+	<string name="alertDialogInvalidKeys_tryAgain_button">Попробовать еще раз</string>
+	<string name="alertDialogInvalidKeys_unexpectedError_text">Неожиданная ошибка. Пожалуйста, попробуйте позже.</string>
+	<string name="alertDialogInvalidKeys_unexpectedError_title">Ошибка</string>
+	<string name="alertDialogInvalidKeys_wrongKeys_text">Для использованиея переводчика вам нужно ввести действительные API ключи в настройках.</string>
+	<string name="alertDialogInvalidKeys_wrongKeys_title">Неправильные API ключи</string>
+	<string name="fragmentFavorites_title">Избранное</string>
+	<string name="fragmentHistory_title">История</string>
+	<string name="fragmentTranslate_title">Перевод</string>
+	<string name="lang_code">ru</string>
+	<string name="preferenceKey_deleteFavorites"></string>
+	<string name="toolbarMenu_license">Правовая информация</string>
+	<string name="toolbarMenu_settings">Настройки</string>
+	<string name="translateFragment_buttonTranslate">Перевести</string>
+	<string name="translateFragment_copyright">Реализовано с помощью сервисов “Яндекс.Переводчик” и “Яндекс.Словарь”.</string>
+	<string name="translateFragment_editTextInputHint">Введите текст…</string>
+	<string name="translateFragment_toast_errorNothingToAddToFavorites">Нечего добавлять в избранное</string>
+	<string name="translateFragment_toast_errorNothingToTranslate">Нечего переводить</string>
+</resources>

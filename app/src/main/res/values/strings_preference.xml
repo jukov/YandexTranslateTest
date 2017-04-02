@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-	<string name="preferenceKey_translateApiKey">editTextPreference_translateApiKey</string>
-	<string name="preferenceKey_dictApiKey">editTextPreference_dictApiKey</string>
+	<string name="preferenceKey_translateApiKey" translatable="false">editTextPreference_translateApiKey</string>
+	<string name="preferenceKey_dictApiKey" translatable="false">editTextPreference_dictApiKey</string>
 
-	<string name="preferenceKey_deleteHistory">editTextPreference_deleteHistory</string>
-	<string name="preferenceKey_deleteFavorites">editTextPreference_deleteFavorites</string>
+	<string name="preferenceKey_deleteHistory" translatable="false">editTextPreference_deleteHistory</string>
+	<string name="preferenceKey_deleteFavorites" translatable="false">editTextPreference_deleteFavorites</string>
 
 </resources>

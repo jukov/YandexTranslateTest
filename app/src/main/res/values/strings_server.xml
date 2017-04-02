@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	
-	<string name="translateUrl">https://translate.yandex.net/api/v1.5/tr.json/</string>
-	<string name="dictUrl">https://dictionary.yandex.net/api/v1/dicservice.json/</string>
+	<string name="translateUrl" translatable="false">https://translate.yandex.net/api/v1.5/tr.json/</string>
+	<string name="dictUrl" translatable="false">https://dictionary.yandex.net/api/v1/dicservice.json/</string>
 
 </resources>
