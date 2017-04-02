@@ -32,15 +32,7 @@ public final class HistoryAdapter extends AbstractTranslateHistoryAdapter<Histor
 
 		final int itemIndex = translationList.indexOf(translation);
 
-		if (itemIndex != -1) {
-			translationList.remove(translation);
-			translationList.add(itemIndex, translation);
-
-			notifyItemChanged(itemIndex);
-
-			LOG.verbose("Updated; Size: " + translationList.size() + "; Text: " + translation.getText());
-
-		} else {
+		if (itemIndex == -1) {
 			translationList.add(translation);
 
 			notifyDataSetChanged();
