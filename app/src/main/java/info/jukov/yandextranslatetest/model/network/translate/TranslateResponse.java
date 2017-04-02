@@ -31,7 +31,7 @@ public final class TranslateResponse {
 	}
 
 	public String getText() {
-		if (text.size() > 1) {
+		if (text.size() > 0) {
 			return text.get(0);
 		}
 
