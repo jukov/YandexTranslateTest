@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import info.jukov.yandextranslatetest.TranslateApp;
+import info.jukov.yandextranslatetest.model.module.TransferModule;
 import info.jukov.yandextranslatetest.model.network.CallbackWithProgress;
 import info.jukov.yandextranslatetest.model.module.ApiModule;
 import info.jukov.yandextranslatetest.model.module.DatabaseModule;
@@ -12,6 +13,7 @@ import info.jukov.yandextranslatetest.model.network.dict.LookupResponse;
 import info.jukov.yandextranslatetest.model.network.translate.TranslateResponse;
 import info.jukov.yandextranslatetest.model.storage.dao.DatabaseManager.DatabaseListener;
 import info.jukov.yandextranslatetest.model.storage.dao.Translation;
+import info.jukov.yandextranslatetest.model.transfer.TransferManager.OnFullTranslateListener;
 import info.jukov.yandextranslatetest.ui.base.Progressable;
 import info.jukov.yandextranslatetest.util.Guard;
 import info.jukov.yandextranslatetest.util.JsonUtils;
@@ -27,7 +29,7 @@ import retrofit2.Response;
  * Time: 19:35
  */
 @InjectViewState
-public final class TranslatePresenter extends MvpPresenter<TranslateView> implements DatabaseListener {
+public final class TranslatePresenter extends MvpPresenter<TranslateView> implements DatabaseListener, OnFullTranslateListener {
 
 	private enum Queries {
 		TRANSLATE,
@@ -36,6 +38,7 @@ public final class TranslatePresenter extends MvpPresenter<TranslateView> implem
 
 	@Inject ApiModule apiModule;
 	@Inject DatabaseModule databaseModule;
+	@Inject TransferModule transferModule;
 
 	private TranslateResponse translateResponse;
 	private LookupResponse lookupResponse;
@@ -43,31 +46,31 @@ public final class TranslatePresenter extends MvpPresenter<TranslateView> implem
 	private String lang;
 	private String text;
 
-	private Translation translation;
+	private Translation actualTranslation;
 
 	private final MultiSetBoolean<Queries> allQueriesLoaded = new MultiSetBoolean<>(Queries.values().length, new OnValueTrueListener() {
 		@Override
 		public void onTrue() {
 
-			translation = new Translation();
+			actualTranslation = new Translation();
 
 			if (translateResponse != null){
-				translation.setTranslateResponse(translateResponse.getText());
+				actualTranslation.setTranslateResponse(translateResponse.getText());
 			}
 
 			if (lookupResponse != null && !lookupResponse.isEmpty()) {
-				translation.setDictionatyResponse(JsonUtils.serialize(lookupResponse));
+				actualTranslation.setDictionatyResponse(JsonUtils.serialize(lookupResponse));
 			}
 
-			translation.setText(text);
-			translation.setLang(lang);
+			actualTranslation.setText(text);
+			actualTranslation.setLang(lang);
 
-			getViewState().onTranslation(translation);
+			getViewState().onTranslation(actualTranslation);
 
 			lang = null;
 			text = null;
 
-			databaseModule.getDatabaseManager().processTranslate(translation);
+			databaseModule.getDatabaseManager().processTranslate(actualTranslation);
 		}
 	});
 
@@ -76,13 +79,14 @@ public final class TranslatePresenter extends MvpPresenter<TranslateView> implem
 		TranslateApp.getAppComponent().inject(this);
 
 		databaseModule.getDatabaseManager().addOnTranslateAddedListener(this);
+		transferModule.getTransferManager().addListener(this);
 	}
 
 	@Override
 	public void onTranslateProcessed(@NonNull final Translation translation) {
-		Guard.checkNotNull(translation, "null == translation");
+		Guard.checkNotNull(translation, "null == actualTranslation");
 
-		if (translation.equals(this.translation)) {
+		if (translation.equals(this.actualTranslation)) {
 			getViewState().onFavoritesAction(translation.getIsFavorite());
 		}
 	}
@@ -94,9 +98,18 @@ public final class TranslatePresenter extends MvpPresenter<TranslateView> implem
 
 	@Override
 	public void onFavoritesDeleted() {
-		translation = null;
+		actualTranslation = null;
 
 		getViewState().onFavoritesAction(false);
+	}
+
+	@Override
+	public void onFullTranslateListener(@NonNull final Translation translation) {
+		Guard.checkNotNull(translation, "null == translation");
+
+		actualTranslation = translation;
+
+		getViewState().onViewFullTranslation(translation);
 	}
 
 	public void translate(@NonNull final String lang, @NonNull final String text, @NonNull final Progressable progressable) {
@@ -108,11 +121,11 @@ public final class TranslatePresenter extends MvpPresenter<TranslateView> implem
 			return;
 		}
 
-		translation = databaseModule.getDatabaseManager().getTranslateFromDatabase(lang, text);
+		actualTranslation = databaseModule.getDatabaseManager().getTranslateFromDatabase(lang, text);
 
-		if (translation != null) {
-			getViewState().onTranslation(translation);
-			getViewState().onFavoritesAction(translation.getIsFavorite());
+		if (actualTranslation != null) {
+			getViewState().onTranslation(actualTranslation);
+			getViewState().onFavoritesAction(actualTranslation.getIsFavorite());
 			return;
 		}
 
@@ -128,12 +141,12 @@ public final class TranslatePresenter extends MvpPresenter<TranslateView> implem
 	}
 
 	public void addToFavorites() {
-		if (translation != null) {
-			translation.setIsFavorite(!translation.getIsFavorite());
+		if (actualTranslation != null) {
+			actualTranslation.setIsFavorite(!actualTranslation.getIsFavorite());
 
-			databaseModule.getDatabaseManager().processTranslate(translation);
+			databaseModule.getDatabaseManager().processTranslate(actualTranslation);
 
-			getViewState().onFavoritesAction(translation.getIsFavorite());
+			getViewState().onFavoritesAction(actualTranslation.getIsFavorite());
 		} else {
 			getViewState().onNothingToAddToFavorite();
 		}

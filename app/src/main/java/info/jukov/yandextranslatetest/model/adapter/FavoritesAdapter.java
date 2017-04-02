@@ -8,6 +8,7 @@ import info.jukov.yandextranslatetest.R;
 import info.jukov.yandextranslatetest.model.adapter.FavoritesAdapter.FavoritesViewHolder;
 import info.jukov.yandextranslatetest.model.storage.dao.DatabaseManager;
 import info.jukov.yandextranslatetest.model.storage.dao.Translation;
+import info.jukov.yandextranslatetest.ui.base.TranslateListHolder;
 import info.jukov.yandextranslatetest.util.Guard;
 import info.jukov.yandextranslatetest.util.Log;
 
@@ -22,8 +23,9 @@ public final class FavoritesAdapter extends AbstractTranslateHistoryAdapter<Favo
 
 	private static final Log LOG = new Log(FavoritesAdapter.class);
 
-	public FavoritesAdapter(@NonNull final Context context, @NonNull final DatabaseManager databaseManager) {
-		super(context, databaseManager);
+	public FavoritesAdapter(@NonNull final Context context, @NonNull final DatabaseManager databaseManager,
+		@NonNull final TranslateListHolder translateListHolder) {
+		super(context, databaseManager, translateListHolder);
 	}
 
 	public void processFavorite(@NonNull final Translation translation) {

@@ -1,6 +1,7 @@
 package info.jukov.yandextranslatetest.ui.screen.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,10 +16,11 @@ import info.jukov.yandextranslatetest.R;
 import info.jukov.yandextranslatetest.TranslateApp;
 import info.jukov.yandextranslatetest.model.adapter.HistoryAdapter;
 import info.jukov.yandextranslatetest.model.module.DatabaseModule;
-import info.jukov.yandextranslatetest.model.storage.dao.DatabaseManager;
+import info.jukov.yandextranslatetest.model.module.TransferModule;
 import info.jukov.yandextranslatetest.model.storage.dao.Translation;
 import info.jukov.yandextranslatetest.presenter.HistoryPresenter;
 import info.jukov.yandextranslatetest.presenter.HistoryView;
+import info.jukov.yandextranslatetest.ui.base.TranslateListHolder;
 import info.jukov.yandextranslatetest.util.Log;
 import java.util.List;
 import javax.inject.Inject;
@@ -29,7 +31,7 @@ import javax.inject.Inject;
  * Time: 19:31
  */
 
-public final class HistoryFragment extends MvpAppCompatFragment implements HistoryView {
+public final class HistoryFragment extends MvpAppCompatFragment implements HistoryView, TranslateListHolder {
 
 	private static final Log LOG = new Log(HistoryFragment.class);
 
@@ -38,6 +40,7 @@ public final class HistoryFragment extends MvpAppCompatFragment implements Histo
 	private HistoryAdapter historyAdapter;
 
 	@Inject DatabaseModule databaseModule;
+	@Inject TransferModule transferModule;
 
 	@InjectPresenter HistoryPresenter presenter;
 
@@ -82,9 +85,14 @@ public final class HistoryFragment extends MvpAppCompatFragment implements Histo
 		historyAdapter.deleteFavorites();
 	}
 
+	@Override
+	public void viewFullTranslation(@NonNull final Translation translation) {
+		transferModule.getTransferManager().onFullTranslate(translation);
+	}
+
 	private void initRecycler() {
 
-		historyAdapter = new HistoryAdapter(getContext(), databaseModule.getDatabaseManager());
+		historyAdapter = new HistoryAdapter(getContext(), databaseModule.getDatabaseManager(), this);
 
 		recyclerViewHistory.setLayoutManager(new LinearLayoutManager(getContext()));
 		recyclerViewHistory.setAdapter(historyAdapter);

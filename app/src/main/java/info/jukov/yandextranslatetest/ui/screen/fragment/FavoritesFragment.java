@@ -1,5 +1,6 @@
 package info.jukov.yandextranslatetest.ui.screen.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,9 +17,12 @@ import info.jukov.yandextranslatetest.R;
 import info.jukov.yandextranslatetest.TranslateApp;
 import info.jukov.yandextranslatetest.model.adapter.FavoritesAdapter;
 import info.jukov.yandextranslatetest.model.module.DatabaseModule;
+import info.jukov.yandextranslatetest.model.module.TransferModule;
 import info.jukov.yandextranslatetest.model.storage.dao.Translation;
 import info.jukov.yandextranslatetest.presenter.FavoritesPresenter;
 import info.jukov.yandextranslatetest.presenter.FavoritesView;
+import info.jukov.yandextranslatetest.ui.base.TranslateListHolder;
+import info.jukov.yandextranslatetest.ui.screen.activity.ScreenMainActivity;
 import info.jukov.yandextranslatetest.util.Guard;
 import info.jukov.yandextranslatetest.util.Log;
 import java.util.List;
@@ -30,7 +34,7 @@ import javax.inject.Inject;
  * Time: 19:31
  */
 
-public final class FavoritesFragment extends MvpAppCompatFragment implements FavoritesView {
+public final class FavoritesFragment extends MvpAppCompatFragment implements FavoritesView, TranslateListHolder {
 
 	private static final Log LOG = new Log(HistoryFragment.class);
 
@@ -39,15 +43,12 @@ public final class FavoritesFragment extends MvpAppCompatFragment implements Fav
 	private FavoritesAdapter favoritesAdapter;
 
 	@Inject DatabaseModule databaseModule;
+	@Inject TransferModule transferModule;
 
 	@InjectPresenter FavoritesPresenter presenter;
 
 	public static FavoritesFragment newInstance() {
-
-		Bundle args = new Bundle();
-
 		FavoritesFragment fragment = new FavoritesFragment();
-		fragment.setArguments(args);
 		return fragment;
 	}
 
@@ -78,6 +79,11 @@ public final class FavoritesFragment extends MvpAppCompatFragment implements Fav
 		favoritesAdapter.deleteFavorites();
 	}
 
+	@Override
+	public void viewFullTranslation(@NonNull final Translation translation) {
+		transferModule.getTransferManager().onFullTranslate(translation);
+	}
+
 	public void onFavoriteStatusChange(@NonNull final Translation translation) {
 		Guard.checkNotNull(translation, "null == translation");
 
@@ -86,7 +92,7 @@ public final class FavoritesFragment extends MvpAppCompatFragment implements Fav
 
 	private void initRecycler() {
 
-		favoritesAdapter = new FavoritesAdapter(getContext(), databaseModule.getDatabaseManager());
+		favoritesAdapter = new FavoritesAdapter(getContext(), databaseModule.getDatabaseManager(), this);
 
 		recyclerViewHistory.setLayoutManager(new LinearLayoutManager(getContext()));
 		recyclerViewHistory.setAdapter(favoritesAdapter);

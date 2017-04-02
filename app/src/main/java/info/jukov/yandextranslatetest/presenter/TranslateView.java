@@ -13,6 +13,8 @@ public interface TranslateView extends MvpView {
 
 	void onTranslation(Translation translation);
 
+	void onViewFullTranslation(Translation translation);
+
 	void onEmptyInput();
 
 	void onNothingToAddToFavorite();

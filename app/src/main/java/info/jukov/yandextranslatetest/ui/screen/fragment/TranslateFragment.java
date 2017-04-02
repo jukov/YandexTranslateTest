@@ -36,6 +36,7 @@ import info.jukov.yandextranslatetest.ui.base.Progressable;
 import info.jukov.yandextranslatetest.ui.format.DictionaryConstructor;
 import info.jukov.yandextranslatetest.util.KeyboardUtils;
 import info.jukov.yandextranslatetest.util.Log;
+import info.jukov.yandextranslatetest.util.StringUtils;
 import info.jukov.yandextranslatetest.util.ToastUtils;
 import java.util.HashSet;
 import java.util.Set;
@@ -209,6 +210,25 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 			textViewDict.setVisibility(View.GONE);
 			containerDictResult.setVisibility(View.GONE);
 		}
+	}
+
+	@Override
+	public void onViewFullTranslation(final Translation translation) {
+		onTranslation(translation);
+
+		editTextTranslatable.setText(translation.getText());
+
+		final int inputPosition = inputSpinnerAdapter.getPosition(StringUtils.formatInputLang(translation.getLang()));
+		if (inputPosition != -1) {
+			spinnerInputLanguage.setSelection(inputPosition);
+		}
+
+		final int outputPosition = outputSpinnerAdapter.getPosition(StringUtils.formatOutputLang(translation.getLang()));
+		if (outputPosition != -1) {
+			spinnerOutputLanguage.setSelection(outputPosition);
+		}
+
+		onFavoritesAction(translation.getIsFavorite());
 	}
 
 	@Override

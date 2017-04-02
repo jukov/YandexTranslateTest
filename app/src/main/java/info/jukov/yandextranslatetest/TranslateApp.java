@@ -6,11 +6,13 @@ import info.jukov.yandextranslatetest.model.component.DaggerAppComponent;
 import info.jukov.yandextranslatetest.model.module.ApiModule;
 import info.jukov.yandextranslatetest.model.module.ContextModule;
 import info.jukov.yandextranslatetest.model.module.DatabaseModule;
+import info.jukov.yandextranslatetest.model.module.TransferModule;
 import info.jukov.yandextranslatetest.model.network.dict.DictApi;
 import info.jukov.yandextranslatetest.model.network.translate.TranslateApi;
 import info.jukov.yandextranslatetest.model.storage.dao.DaoMaster;
 import info.jukov.yandextranslatetest.model.storage.dao.DaoSession;
 import info.jukov.yandextranslatetest.model.storage.dao.DatabaseManager;
+import info.jukov.yandextranslatetest.model.transfer.TransferManager;
 import info.jukov.yandextranslatetest.ui.format.DictionaryConstructor;
 import org.greenrobot.greendao.database.Database;
 
@@ -44,6 +46,7 @@ public final class TranslateApp extends Application {
 			.contextModule(new ContextModule(this))
 			.apiModule(new ApiModule(new DictApi(this), new TranslateApi(this)))
 			.databaseModule(new DatabaseModule(new DatabaseManager(openDatabase().getTranslationDao())))
+			.transferModule(new TransferModule(new TransferManager()))
 			.build();
 	}
 
@@ -52,5 +55,4 @@ public final class TranslateApp extends Application {
 		Database database = devOpenHelper.getWritableDb();
 		return new DaoMaster(database).newSession();
 	}
-
 }

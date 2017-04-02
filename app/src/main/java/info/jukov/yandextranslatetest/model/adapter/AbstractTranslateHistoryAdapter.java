@@ -15,7 +15,9 @@ import info.jukov.yandextranslatetest.R;
 import info.jukov.yandextranslatetest.model.adapter.AbstractTranslateHistoryAdapter.ViewHolder;
 import info.jukov.yandextranslatetest.model.storage.dao.DatabaseManager;
 import info.jukov.yandextranslatetest.model.storage.dao.Translation;
+import info.jukov.yandextranslatetest.ui.base.TranslateListHolder;
 import info.jukov.yandextranslatetest.util.Guard;
+import info.jukov.yandextranslatetest.util.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +25,8 @@ import java.util.List;
  * User: jukov
  * Date: 21.03.2017
  * Time: 22:36
+ *
+ * Базовый адаптер для отображения переводов.
  */
 public abstract class AbstractTranslateHistoryAdapter<VH extends ViewHolder> extends RecyclerView.Adapter<VH> {
 
@@ -32,24 +36,17 @@ public abstract class AbstractTranslateHistoryAdapter<VH extends ViewHolder> ext
 
 	private final DatabaseManager databaseManager;
 
-	private static String formatInputLang(final String lang) {
-		Guard.checkPreCondition(lang.length() == 5 || lang.contains("-"),
-			"Lang must be correspond pattern 'xx-xx': " + lang);
-		return lang.split("-", 2)[0].toUpperCase();
-	}
+	private final TranslateListHolder translateListHolder;
 
-	private static String formatOutputLang(final String lang) {
-		Guard.checkPreCondition(lang.length() == 5 || lang.contains("-"),
-			"Lang must be correspond pattern 'xx-xx'");
-		return lang.split("-", 2)[1].toUpperCase();
-	}
-
-	protected AbstractTranslateHistoryAdapter(@NonNull final Context context, @NonNull final DatabaseManager databaseManager) {
+	protected  AbstractTranslateHistoryAdapter(@NonNull final Context context, @NonNull final DatabaseManager databaseManager,
+		@NonNull final TranslateListHolder translateListHolder) {
 		Guard.checkNotNull(context, "null == context");
 		Guard.checkNotNull(databaseManager, "null == databaseManager");
+		Guard.checkNotNull(translateListHolder, "null == translateListHolder");
 
 		inflater = LayoutInflater.from(context);
 
+		this.translateListHolder = translateListHolder;
 		this.databaseManager = databaseManager;
 
 		translationList = new ArrayList<>();
@@ -87,7 +84,7 @@ public abstract class AbstractTranslateHistoryAdapter<VH extends ViewHolder> ext
 			conteinerText.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(final View v) {
-
+					translateListHolder.viewFullTranslation(translation);
 				}
 			});
 
@@ -103,8 +100,8 @@ public abstract class AbstractTranslateHistoryAdapter<VH extends ViewHolder> ext
 			this.translation = translation;
 
 			textViewInput.setText(translation.getText());
-			textViewInputLang.setText(formatInputLang(translation.getLang()));
-			textViewOutputLang.setText(formatOutputLang(translation.getLang()));
+			textViewInputLang.setText(StringUtils.formatInputLang(translation.getLang()).toUpperCase());
+			textViewOutputLang.setText(StringUtils.formatOutputLang(translation.getLang()).toUpperCase());
 
 			setFavorite(translation.getIsFavorite());
 

@@ -39,7 +39,7 @@ public final class ApiKeysCheckPresenter extends MvpPresenter<ApiKeysCheckView> 
 			.getString(R.string.preferenceKey_translateApiKey);
 
 		final String dictApiKey = preferences.getString(dictPreferenceKey, "");
-		final String translateApiKey = preferences.getString(dictPreferenceKey, "");
+		final String translateApiKey = preferences.getString(translatePreferenceKey, "");
 
 		if (!dictApiKey.isEmpty() && !translateApiKey.isEmpty()) {
 			getViewState().onKeysEntered();

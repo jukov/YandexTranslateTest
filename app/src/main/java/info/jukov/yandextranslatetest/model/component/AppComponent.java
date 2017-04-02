@@ -4,10 +4,12 @@ import dagger.Component;
 import info.jukov.yandextranslatetest.model.module.ApiModule;
 import info.jukov.yandextranslatetest.model.module.ContextModule;
 import info.jukov.yandextranslatetest.model.module.DatabaseModule;
+import info.jukov.yandextranslatetest.model.module.TransferModule;
 import info.jukov.yandextranslatetest.presenter.ApiKeysCheckPresenter;
 import info.jukov.yandextranslatetest.presenter.FavoritesPresenter;
 import info.jukov.yandextranslatetest.presenter.HistoryPresenter;
 import info.jukov.yandextranslatetest.presenter.LangsLoaderPresenter;
+import info.jukov.yandextranslatetest.presenter.MainPresenter;
 import info.jukov.yandextranslatetest.presenter.TranslatePresenter;
 import info.jukov.yandextranslatetest.ui.screen.fragment.FavoritesFragment;
 import info.jukov.yandextranslatetest.ui.screen.fragment.HistoryFragment;
@@ -19,7 +21,7 @@ import javax.inject.Singleton;
  * Date: 18.03.2017
  * Time: 18:08
  */
-@Component(modules = {ContextModule.class, ApiModule.class, DatabaseModule.class})
+@Component(modules = {ContextModule.class, ApiModule.class, DatabaseModule.class, TransferModule.class})
 @Singleton
 public interface AppComponent {
 
@@ -39,4 +41,5 @@ public interface AppComponent {
 
 	void inject(SettingsFragment target);
 
+	void inject(MainPresenter target);
 }

@@ -122,7 +122,7 @@ public final class LanguageAdapter extends BaseAdapter {
 	}
 
 	/**
-	 * Возвращает список самых используемых языков.
+	 * @return список самых используемых языков.
 	 */
 	public List<Language> getMostUsedLanguages() {
 
@@ -141,6 +141,22 @@ public final class LanguageAdapter extends BaseAdapter {
 		}
 
 		return mostUsedLanguages;
+	}
+
+	/**
+	 * @return индекс языка по его коду. Если язык не найден, возвращает -1.
+	 * */
+	public int getPosition(@NonNull final String langCode) {
+		Guard.checkNotNull(langCode, "null == langCode");
+
+		for (int i = 0; i < languages.size(); i++) {
+			final Language language = languages.get(i);
+			if (langCode.equals(language.getCode())) {
+				return i;
+			}
+		}
+
+		return -1;
 	}
 
 	@Override

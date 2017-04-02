@@ -905,7 +905,7 @@
     <inspection_tool class="DeprecatedAPI" enabled="false" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="DeprecatedCallableAddReplaceWith" enabled="false" level="INFO" enabled_by_default="true" />
     <inspection_tool class="DeprecatedClassUsageInspection" enabled="false" level="WARNING" enabled_by_default="false" />
-    <inspection_tool class="Deprecation" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="Deprecation" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="DerivedFunctionsReturnTypeMismatch" enabled="false" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="DeserializableClassInSecureContext" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="DesignForExtension" enabled="false" level="WARNING" enabled_by_default="false" />
@@ -1867,7 +1867,7 @@
     <inspection_tool class="MisorderedAssertEqualsParameters" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="MissedExecutable" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="MissingAspectjAutoproxyInspection" enabled="true" level="WARNING" enabled_by_default="true" />
-    <inspection_tool class="MissingDeprecatedAnnotation" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="MissingDeprecatedAnnotation" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="MissingFinalNewline" enabled="false" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="MissingMnemonic" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="MissingOverrideAnnotation" enabled="true" level="ERROR" enabled_by_default="false">
