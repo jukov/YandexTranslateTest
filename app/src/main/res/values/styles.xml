@@ -20,6 +20,13 @@
 		<item name="android:background">@color/colorPrimary</item>
 	</style>
 
+	<!--Material Text Styles-->
+
+	<style name="TextHeadline">
+		<item name="android:textSize">@dimen/textsize_headline</item>
+		<item name="android:textColor">@color/text_all_title</item>
+	</style>
+
 	<style name="TextTitle">
 		<item name="android:textSize">@dimen/textsize_title</item>
 		<item name="android:textColor">@color/text_all_title</item>
@@ -39,6 +46,12 @@
 		<item name="android:layout_width">match_parent</item>
 		<item name="android:layout_height">@dimen/height_divider</item>
 		<item name="android:background">@color/divider_black12</item>
+	</style>
+
+	<!--Custom Text Styles-->
+
+	<style name="TextHeadline.Transparent" parent="TextHeadline">
+		<item name="android:textColor">@color/text_all_black54</item>
 	</style>
 
 </resources>

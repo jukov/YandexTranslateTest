@@ -11,8 +11,7 @@ import info.jukov.yandextranslatetest.presenter.HistoryPresenter;
 import info.jukov.yandextranslatetest.presenter.LangsLoaderPresenter;
 import info.jukov.yandextranslatetest.presenter.MainPresenter;
 import info.jukov.yandextranslatetest.presenter.TranslatePresenter;
-import info.jukov.yandextranslatetest.ui.screen.fragment.FavoritesFragment;
-import info.jukov.yandextranslatetest.ui.screen.fragment.HistoryFragment;
+import info.jukov.yandextranslatetest.ui.screen.fragment.BaseTranslationsListFragment;
 import info.jukov.yandextranslatetest.ui.screen.fragment.SettingsFragment;
 import javax.inject.Singleton;
 
@@ -35,9 +34,7 @@ public interface AppComponent {
 
 	void inject(ApiKeysCheckPresenter target);
 
-	void inject(HistoryFragment target);
-
-	void inject(FavoritesFragment target);
+	void inject(BaseTranslationsListFragment target);
 
 	void inject(SettingsFragment target);
 

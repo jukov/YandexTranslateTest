@@ -15,7 +15,7 @@ import info.jukov.yandextranslatetest.R;
 import info.jukov.yandextranslatetest.model.adapter.AbstractTranslateHistoryAdapter.ViewHolder;
 import info.jukov.yandextranslatetest.model.storage.dao.DatabaseManager;
 import info.jukov.yandextranslatetest.model.storage.dao.Translation;
-import info.jukov.yandextranslatetest.ui.base.TranslateListHolder;
+import info.jukov.yandextranslatetest.ui.base.TranslationListHolder;
 import info.jukov.yandextranslatetest.util.Guard;
 import info.jukov.yandextranslatetest.util.StringUtils;
 import java.util.ArrayList;
@@ -30,26 +30,38 @@ import java.util.List;
  */
 public abstract class AbstractTranslateHistoryAdapter<VH extends ViewHolder> extends RecyclerView.Adapter<VH> {
 
-	protected final List<Translation> translationList;
-
-	protected final LayoutInflater inflater;
-
+	private final List<Translation> translationList;
+	private final LayoutInflater inflater;
 	private final DatabaseManager databaseManager;
+	private final TranslationListHolder translationListHolder;
+	private final OnDataSetChangedListener dataSetChangedListener;
 
-	private final TranslateListHolder translateListHolder;
-
-	protected  AbstractTranslateHistoryAdapter(@NonNull final Context context, @NonNull final DatabaseManager databaseManager,
-		@NonNull final TranslateListHolder translateListHolder) {
+	protected AbstractTranslateHistoryAdapter(@NonNull final Context context, @NonNull final DatabaseManager databaseManager,
+		@NonNull final TranslationListHolder translationListHolder, @NonNull final OnDataSetChangedListener dataSetChangedListener) {
 		Guard.checkNotNull(context, "null == context");
 		Guard.checkNotNull(databaseManager, "null == databaseManager");
-		Guard.checkNotNull(translateListHolder, "null == translateListHolder");
+		Guard.checkNotNull(translationListHolder, "null == translationListHolder");
+		Guard.checkNotNull(dataSetChangedListener, "null == dataSetChangedListener");
 
 		inflater = LayoutInflater.from(context);
 
-		this.translateListHolder = translateListHolder;
+		this.dataSetChangedListener = dataSetChangedListener;
+		this.translationListHolder = translationListHolder;
 		this.databaseManager = databaseManager;
 
 		translationList = new ArrayList<>();
+	}
+
+	public OnDataSetChangedListener getDataSetChangedListener() {
+		return dataSetChangedListener;
+	}
+
+	public List<Translation> getTranslationList() {
+		return translationList;
+	}
+
+	public LayoutInflater getInflater() {
+		return inflater;
 	}
 
 	@Override
@@ -64,7 +76,16 @@ public abstract class AbstractTranslateHistoryAdapter<VH extends ViewHolder> ext
 
 	public void setTranslations(final List<Translation> translationList) {
 		this.translationList.addAll(translationList);
+
+		notifyDataSetChanged();
+		getDataSetChangedListener().onDataSetChange(getItemCount());
 	}
+
+	public abstract void processTranslation(final Translation translation);
+
+	public abstract void deleteFavorites();
+
+	public abstract void deleteHistory();
 
 	public class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -84,7 +105,7 @@ public abstract class AbstractTranslateHistoryAdapter<VH extends ViewHolder> ext
 			conteinerText.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(final View v) {
-					translateListHolder.viewFullTranslation(translation);
+					translationListHolder.viewFullTranslation(translation);
 				}
 			});
 
@@ -127,5 +148,9 @@ public abstract class AbstractTranslateHistoryAdapter<VH extends ViewHolder> ext
 				imageViewFavorite.setImageResource(R.drawable.ic_heart_outline);
 			}
 		}
+	}
+
+	public interface OnDataSetChangedListener {
+		void onDataSetChange(int currentSize);
 	}
 }

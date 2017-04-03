@@ -12,8 +12,8 @@
 		android:gravity="center_vertical"
 		style="@style/TextSubheading"
 		tools:text="English"
-		android:layout_marginLeft="@dimen/space_all_horizontal"
-		android:layout_marginRight="@dimen/space_all_horizontal"/>
+		android:layout_marginLeft="@dimen/space_all_screenPadding"
+		android:layout_marginRight="@dimen/space_all_screenPadding"/>
 
 	<View
 		android:id="@+id/divider"

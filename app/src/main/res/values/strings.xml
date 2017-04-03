@@ -11,6 +11,12 @@
 	<string name="translateFragment_toast_errorNothingToTranslate">Nothing to translate</string>
 	<string name="translateFragment_toast_errorNothingToAddToFavorites">Nothing to add to favorites</string>
 
+	<!--HistoryFragment-->
+	<string name="historyFragment_textViewEmptyList">No translations have been added to history. Try to translate something.</string>
+
+	<!--FavoritesFragment-->
+	<string name="favoritesFragment_textViewEmptyList">No translations have been added to favorites. Try to translate something and click on button with a “heart”.</string>
+	
 	<!--Current lang code-->
 	<string name="lang_code">en</string>
 

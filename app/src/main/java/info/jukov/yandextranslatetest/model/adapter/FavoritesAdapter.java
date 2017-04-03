@@ -8,7 +8,7 @@ import info.jukov.yandextranslatetest.R;
 import info.jukov.yandextranslatetest.model.adapter.FavoritesAdapter.FavoritesViewHolder;
 import info.jukov.yandextranslatetest.model.storage.dao.DatabaseManager;
 import info.jukov.yandextranslatetest.model.storage.dao.Translation;
-import info.jukov.yandextranslatetest.ui.base.TranslateListHolder;
+import info.jukov.yandextranslatetest.ui.base.TranslationListHolder;
 import info.jukov.yandextranslatetest.util.Guard;
 import info.jukov.yandextranslatetest.util.Log;
 
@@ -24,52 +24,64 @@ public final class FavoritesAdapter extends AbstractTranslateHistoryAdapter<Favo
 	private static final Log LOG = new Log(FavoritesAdapter.class);
 
 	public FavoritesAdapter(@NonNull final Context context, @NonNull final DatabaseManager databaseManager,
-		@NonNull final TranslateListHolder translateListHolder) {
-		super(context, databaseManager, translateListHolder);
+		@NonNull final TranslationListHolder translationListHolder, @NonNull final OnDataSetChangedListener dataSetChangedListener) {
+		super(context, databaseManager, translationListHolder, dataSetChangedListener);
 	}
 
-	public void processFavorite(@NonNull final Translation translation) {
+	@Override
+	public void processTranslation(@NonNull final Translation translation) {
 		Guard.checkNotNull(translation, "null == translation");
 
-		final int itemIndex = translationList.indexOf(translation);
+		final int itemIndex = getTranslationList().indexOf(translation);
 
 		if (translation.getIsFavorite() == true) {
 			if (itemIndex != -1) {
-				translationList.get(itemIndex).setIsFavorite(true);
+				getTranslationList().get(itemIndex).setIsFavorite(true);
 
-				LOG.verbose("Updated; Size: " + translationList.size() + "; Text: " + translation.getText());
+				LOG.verbose("Updated; Size: " + getTranslationList().size() + "; Text: " + translation.getText());
 
 				notifyItemChanged(itemIndex);
+				getDataSetChangedListener().onDataSetChange(getItemCount());
 
-				LOG.verbose("Updated; Size: " + translationList.size() + "; Text: " + translation.getText());
+				LOG.verbose("Updated; Size: " + getTranslationList().size() + "; Text: " + translation.getText());
 
 			} else {
-				translationList.add(translation);
+				getTranslationList().add(translation);
 
 				notifyDataSetChanged();
+				getDataSetChangedListener().onDataSetChange(getItemCount());
 
-				LOG.verbose("Added; Size: " + translationList.size() + "; Text: " + translation.getText());
+				LOG.verbose("Added; Size: " + getTranslationList().size() + "; Text: " + translation.getText());
 			}
 		} else {
 			if (itemIndex != -1) {
-				translationList.remove(itemIndex);
-				notifyItemRemoved(itemIndex);
+				getTranslationList().remove(itemIndex);
 
-				LOG.verbose("Removed; Size: " + translationList.size() + "; Text: " + translation.getText());
+				notifyItemRemoved(itemIndex);
+				getDataSetChangedListener().onDataSetChange(getItemCount());
+
+				LOG.verbose("Removed; Size: " + getTranslationList().size() + "; Text: " + translation.getText());
 			}
 		}
 	}
 
+	@Override
 	public void deleteFavorites() {
-		translationList.clear();
+		getTranslationList().clear();
 
 		notifyDataSetChanged();
+		getDataSetChangedListener().onDataSetChange(getItemCount());
+	}
+
+	@Override
+	public void deleteHistory() {
+		//unused in this adapter
 	}
 
 	@Override
 	public FavoritesViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
 
-		final View view = inflater.inflate(R.layout.recycler_history_item, parent, false);
+		final View view = getInflater().inflate(R.layout.recycler_history_item, parent, false);
 
 		final FavoritesViewHolder viewHolder = new FavoritesViewHolder(view);
 

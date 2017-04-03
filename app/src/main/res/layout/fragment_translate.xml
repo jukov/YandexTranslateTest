@@ -52,8 +52,8 @@
 				android:id="@+id/editTextTranslatable"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:layout_marginLeft="@dimen/space_all_horizontal"
-				android:layout_marginRight="@dimen/space_all_horizontal"
+				android:layout_marginLeft="@dimen/space_all_screenPadding"
+				android:layout_marginRight="@dimen/space_all_screenPadding"
 				android:gravity="top"
 				android:imeOptions="actionDone"
 				android:hint="@string/translateFragment_editTextInputHint"
@@ -64,8 +64,8 @@
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:orientation="horizontal"
-				android:layout_marginLeft="@dimen/space_all_horizontal"
-				android:layout_marginRight="@dimen/space_all_horizontal">
+				android:layout_marginLeft="@dimen/space_all_screenPadding"
+				android:layout_marginRight="@dimen/space_all_screenPadding">
 
 				<Button
 					android:id="@+id/buttonTranslate"
@@ -87,9 +87,9 @@
 				style="@style/TextSubheading"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:layout_marginBottom="@dimen/space_all_vertical"
-				android:layout_marginLeft="@dimen/space_all_horizontal"
-				android:layout_marginRight="@dimen/space_all_horizontal"
+				android:layout_marginBottom="@dimen/space_all_screenPadding"
+				android:layout_marginLeft="@dimen/space_all_screenPadding"
+				android:layout_marginRight="@dimen/space_all_screenPadding"
 				android:layout_marginTop="@dimen/space_all_betweenContent"
 				android:text="@string/translateFragment_copyright"/>
 
@@ -117,15 +117,15 @@
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:orientation="vertical"
-			android:paddingBottom="@dimen/space_all_vertical">
+			android:paddingBottom="@dimen/space_all_screenPadding">
 
 			<TextView
 				android:id="@+id/textViewTranslated"
 				style="@style/TextTitle"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:layout_marginLeft="@dimen/space_all_horizontal"
-				android:layout_marginRight="@dimen/space_all_horizontal"
+				android:layout_marginLeft="@dimen/space_all_screenPadding"
+				android:layout_marginRight="@dimen/space_all_screenPadding"
 				android:layout_marginTop="@dimen/space_all_betweenContent"
 				tools:text="Время"/>
 
@@ -134,8 +134,8 @@
 				style="@style/TextSubheading"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:layout_marginLeft="@dimen/space_all_horizontal"
-				android:layout_marginRight="@dimen/space_all_horizontal"
+				android:layout_marginLeft="@dimen/space_all_screenPadding"
+				android:layout_marginRight="@dimen/space_all_screenPadding"
 				android:layout_marginTop="@dimen/space_all_betweenContent"
 				tools:text="Time [taɪm]"/>
 
