@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical">
+
+	<android.support.v7.widget.Toolbar
+		android:id="@+id/toolbar"
+		android:layout_width="match_parent"
+		android:layout_height="?attr/actionBarSize"
+		android:background="?attr/colorPrimary"
+		android:theme="@style/ThemeOverlay.AppCompat.Dark"
+		app:popupTheme="@style/Theme.AppCompat.Light"/>
+
+	<ScrollView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<RelativeLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:paddingBottom="@dimen/space_all_betweenContent"
+			android:paddingLeft="@dimen/space_all_screenPadding"
+			android:paddingRight="@dimen/space_all_screenPadding">
+
+			<ImageView
+				android:id="@+id/imageViewLogo"
+				android:layout_width="match_parent"
+				android:layout_height="192dp"
+				android:padding="@dimen/space_all_betweenContent"
+				android:src="@drawable/banner_splash"/>
+
+			<TextView
+				android:id="@+id/textViewAppName"
+				style="@style/TextTitle"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_below="@id/imageViewLogo"
+				android:paddingTop="@dimen/space_all_betweenContent"
+				android:text="@string/app_name"/>
+
+			<TextView
+				android:id="@+id/textViewAuthorName"
+				style="@style/TextSubheading.Transparent"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_below="@id/textViewAppName"
+				android:paddingTop="@dimen/space_all_betweenTitleAndSubtitle"
+				android:text="@string/about_author"/>
+
+			<TextView
+				android:id="@+id/textViewLicense"
+				style="@style/TextBody"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_below="@id/textViewAuthorName"
+				android:paddingTop="@dimen/space_all_betweenTitleAndSubtitle"
+				android:autoLink="web"
+				android:text="@string/about_license"/>
+
+			<TextView
+				android:id="@+id/textViewYandexCopyright"
+				style="@style/TextSubheading"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_below="@id/textViewLicense"
+				android:paddingTop="@dimen/space_all_betweenContent"/>
+
+			<TextView
+				android:id="@+id/textViewOtherLicenses"
+				style="@style/TextSubheading"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_below="@id/textViewYandexCopyright"
+				android:paddingTop="@dimen/space_all_betweenElement"
+				android:text="@string/about_otherLicenses"/>
+
+			<LinearLayout
+				android:layout_below="@id/textViewOtherLicenses"
+				android:id="@+id/containerLicense"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="vertical"/>
+
+		</RelativeLayout>
+
+	</ScrollView>
+
+</LinearLayout>

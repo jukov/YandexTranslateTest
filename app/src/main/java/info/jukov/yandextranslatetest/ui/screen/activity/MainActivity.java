@@ -37,12 +37,12 @@ import info.jukov.yandextranslatetest.util.Log;
  * Time: 21:47
  */
 
-public final class ScreenMainActivity extends MvpAppCompatActivity implements MainView {
+public final class MainActivity extends MvpAppCompatActivity implements MainView {
 
-	public static final String ACTION_ERROR = ExtrasUtils.createExtraName("ACTION_ERROR", ScreenMainActivity.class);
-	public static final String EXTRA_ERROR_CODE = ExtrasUtils.createExtraName("EXTRA_ERROR_CODE", ScreenMainActivity.class);
+	public static final String ACTION_ERROR = ExtrasUtils.createExtraName("ACTION_ERROR", MainActivity.class);
+	public static final String EXTRA_ERROR_CODE = ExtrasUtils.createExtraName("EXTRA_ERROR_CODE", MainActivity.class);
 
-	private static final Log LOG = new Log(ScreenMainActivity.class);
+	private static final Log LOG = new Log(MainActivity.class);
 
 	@InjectPresenter MainPresenter presenter;
 
@@ -55,14 +55,14 @@ public final class ScreenMainActivity extends MvpAppCompatActivity implements Ma
 	public static void start(@NonNull final Context context) {
 		Guard.checkNotNull(context, "null == context");
 
-		Intent starter = new Intent(context, ScreenMainActivity.class);
+		Intent starter = new Intent(context, MainActivity.class);
 		context.startActivity(starter);
 	}
 
 	public static void startWithError(@NonNull final Context context, final int errorCode) {
 		Guard.checkNotNull(context, "null == context");
 
-		Intent starter = new Intent(context, ScreenMainActivity.class);
+		Intent starter = new Intent(context, MainActivity.class);
 		starter.setAction(ACTION_ERROR);
 		starter.putExtra(EXTRA_ERROR_CODE, errorCode);
 		context.startActivity(starter);
@@ -95,9 +95,10 @@ public final class ScreenMainActivity extends MvpAppCompatActivity implements Ma
 	public boolean onOptionsItemSelected(final MenuItem item) {
 		switch (item.getItemId()) {
 			case R.id.toolbarMenuSetttings:
-				ScreenSettingsActivity.start(this);
+				SettingsActivity.start(this);
 				break;
 			case R.id.toolbarMenuLicense:
+				LicenseActivity.start(this);
 				break;
 			default:
 				throw new IllegalStateException("Unexpected menu item");
@@ -110,9 +111,9 @@ public final class ScreenMainActivity extends MvpAppCompatActivity implements Ma
 	protected void onActivityResult(final int requestCode, final int resultCode,
 		final Intent data) {
 
-		if (requestCode == ScreenSettingsActivity.REQUEST_CODE_RESTART_AFTER_API_KEY_CHANGE &&
+		if (requestCode == SettingsActivity.REQUEST_CODE_RESTART_AFTER_API_KEY_CHANGE &&
 			resultCode == RESULT_OK) {
-			ScreenSplashActivity.restartApp(this);
+			SplashActivity.restartApp(this);
 		}
 
 		super.onActivityResult(requestCode, resultCode, data);
@@ -152,7 +153,7 @@ public final class ScreenMainActivity extends MvpAppCompatActivity implements Ma
 		final OnClickListener openSettingsListener = new OnClickListener() {
 			@Override
 			public void onClick(final DialogInterface dialog, final int which) {
-				ScreenSettingsActivity.start(ScreenMainActivity.this);
+				SettingsActivity.start(MainActivity.this);
 			}
 		};
 
@@ -166,7 +167,7 @@ public final class ScreenMainActivity extends MvpAppCompatActivity implements Ma
 		final OnClickListener restartListener = new OnClickListener() {
 			@Override
 			public void onClick(final DialogInterface dialog, final int which) {
-				ScreenSplashActivity.restartApp(ScreenMainActivity.this);
+				SplashActivity.restartApp(MainActivity.this);
 			}
 		};
 

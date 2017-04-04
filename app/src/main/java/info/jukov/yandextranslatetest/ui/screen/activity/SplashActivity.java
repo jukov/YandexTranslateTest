@@ -22,13 +22,13 @@ import info.jukov.yandextranslatetest.util.Log;
  * Time: 11:43
  */
 
-public final class ScreenSplashActivity extends MvpAppCompatActivity
+public final class SplashActivity extends MvpAppCompatActivity
 	implements LangsLoaderView, ApiKeysCheckView {
 
 	public static final String ACTION_RESTART = ExtrasUtils
-		.createExtraName("ACTION_RESTART", ScreenSplashActivity.class);
+		.createExtraName("ACTION_RESTART", SplashActivity.class);
 
-	private static final Log LOG = new Log(ScreenSplashActivity.class);
+	private static final Log LOG = new Log(SplashActivity.class);
 
 	public static void restartApp(@NonNull final AppCompatActivity activity) {
 		final Intent intent = activity.getBaseContext().getPackageManager()
@@ -60,13 +60,13 @@ public final class ScreenSplashActivity extends MvpAppCompatActivity
 
 	@Override
 	public void onLoadFinished() {
-		ScreenMainActivity.start(this);
+		MainActivity.start(this);
 		finish();
 	}
 
 	@Override
 	public void onLoadFailed(final int errorCode) {
-		ScreenMainActivity.startWithError(this, errorCode);
+		MainActivity.startWithError(this, errorCode);
 		finish();
 	}
 
@@ -77,7 +77,7 @@ public final class ScreenSplashActivity extends MvpAppCompatActivity
 
 	@Override
 	public void onKeysNotEntered() {
-		ScreenMainActivity.startWithError(this, ErrorCodes.KEYS_NOT_SET_CUSTOM);
+		MainActivity.startWithError(this, ErrorCodes.KEYS_NOT_SET_CUSTOM);
 		finish();
 	}
 }

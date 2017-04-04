@@ -20,37 +20,43 @@
 		<item name="android:background">@color/colorPrimary</item>
 	</style>
 
-	<!--Material Text Styles-->
-
-	<style name="TextHeadline">
-		<item name="android:textSize">@dimen/textsize_headline</item>
-		<item name="android:textColor">@color/text_all_title</item>
-	</style>
-
-	<style name="TextTitle">
-		<item name="android:textSize">@dimen/textsize_title</item>
-		<item name="android:textColor">@color/text_all_title</item>
-	</style>
-
-	<style name="TextSubheading">
-		<item name="android:textSize">@dimen/textsize_subheading</item>
-		<item name="android:textColor">@color/text_all_subheading</item>
-	</style>
-
-	<style name="TextBody">
-		<item name="android:textSize">@dimen/textsize_body</item>
-		<item name="android:textColor">@color/text_all_body</item>
-	</style>
-
 	<style name="Divider">
 		<item name="android:layout_width">match_parent</item>
 		<item name="android:layout_height">@dimen/height_divider</item>
 		<item name="android:background">@color/divider_black12</item>
 	</style>
 
-	<!--Custom Text Styles-->
+	<!--Material Text Styles-->
+
+	<style name="TextHeadline">
+		<item name="android:textSize">@dimen/textsize_headline</item>
+		<item name="android:textColor">@color/text_all_black87</item>
+	</style>
+
+	<style name="TextTitle">
+		<item name="android:textSize">@dimen/textsize_title</item>
+		<item name="android:textColor">@color/text_all_black87</item>
+	</style>
+
+	<style name="TextSubheading">
+		<item name="android:textSize">@dimen/textsize_subheading</item>
+		<item name="android:textColor">@color/text_all_black87</item>
+	</style>
+
+	<style name="TextBody">
+		<item name="android:textSize">@dimen/textsize_body</item>
+		<item name="android:textColor">@color/text_all_black87</item>
+	</style>
 
 	<style name="TextHeadline.Transparent" parent="TextHeadline">
+		<item name="android:textColor">@color/text_all_black54</item>
+	</style>
+
+	<style name="TextSubheading.Transparent" parent="TextSubheading">
+		<item name="android:textColor">@color/text_all_black54</item>
+	</style>
+
+	<style name="TextBody.Transparent" parent="TextBody">
 		<item name="android:textColor">@color/text_all_black54</item>
 	</style>
 

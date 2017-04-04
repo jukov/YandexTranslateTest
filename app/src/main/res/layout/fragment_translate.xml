@@ -91,7 +91,7 @@
 				android:layout_marginLeft="@dimen/space_all_screenPadding"
 				android:layout_marginRight="@dimen/space_all_screenPadding"
 				android:layout_marginTop="@dimen/space_all_betweenContent"
-				android:text="@string/translateFragment_copyright"/>
+				tools:text="@string/translateFragment_copyright"/>
 
 		</LinearLayout>
 

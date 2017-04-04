@@ -14,17 +14,21 @@
 		android:supportsRtl="true"
 		android:theme="@style/AppTheme">
 
-		<activity android:name=".ui.screen.activity.ScreenSplashActivity">
+		<activity android:name=".ui.screen.activity.SplashActivity">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN"/>
 				<category android:name="android.intent.category.LAUNCHER"/>
 			</intent-filter>
 		</activity>
 
-		<activity android:name=".ui.screen.activity.ScreenMainActivity"
+		<activity android:name=".ui.screen.activity.MainActivity"
 			android:launchMode="singleTop"/>
 
-		<activity android:name=".ui.screen.activity.ScreenSettingsActivity"/>
+		<activity android:name=".ui.screen.activity.SettingsActivity"
+			android:label="@string/activitySettings_title"/>
+
+		<activity android:name=".ui.screen.activity.LicenseActivity"
+			android:label="@string/activityLicense_title"/>
 
 	</application>
 

@@ -5,6 +5,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -62,6 +64,7 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 	@BindView(R.id.buttonFavorite) ImageButton buttonFavorite;
 	@BindView(R.id.textViewTranslated) TextView textViewTranslated;
 	@BindView(R.id.textViewDict) TextView textViewDict;
+	@BindView(R.id.textViewCopyright) TextView textViewCopyright;
 	@BindView(R.id.containerDictResult) LinearLayout containerDictResult;
 	@BindView(R.id.progressBar) ProgressBar progressBar;
 
@@ -88,7 +91,7 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 		View view = inflater.inflate(R.layout.fragment_translate, null);
 		ButterKnife.bind(this, view);
 
-		initEditText();
+		initUi();
 		initAdapters();
 		initSpinners();
 
@@ -105,7 +108,7 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 		}
 	}
 
-	private void initEditText() {
+	private void initUi() {
 		editTextTranslatable.setOnEditorActionListener(new OnEditorActionListener() {
 			@Override
 			public boolean onEditorAction(final TextView v, final int actionId, final KeyEvent event) {
@@ -116,6 +119,9 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 				return true;
 			}
 		});
+
+		textViewCopyright.setText(Html.fromHtml(getString(R.string.translateFragment_copyright)));
+		textViewCopyright.setMovementMethod(LinkMovementMethod.getInstance());
 	}
 
 	private void initAdapters() {

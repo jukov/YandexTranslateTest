@@ -1,12 +1,12 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
-	<string name="app_name">Yandex.Translate Test</string>
+	<string name="app_name">Translate Test</string>
 
 	<!--TranslateFragment-->
 	<string name="translateFragment_buttonTranslate">Translate</string>
 	<string name="translateFragment_editTextInputHint">Enter text…</string>
 
-	<string name="translateFragment_copyright">Realized with help of services “Yandex.Translate” and “Yandex.Dictionary”.</string>
+	<string name="translateFragment_copyright" tools:ignore="TypographyQuotes"><![CDATA[Realized with help of services “<a href="http://translate.yandex.ru/">Yandex.Translate</a>” and “<a href="https://tech.yandex.ru/dictionary/">Yandex.Dictionary</a>”.]]></string>
 
 	<string name="translateFragment_toast_errorNothingToTranslate">Nothing to translate</string>
 	<string name="translateFragment_toast_errorNothingToAddToFavorites">Nothing to add to favorites</string>
@@ -24,6 +24,8 @@
 	<string name="fragmentTranslate_title">Translate</string>
 	<string name="fragmentHistory_title">History</string>
 	<string name="fragmentFavorites_title">Favorites</string>
+	<string name="activitySettings_title">Settings</string>
+	<string name="activityLicense_title">License information</string>
 
 	<!--Toolbar Menu-->
 	<string name="toolbarMenu_settings">Settings</string>
@@ -81,5 +83,10 @@
 
 	<string name="alertDialogConfirmation_delete_button">Delete</string>
 	<string name="alertDialogConfirmation_cancel_button">Cancel</string>
+
+	<!--About-->
+	<string name="about_author">by Alexander Zhukov</string>
+	<string name="about_license">Licensed by WTFPL http://www.wtfpl.net/</string>
+	<string name="about_otherLicenses">Components licenses:</string>
 
 </resources>

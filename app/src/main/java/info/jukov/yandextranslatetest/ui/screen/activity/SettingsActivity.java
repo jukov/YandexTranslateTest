@@ -17,12 +17,12 @@ import info.jukov.yandextranslatetest.ui.screen.fragment.SettingsFragment;
  * Time: 7:17
  */
 
-public final class ScreenSettingsActivity extends AppCompatActivity {
+public final class SettingsActivity extends AppCompatActivity {
 
 	public static final int REQUEST_CODE_RESTART_AFTER_API_KEY_CHANGE = 655;
 
 	public static void start(final AppCompatActivity activity) {
-		Intent starter = new Intent(activity, ScreenSettingsActivity.class);
+		Intent starter = new Intent(activity, SettingsActivity.class);
 		activity.startActivityForResult(starter, REQUEST_CODE_RESTART_AFTER_API_KEY_CHANGE);
 	}
 

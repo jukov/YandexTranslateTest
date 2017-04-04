@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<dimen name="space_all_screenPadding">16dp</dimen>
+	<dimen name="space_all_betweenElement">16dp</dimen>
 	<dimen name="space_all_betweenContent">8dp</dimen>
+
+	<dimen name="space_all_betweenTitleAndSubtitle">4dp</dimen>
 
 	<dimen name="space_progressBar_vertical">32dp</dimen>
 
