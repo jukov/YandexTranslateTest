@@ -10,7 +10,10 @@ public interface ErrorCodes {
 
 	int WRONG_API_KEY = 401;
 	int BANNED_API_KEY = 402;
-	int DAILY_LIMIT_EXCEEDED = 404;
+	int QUERY_DAILY_LIMIT_EXCEEDED = 403;
+	int TEXT_DAILY_LIMIT_EXCEEDED = 404;
+	int TEXT_TOO_LONG = 413;
+	int LANG_NOT_SUPPORTED = 501;
 
 	/**
 	 * Кастомный код ошибки для случая, когда ключи не введены пользователем.

@@ -67,6 +67,12 @@
 	<string name="alertDialogInvalidKeys_networkError_title">Network error</string>
 	<string name="alertDialogInvalidKeys_networkError_text">An network error occurred. Make sure you have a network connection and try again.</string>
 
+	<string name="alertDialogInvalidKeys_langNotSupported_title">Translate dirrection not supported</string>
+	<string name="alertDialogInvalidKeys_langNotSupported_text">This translate direction not supported.</string>
+
+	<string name="alertDialogInvalidKeys_textTooLong_title">Text too long</string>
+	<string name="alertDialogInvalidKeys_textTooLong_text">You entered too long translatable text. The maximum length is 10000 characters.</string>
+
 	<string name="alertDialogInvalidKeys_unexpectedError_title">Error</string>
 	<string name="alertDialogInvalidKeys_unexpectedError_text">Unexpected error. Please, try again later.</string>
 

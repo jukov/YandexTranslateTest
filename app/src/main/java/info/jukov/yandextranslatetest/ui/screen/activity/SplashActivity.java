@@ -1,10 +1,10 @@
 package info.jukov.yandextranslatetest.ui.screen.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import info.jukov.yandextranslatetest.R;
@@ -30,7 +30,7 @@ public final class SplashActivity extends MvpAppCompatActivity
 
 	private static final Log LOG = new Log(SplashActivity.class);
 
-	public static void restartApp(@NonNull final AppCompatActivity activity) {
+	public static void restartApp(@NonNull final Activity activity) {
 		final Intent intent = activity.getBaseContext().getPackageManager()
 			.getLaunchIntentForPackage(activity.getPackageName())
 			.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

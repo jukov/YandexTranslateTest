@@ -19,5 +19,7 @@ public interface TranslateView extends MvpView {
 
 	void onNothingToAddToFavorite();
 
-	void onFavoritesAction(final boolean added);
+	void onFavoritesAction(boolean added);
+
+	void onLoadFailed(int errorCode);
 }

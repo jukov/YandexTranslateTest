@@ -34,6 +34,7 @@ import info.jukov.yandextranslatetest.model.storage.dao.Translation;
 import info.jukov.yandextranslatetest.model.storage.preferences.LangPreferences;
 import info.jukov.yandextranslatetest.presenter.TranslatePresenter;
 import info.jukov.yandextranslatetest.presenter.TranslateView;
+import info.jukov.yandextranslatetest.ui.ErrorDialog;
 import info.jukov.yandextranslatetest.ui.base.Progressable;
 import info.jukov.yandextranslatetest.ui.format.DictionaryConstructor;
 import info.jukov.yandextranslatetest.util.KeyboardUtils;
@@ -186,12 +187,14 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 		});
 	}
 
-	@OnClick(R.id.buttonTranslate) void onTranslateClick() {
+	@OnClick(R.id.buttonTranslate)
+	void onTranslateClick() {
 		KeyboardUtils.hideSoftInput(getActivity());
 		presenter.translate(getLangForServer(), getTranslatableText(), this);
 	}
 
-	@OnClick(R.id.buttonFavorite) void onFavoriteClick() {
+	@OnClick(R.id.buttonFavorite)
+	void onFavoriteClick() {
 		presenter.addToFavorites();
 	}
 
@@ -254,6 +257,11 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 	@Override
 	public void onNothingToAddToFavorite() {
 		ToastUtils.shortToast(getContext(), R.string.translateFragment_toast_errorNothingToAddToFavorites);
+	}
+
+	@Override
+	public void onLoadFailed(final int errorCode) {
+		ErrorDialog.BuildDialog(getActivity(), errorCode).show();
 	}
 
 	@Override

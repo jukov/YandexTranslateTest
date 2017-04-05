@@ -5,10 +5,12 @@ import android.support.annotation.Nullable;
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import info.jukov.yandextranslatetest.TranslateApp;
-import info.jukov.yandextranslatetest.model.module.TransferModule;
-import info.jukov.yandextranslatetest.model.network.CallbackWithProgress;
 import info.jukov.yandextranslatetest.model.module.ApiModule;
 import info.jukov.yandextranslatetest.model.module.DatabaseModule;
+import info.jukov.yandextranslatetest.model.module.TransferModule;
+import info.jukov.yandextranslatetest.model.network.CallbackWithProgress;
+import info.jukov.yandextranslatetest.model.network.ErrorCodes;
+import info.jukov.yandextranslatetest.model.network.ErrorResponse;
 import info.jukov.yandextranslatetest.model.network.dict.LookupResponse;
 import info.jukov.yandextranslatetest.model.network.translate.TranslateResponse;
 import info.jukov.yandextranslatetest.model.storage.dao.DatabaseManager.DatabaseListener;
@@ -19,6 +21,8 @@ import info.jukov.yandextranslatetest.util.Guard;
 import info.jukov.yandextranslatetest.util.JsonUtils;
 import info.jukov.yandextranslatetest.util.MultiSetBoolean;
 import info.jukov.yandextranslatetest.util.MultiSetBoolean.OnValueTrueListener;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import javax.inject.Inject;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -47,6 +51,10 @@ public final class TranslatePresenter extends MvpPresenter<TranslateView> implem
 	private String text;
 
 	private Translation actualTranslation;
+
+	private final Lock lock = new ReentrantLock();
+
+	private boolean isLoadFailReported;
 
 	private final MultiSetBoolean<Queries> allQueriesLoaded = new MultiSetBoolean<>(Queries.values().length, new OnValueTrueListener() {
 		@Override
@@ -135,6 +143,8 @@ public final class TranslatePresenter extends MvpPresenter<TranslateView> implem
 		translateResponse = null;
 		lookupResponse = null;
 
+		isLoadFailReported = false;
+
 		allQueriesLoaded.reset();
 		apiModule.getTranslateApi().use(new TranslateCallback(progressable), progressable).translate(lang, text);
 		apiModule.getDictApi().use(new DictCallback(progressable), progressable).lookup(lang, text, null, null);
@@ -152,6 +162,18 @@ public final class TranslatePresenter extends MvpPresenter<TranslateView> implem
 		}
 	}
 
+	private void reportLoadFailed(final int errorCode) {
+		lock.lock();
+		try {
+			if (!isLoadFailReported) {
+				isLoadFailReported = true;
+				getViewState().onLoadFailed(errorCode);
+			}
+		} finally {
+			lock.unlock();
+		}
+	}
+
 	private final class TranslateCallback extends CallbackWithProgress<TranslateResponse> {
 
 		private TranslateCallback(@Nullable final Progressable progressable) {
@@ -164,14 +186,24 @@ public final class TranslatePresenter extends MvpPresenter<TranslateView> implem
 			super.onResponse(call, response);
 			if (response.body() != null) {
 				translateResponse = response.body();
+				allQueriesLoaded.set(Queries.TRANSLATE);
+				return;
 			}
-			allQueriesLoaded.set(Queries.TRANSLATE);
+
+			if (getErrorBody() != null) {
+				ErrorResponse errorResponse = JsonUtils.deserialize(ErrorResponse.class, getErrorBody());
+				if (errorResponse != null) {
+					reportLoadFailed(errorResponse.getCode());
+				}
+			}
+
+			reportLoadFailed(response.code());
 		}
 
 		@Override
 		public void onFailure(final Call<TranslateResponse> call, final Throwable t) {
 			super.onFailure(call, t);
-			allQueriesLoaded.set(Queries.TRANSLATE);
+			reportLoadFailed(ErrorCodes.NETWORK_ERROR_CUSTOM);
 		}
 	}
 
@@ -187,14 +219,24 @@ public final class TranslatePresenter extends MvpPresenter<TranslateView> implem
 			super.onResponse(call, response);
 			if (response.body() != null) {
 				lookupResponse = response.body();
+				allQueriesLoaded.set(Queries.DICT);
+				return;
 			}
-			allQueriesLoaded.set(Queries.DICT);
+
+			if (getErrorBody() != null) {
+				ErrorResponse errorResponse = JsonUtils.deserialize(ErrorResponse.class, getErrorBody());
+				if (errorResponse != null) {
+					reportLoadFailed(errorResponse.getCode());
+				}
+			}
+
+			reportLoadFailed(response.code());
 		}
 
 		@Override
 		public void onFailure(final Call<LookupResponse> call, final Throwable t) {
 			super.onFailure(call, t);
-			allQueriesLoaded.set(Queries.DICT);
+			reportLoadFailed(ErrorCodes.NETWORK_ERROR_CUSTOM);
 		}
 	}
 

@@ -1,16 +1,11 @@
 package info.jukov.yandextranslatetest.ui.screen.activity;
 
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AlertDialog.Builder;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,9 +16,9 @@ import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import info.jukov.yandextranslatetest.R;
 import info.jukov.yandextranslatetest.model.adapter.TabAdapter;
-import info.jukov.yandextranslatetest.model.network.ErrorCodes;
 import info.jukov.yandextranslatetest.presenter.MainPresenter;
 import info.jukov.yandextranslatetest.presenter.MainView;
+import info.jukov.yandextranslatetest.ui.ErrorDialog;
 import info.jukov.yandextranslatetest.ui.screen.fragment.FavoritesFragment;
 import info.jukov.yandextranslatetest.ui.screen.fragment.HistoryFragment;
 import info.jukov.yandextranslatetest.ui.screen.fragment.TranslateFragment;
@@ -49,8 +44,6 @@ public final class MainActivity extends MvpAppCompatActivity implements MainView
 	@BindView(R.id.toolbar) Toolbar toolbar;
 	@BindView(R.id.tabLayout) TabLayout tabLayout;
 	@BindView(R.id.viewPager) ViewPager viewPager;
-
-	private TabAdapter tabAdapter;
 
 	public static void start(@NonNull final Context context) {
 		Guard.checkNotNull(context, "null == context");
@@ -127,13 +120,13 @@ public final class MainActivity extends MvpAppCompatActivity implements MainView
 
 	private void handleIntent(@NonNull final Intent intent) {
 		if (ACTION_ERROR.equals(intent.getAction())) {
-			makeErrorDialog(intent.getIntExtra(EXTRA_ERROR_CODE, -1)).show();
+			ErrorDialog.BuildDialog(this, intent.getIntExtra(EXTRA_ERROR_CODE, -1)).show();
 		}
 	}
 
 	private void initTabLayout() {
 
-		tabAdapter = new TabAdapter.Builder(this, getSupportFragmentManager())
+		final TabAdapter tabAdapter = new TabAdapter.Builder(this, getSupportFragmentManager())
 			.addTab(TranslateFragment.newInstance(), R.string.fragmentTranslate_title)
 			.addTab(FavoritesFragment.newInstance(), R.string.fragmentFavorites_title)
 			.addTab(HistoryFragment.newInstance(), R.string.fragmentHistory_title)
@@ -144,76 +137,5 @@ public final class MainActivity extends MvpAppCompatActivity implements MainView
 
 		tabLayout.setupWithViewPager(viewPager);
 		tabAdapter.notifyDataSetChanged();
-	}
-
-	private Dialog makeErrorDialog(final int errorCode) {
-
-		final AlertDialog.Builder builder = new Builder(this);
-
-		final OnClickListener openSettingsListener = new OnClickListener() {
-			@Override
-			public void onClick(final DialogInterface dialog, final int which) {
-				SettingsActivity.start(MainActivity.this);
-			}
-		};
-
-		final OnClickListener exitListener = new OnClickListener() {
-			@Override
-			public void onClick(final DialogInterface dialog, final int which) {
-				finish();
-			}
-		};
-
-		final OnClickListener restartListener = new OnClickListener() {
-			@Override
-			public void onClick(final DialogInterface dialog, final int which) {
-				SplashActivity.restartApp(MainActivity.this);
-			}
-		};
-
-		switch (errorCode) {
-			case ErrorCodes.WRONG_API_KEY:
-				builder.setTitle(R.string.alertDialogInvalidKeys_wrongKeys_title)
-					.setMessage(R.string.alertDialogInvalidKeys_wrongKeys_text)
-					.setPositiveButton(R.string.alertDialogInvalidKeys_goToSettings_button,
-						openSettingsListener);
-				break;
-			case ErrorCodes.BANNED_API_KEY:
-				builder.setTitle(R.string.alertDialogInvalidKeys_bannedKeys_title)
-					.setMessage(R.string.alertDialogInvalidKeys_bannedKeys_text)
-					.setPositiveButton(R.string.alertDialogInvalidKeys_goToSettings_button,
-						openSettingsListener);
-				break;
-			case ErrorCodes.DAILY_LIMIT_EXCEEDED:
-				builder.setTitle(R.string.alertDialogInvalidKeys_exceededDailyLimit_title)
-					.setMessage(R.string.alertDialogInvalidKeys_exceededDailyLimit_text)
-					.setPositiveButton(R.string.alertDialogInvalidKeys_goToSettings_button,
-						openSettingsListener);
-				break;
-			case ErrorCodes.KEYS_NOT_SET_CUSTOM:
-				builder.setTitle(R.string.alertDialogInvalidKeys_keysNotSet_title)
-					.setMessage(R.string.alertDialogInvalidKeys_keysNotSet_text)
-					.setPositiveButton(R.string.alertDialogInvalidKeys_goToSettings_button,
-						openSettingsListener);
-				break;
-			case ErrorCodes.NETWORK_ERROR_CUSTOM:
-				builder.setTitle(R.string.alertDialogInvalidKeys_networkError_title)
-					.setMessage(R.string.alertDialogInvalidKeys_networkError_text)
-					.setPositiveButton(R.string.alertDialogInvalidKeys_tryAgain_button,
-						restartListener);
-				break;
-			default:
-				LOG.warning("Unexpected error code");
-				builder.setTitle(R.string.alertDialogInvalidKeys_unexpectedError_title)
-					.setMessage(R.string.alertDialogInvalidKeys_unexpectedError_text);
-		}
-
-		builder.setNegativeButton(R.string.alertDialogInvalidKeys_exit_button, exitListener);
-
-		final Dialog dialog = builder.create();
-
-		dialog.setCanceledOnTouchOutside(false);
-
-		return dialog;
 	}
 }

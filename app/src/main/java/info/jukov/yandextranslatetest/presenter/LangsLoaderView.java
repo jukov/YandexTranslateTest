@@ -12,5 +12,5 @@ public interface LangsLoaderView extends MvpView {
 
 	void onLoadFinished();
 
-	void onLoadFailed(final int errorCode);
+	void onLoadFailed(int errorCode);
 }

@@ -1,5 +1,6 @@
 package info.jukov.yandextranslatetest.ui.screen.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -21,7 +22,7 @@ public final class SettingsActivity extends AppCompatActivity {
 
 	public static final int REQUEST_CODE_RESTART_AFTER_API_KEY_CHANGE = 655;
 
-	public static void start(final AppCompatActivity activity) {
+	public static void start(final Activity activity) {
 		Intent starter = new Intent(activity, SettingsActivity.class);
 		activity.startActivityForResult(starter, REQUEST_CODE_RESTART_AFTER_API_KEY_CHANGE);
 	}
@@ -43,10 +44,8 @@ public final class SettingsActivity extends AppCompatActivity {
 
 		settingsFragment = SettingsFragment.newInstance();
 
-		final FragmentTransaction fragmentTransaction = getSupportFragmentManager()
-			.beginTransaction();
-		fragmentTransaction
-			.replace(R.id.fragmentContainer, settingsFragment, SettingsFragment.FRAGMENT_TAG);
+		final FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+		fragmentTransaction.replace(R.id.fragmentContainer, settingsFragment, SettingsFragment.FRAGMENT_TAG);
 		fragmentTransaction.commit();
 	}
 
