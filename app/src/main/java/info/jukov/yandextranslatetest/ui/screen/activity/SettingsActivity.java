@@ -11,6 +11,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import info.jukov.yandextranslatetest.R;
 import info.jukov.yandextranslatetest.ui.screen.fragment.SettingsFragment;
+import info.jukov.yandextranslatetest.util.ExtrasUtils;
 
 /**
  * User: jukov
@@ -20,6 +21,8 @@ import info.jukov.yandextranslatetest.ui.screen.fragment.SettingsFragment;
 
 public final class SettingsActivity extends AppCompatActivity {
 
+	private static final String EXTRA_FOR_KEY_CHANGE = ExtrasUtils.createExtraName("EXTRA_FOR_KEY_CHANGE", SettingsActivity.class);
+
 	public static final int REQUEST_CODE_RESTART_AFTER_API_KEY_CHANGE = 655;
 
 	public static void start(final Activity activity) {
@@ -27,15 +30,27 @@ public final class SettingsActivity extends AppCompatActivity {
 		activity.startActivityForResult(starter, REQUEST_CODE_RESTART_AFTER_API_KEY_CHANGE);
 	}
 
+	public static void startForKeyChange(final Activity activity) {
+		Intent starter = new Intent(activity, SettingsActivity.class);
+		starter.putExtra(EXTRA_FOR_KEY_CHANGE, true);
+		activity.startActivityForResult(starter, REQUEST_CODE_RESTART_AFTER_API_KEY_CHANGE);
+	}
+
 	@BindView(R.id.toolbar) Toolbar toolbar;
 
 	private SettingsFragment settingsFragment;
+
+	private boolean isForKeyChange = false;
 
 	@Override
 	protected void onCreate(@Nullable final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_settings);
 		ButterKnife.bind(this);
+
+		if (getIntent() != null) {
+			isForKeyChange = getIntent().getBooleanExtra(EXTRA_FOR_KEY_CHANGE, false);
+		}
 
 		setSupportActionBar(toolbar);
 		if (getSupportActionBar() != null) {
@@ -51,7 +66,7 @@ public final class SettingsActivity extends AppCompatActivity {
 
 	@Override
 	public boolean onSupportNavigateUp() {
-		if (settingsFragment.isApiKeysChanged()) {
+		if (settingsFragment.isApiKeysChanged() || isForKeyChange) {
 			setResult(RESULT_OK);
 		} else {
 			setResult(RESULT_CANCELED);

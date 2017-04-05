@@ -148,7 +148,7 @@ public enum ErrorDialog {
 		final OnClickListener openSettingsListener = new OnClickListener() {
 			@Override
 			public void onClick(final DialogInterface dialog, final int which) {
-				SettingsActivity.start(activity);
+				SettingsActivity.startForKeyChange(activity);
 			}
 		};
 
