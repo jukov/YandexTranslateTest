@@ -183,7 +183,7 @@ public final class LanguageAdapter extends BaseAdapter {
 		if (view != null) {
 			viewHolder = (ViewHolder) view.getTag();
 		} else {
-			view = inflater.inflate(R.layout.spinner_lang_item, parent, false);
+			view = inflater.inflate(R.layout.component_spinner_item_lang, parent, false);
 			viewHolder = new ViewHolder(view);
 			view.setTag(viewHolder);
 		}

@@ -11,6 +11,8 @@
 	<dimen name="space_componentDictHorizontal_double">32dp</dimen>
 	<dimen name="space_componentDiciHorizontal_triple">48dp</dimen>
 
+	<dimen name="space_swipeLangButton_padding">4dp</dimen>
+
 	<dimen name="elevation_fragmentTranslate_appBar">4dp</dimen>
 
 	<dimen name="textsize_headline">24sp</dimen>

@@ -35,6 +35,26 @@
 					android:layout_height="@dimen/height_spinnerLang"
 					android:layout_weight="1"/>
 
+				<View
+					android:layout_width="1dp"
+					android:layout_height="match_parent"
+					android:background="@color/divider_black12"/>
+
+				<ImageView
+					android:id="@+id/buttonSwapLang"
+					android:layout_width="wrap_content"
+					android:layout_height="match_parent"
+					app:srcCompat="@drawable/ic_swap_horizontal"
+					android:layout_gravity="center_vertical"
+					android:background="?attr/selectableItemBackground"
+					android:padding="@dimen/space_swipeLangButton_padding"
+					android:clickable="true"/>
+
+				<View
+					android:layout_width="1dp"
+					android:layout_height="match_parent"
+					android:background="@color/divider_black12"/>
+
 				<Spinner
 					android:id="@+id/spinnerOutputLanguage"
 					android:layout_width="match_parent"
@@ -44,7 +64,6 @@
 			</LinearLayout>
 
 			<View
-				android:id="@+id/divider"
 				android:layout_width="match_parent"
 				android:layout_height="1dp"
 				android:background="@color/divider_black12"/>
@@ -82,7 +101,7 @@
 					android:id="@+id/buttonFavorite"
 					android:layout_width="wrap_content"
 					android:layout_height="match_parent"
-					android:src="@drawable/ic_heart_outline"/>
+					app:srcCompat="@drawable/ic_heart_outline"/>
 
 			</LinearLayout>
 

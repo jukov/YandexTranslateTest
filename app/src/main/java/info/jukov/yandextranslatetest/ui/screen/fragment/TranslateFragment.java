@@ -16,6 +16,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -60,6 +61,7 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 
 	@BindView(R.id.spinnerInputLanguage) Spinner spinnerInputLanguage;
 	@BindView(R.id.spinnerOutputLanguage) Spinner spinnerOutputLanguage;
+	@BindView(R.id.buttonSwapLang) ImageView buttonSwapLang;
 	@BindView(R.id.editTextTranslatable) EditText editTextTranslatable;
 	@BindView(R.id.buttonTranslate) Button buttonTranslate;
 	@BindView(R.id.buttonFavorite) ImageButton buttonFavorite;
@@ -196,6 +198,15 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 	@OnClick(R.id.buttonFavorite)
 	void onFavoriteClick() {
 		presenter.addToFavorites();
+	}
+
+	@OnClick(R.id.buttonSwapLang)
+	void onSwapLangClick() {
+		final String inputLangCode = inputSpinnerAdapter.getItem(spinnerInputLanguage.getSelectedItemPosition());
+		final String ontputLangCode = outputSpinnerAdapter.getItem(spinnerOutputLanguage.getSelectedItemPosition());
+
+		spinnerInputLanguage.setSelection(inputSpinnerAdapter.getPosition(ontputLangCode));
+		spinnerOutputLanguage.setSelection(outputSpinnerAdapter.getPosition(inputLangCode));
 	}
 
 	@Override
