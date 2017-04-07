@@ -13,7 +13,8 @@
 		android:layout_alignParentTop="true"
 		android:background="@color/background_white50"
 		android:stateListAnimator="@animator/appbar_elevated"
-		app:layout_scrollFlags="scroll">
+		app:layout_scrollFlags="scroll"
+		app:layout_behavior="info.jukov.yandextranslatetest.ui.IgnoreSwipeBehavior">
 
 		<LinearLayout
 			android:layout_width="match_parent"
@@ -56,6 +57,9 @@
 				android:layout_marginRight="@dimen/space_all_screenPadding"
 				android:gravity="top"
 				android:imeOptions="actionDone"
+				android:overScrollMode="always"
+				android:scrollbars="vertical"
+				android:inputType="textMultiLine"
 				android:hint="@string/translateFragment_editTextInputHint"
 				android:maxLines="6"
 				android:minLines="3"/>
