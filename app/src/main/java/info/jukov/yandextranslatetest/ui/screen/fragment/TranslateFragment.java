@@ -1,5 +1,6 @@
 package info.jukov.yandextranslatetest.ui.screen.fragment;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -35,14 +36,13 @@ import info.jukov.yandextranslatetest.model.storage.dao.Translation;
 import info.jukov.yandextranslatetest.model.storage.preferences.LangPreferences;
 import info.jukov.yandextranslatetest.presenter.TranslatePresenter;
 import info.jukov.yandextranslatetest.presenter.TranslateView;
-import info.jukov.yandextranslatetest.ui.ErrorDialog;
 import info.jukov.yandextranslatetest.ui.base.Progressable;
+import info.jukov.yandextranslatetest.ui.dialog.ErrorDialogBuilder;
 import info.jukov.yandextranslatetest.ui.format.DictionaryConstructor;
 import info.jukov.yandextranslatetest.util.KeyboardUtils;
 import info.jukov.yandextranslatetest.util.Log;
 import info.jukov.yandextranslatetest.util.StringUtils;
 import info.jukov.yandextranslatetest.util.ToastUtils;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -78,6 +78,8 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 	private String previousOutputLangCode;
 
 	private int progressableTasksCount = 0;
+
+	@Nullable private Dialog currentDialog = null;
 
 	public static TranslateFragment newInstance() {
 
@@ -115,9 +117,7 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 		editTextTranslatable.setOnEditorActionListener(new OnEditorActionListener() {
 			@Override
 			public boolean onEditorAction(final TextView v, final int actionId, final KeyEvent event) {
-				KeyboardUtils.hideSoftInput(getActivity());
-
-				presenter.translate(getLangForServer(), getTranslatableText(), TranslateFragment.this);
+				presenter.onTranslateClick(getLangForServer(), getTranslatableText(), TranslateFragment.this);
 
 				return true;
 			}
@@ -128,44 +128,16 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 	}
 
 	private void initAdapters() {
-		final Set<Language> inputLangs = LangPreferences.getReadableWords(getContext());
-
-		if (inputLangs == null) {
-			setContentEnabled(false);
-			return;
-		}
-
-		final Set<Language> outputLangs = new HashSet<>(inputLangs);
-
-		final Set<Language> mostUsedInputLangs = LangPreferences.getMostUsedInputLangs(getContext());
-		final Set<Language> mostUsedOutputLangs = LangPreferences.getMostUsedOutputLangs(getContext());
-
-		if (mostUsedInputLangs != null && mostUsedInputLangs.size() > 0) {
-			inputLangs.removeAll(mostUsedInputLangs);
-			inputLangs.addAll(mostUsedInputLangs);
-		}
-
-		if (mostUsedOutputLangs != null && mostUsedOutputLangs.size() > 0) {
-			outputLangs.removeAll(mostUsedOutputLangs);
-			outputLangs.addAll(mostUsedOutputLangs);
-		}
-
-		inputSpinnerAdapter = new LanguageAdapter(getContext(), inputLangs);
-		outputSpinnerAdapter = new LanguageAdapter(getContext(), outputLangs);
+		presenter.initLangs(LangPreferences.getReadableWords(getContext()), LangPreferences.getMostUsedInputLangs(getContext()),
+			LangPreferences.getMostUsedOutputLangs(getContext()));
 	}
 
 	private void initSpinners() {
-		spinnerInputLanguage.setAdapter(inputSpinnerAdapter);
-		spinnerOutputLanguage.setAdapter(outputSpinnerAdapter);
 
 		spinnerInputLanguage.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
-			public void onItemSelected(final AdapterView<?> parent, final View view,
-				final int position, final long id) {
-				if (position != 0) {
-					inputSpinnerAdapter.pinItemToTop(position);
-					spinnerInputLanguage.setSelection(0);
-				}
+			public void onItemSelected(final AdapterView<?> parent, final View view, final int position, final long id) {
+				presenter.onInputLangSelected(position);
 			}
 
 			@Override
@@ -175,12 +147,8 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 
 		spinnerOutputLanguage.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
-			public void onItemSelected(final AdapterView<?> parent, final View view,
-				final int position, final long id) {
-				if (position != 0) {
-					outputSpinnerAdapter.pinItemToTop(position);
-					spinnerOutputLanguage.setSelection(0);
-				}
+			public void onItemSelected(final AdapterView<?> parent, final View view, final int position, final long id) {
+				presenter.onOutputLangSelected(position);
 			}
 
 			@Override
@@ -191,22 +159,17 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 
 	@OnClick(R.id.buttonTranslate)
 	void onTranslateClick() {
-		KeyboardUtils.hideSoftInput(getActivity());
-		presenter.translate(getLangForServer(), getTranslatableText(), this);
+		presenter.onTranslateClick(getLangForServer(), getTranslatableText(), this);
 	}
 
 	@OnClick(R.id.buttonFavorite)
 	void onFavoriteClick() {
-		presenter.addToFavorites();
+		presenter.onFavoriteClick();
 	}
 
 	@OnClick(R.id.buttonSwapLang)
 	void onSwapLangClick() {
-		final String inputLangCode = inputSpinnerAdapter.getItem(spinnerInputLanguage.getSelectedItemPosition());
-		final String ontputLangCode = outputSpinnerAdapter.getItem(spinnerOutputLanguage.getSelectedItemPosition());
-
-		spinnerInputLanguage.setSelection(inputSpinnerAdapter.getPosition(ontputLangCode));
-		spinnerOutputLanguage.setSelection(outputSpinnerAdapter.getPosition(inputLangCode));
+		presenter.onSwapLangClick();
 	}
 
 	@Override
@@ -230,11 +193,6 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 			textViewDict.setVisibility(View.GONE);
 			containerDictResult.setVisibility(View.GONE);
 		}
-	}
-
-	@Override
-	public void onViewFullTranslation(final Translation translation) {
-		onTranslation(translation);
 
 		editTextTranslatable.setText(translation.getText());
 
@@ -272,7 +230,56 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 
 	@Override
 	public void onLoadFailed(final int errorCode) {
-		ErrorDialog.BuildDialog(getActivity(), errorCode).show();
+		if (currentDialog != null) {
+			currentDialog.dismiss();
+		}
+		currentDialog = ErrorDialogBuilder.BuildDialog(getActivity(), errorCode, presenter);
+		currentDialog.show();
+	}
+
+	@Override
+	public void closeDialog() {
+		if (currentDialog != null) {
+			currentDialog.dismiss();
+		}
+	}
+
+	@Override
+	public void hideKeyboard() {
+		KeyboardUtils.hideSoftInput(getActivity());
+	}
+
+	@Override
+	public void swapLang() {
+		final String inputLangCode = inputSpinnerAdapter.getItem(spinnerInputLanguage.getSelectedItemPosition());
+		final String ontputLangCode = outputSpinnerAdapter.getItem(spinnerOutputLanguage.getSelectedItemPosition());
+
+		spinnerInputLanguage.setSelection(inputSpinnerAdapter.getPosition(ontputLangCode));
+		spinnerOutputLanguage.setSelection(outputSpinnerAdapter.getPosition(inputLangCode));
+	}
+
+	@Override
+	public void selectInputLang(final int position) {
+		inputSpinnerAdapter.pinItemToTop(position);
+		spinnerInputLanguage.setSelection(0);
+	}
+
+	@Override
+	public void selectOutputLang(final int position) {
+		outputSpinnerAdapter.pinItemToTop(position);
+		spinnerOutputLanguage.setSelection(0);
+	}
+
+	@Override
+	public void setInputLangs(final Set<Language> inputLangs) {
+		inputSpinnerAdapter = new LanguageAdapter(getContext(), inputLangs);
+		spinnerInputLanguage.setAdapter(inputSpinnerAdapter);
+	}
+
+	@Override
+	public void setOutputLangs(final Set<Language> outputLangs) {
+		outputSpinnerAdapter = new LanguageAdapter(getContext(), outputLangs);
+		spinnerOutputLanguage.setAdapter(outputSpinnerAdapter);
 	}
 
 	@Override

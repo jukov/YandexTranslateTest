@@ -1,9 +1,11 @@
 package info.jukov.yandextranslatetest.ui.screen.activity;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
@@ -18,7 +20,7 @@ import info.jukov.yandextranslatetest.R;
 import info.jukov.yandextranslatetest.model.adapter.TabAdapter;
 import info.jukov.yandextranslatetest.presenter.MainPresenter;
 import info.jukov.yandextranslatetest.presenter.MainView;
-import info.jukov.yandextranslatetest.ui.ErrorDialog;
+import info.jukov.yandextranslatetest.ui.dialog.ErrorDialogBuilder;
 import info.jukov.yandextranslatetest.ui.screen.fragment.FavoritesFragment;
 import info.jukov.yandextranslatetest.ui.screen.fragment.HistoryFragment;
 import info.jukov.yandextranslatetest.ui.screen.fragment.TranslateFragment;
@@ -44,6 +46,8 @@ public final class MainActivity extends MvpAppCompatActivity implements MainView
 	@BindView(R.id.toolbar) Toolbar toolbar;
 	@BindView(R.id.tabLayout) TabLayout tabLayout;
 	@BindView(R.id.viewPager) ViewPager viewPager;
+
+	@Nullable private Dialog currentDialog = null;
 
 	public static void start(@NonNull final Context context) {
 		Guard.checkNotNull(context, "null == context");
@@ -118,9 +122,20 @@ public final class MainActivity extends MvpAppCompatActivity implements MainView
 		viewPager.setCurrentItem(0);
 	}
 
+	@Override
+	public void closeDialog() {
+		if (currentDialog != null) {
+			currentDialog.dismiss();
+		}
+	}
+
 	private void handleIntent(@NonNull final Intent intent) {
 		if (ACTION_ERROR.equals(intent.getAction())) {
-			ErrorDialog.BuildDialog(this, intent.getIntExtra(EXTRA_ERROR_CODE, -1)).show();
+			if (currentDialog != null) {
+				currentDialog.dismiss();
+			}
+			currentDialog = ErrorDialogBuilder.BuildDialog(this, intent.getIntExtra(EXTRA_ERROR_CODE, -1), presenter);
+			currentDialog.show();
 		}
 	}
 

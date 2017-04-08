@@ -21,9 +21,15 @@ import info.jukov.yandextranslatetest.util.ExtrasUtils;
 
 public final class SettingsActivity extends AppCompatActivity {
 
+	public static final int REQUEST_CODE_RESTART_AFTER_API_KEY_CHANGE = 655;
+
 	private static final String EXTRA_FOR_KEY_CHANGE = ExtrasUtils.createExtraName("EXTRA_FOR_KEY_CHANGE", SettingsActivity.class);
 
-	public static final int REQUEST_CODE_RESTART_AFTER_API_KEY_CHANGE = 655;
+	@BindView(R.id.toolbar) Toolbar toolbar;
+
+	private SettingsFragment settingsFragment;
+
+	private boolean isForKeyChange = false;
 
 	public static void start(final Activity activity) {
 		Intent starter = new Intent(activity, SettingsActivity.class);
@@ -35,12 +41,6 @@ public final class SettingsActivity extends AppCompatActivity {
 		starter.putExtra(EXTRA_FOR_KEY_CHANGE, true);
 		activity.startActivityForResult(starter, REQUEST_CODE_RESTART_AFTER_API_KEY_CHANGE);
 	}
-
-	@BindView(R.id.toolbar) Toolbar toolbar;
-
-	private SettingsFragment settingsFragment;
-
-	private boolean isForKeyChange = false;
 
 	@Override
 	protected void onCreate(@Nullable final Bundle savedInstanceState) {
@@ -73,5 +73,16 @@ public final class SettingsActivity extends AppCompatActivity {
 		}
 		finish();
 		return true;
+	}
+
+	@Override
+	protected void onSaveInstanceState(final Bundle outState) {
+		outState.putBoolean(EXTRA_FOR_KEY_CHANGE, isForKeyChange);
+	}
+
+	@Override
+	protected void onRestoreInstanceState(final Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);
+		isForKeyChange = savedInstanceState.getBoolean(EXTRA_FOR_KEY_CHANGE, false);
 	}
 }

@@ -12,4 +12,5 @@ public interface MainView extends MvpView {
 
 	void moveToTranslateTab();
 
+	void closeDialog();
 }

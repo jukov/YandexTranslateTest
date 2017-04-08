@@ -13,14 +13,18 @@ import info.jukov.yandextranslatetest.model.network.ErrorCodes;
 import info.jukov.yandextranslatetest.model.network.ErrorResponse;
 import info.jukov.yandextranslatetest.model.network.dict.LookupResponse;
 import info.jukov.yandextranslatetest.model.network.translate.TranslateResponse;
+import info.jukov.yandextranslatetest.model.storage.Language;
 import info.jukov.yandextranslatetest.model.storage.dao.DatabaseManager.DatabaseListener;
 import info.jukov.yandextranslatetest.model.storage.dao.Translation;
 import info.jukov.yandextranslatetest.model.transfer.TransferManager.OnFullTranslateListener;
 import info.jukov.yandextranslatetest.ui.base.Progressable;
+import info.jukov.yandextranslatetest.ui.dialog.DialogCloser;
 import info.jukov.yandextranslatetest.util.Guard;
 import info.jukov.yandextranslatetest.util.JsonUtils;
 import info.jukov.yandextranslatetest.util.MultiSetBoolean;
 import info.jukov.yandextranslatetest.util.MultiSetBoolean.OnValueTrueListener;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import javax.inject.Inject;
@@ -33,14 +37,18 @@ import retrofit2.Response;
  * Time: 19:35
  */
 @InjectViewState
-public final class TranslatePresenter extends MvpPresenter<TranslateView> implements DatabaseListener, OnFullTranslateListener {
+public final class TranslatePresenter extends MvpPresenter<TranslateView> implements DatabaseListener, OnFullTranslateListener,
+																					 DialogCloser {
 
 	private enum Queries {
 		TRANSLATE,
 		DICT
 	}
 
+	private final Lock lock = new ReentrantLock();
+
 	@Inject ApiModule apiModule;
+
 	@Inject DatabaseModule databaseModule;
 	@Inject TransferModule transferModule;
 
@@ -52,17 +60,13 @@ public final class TranslatePresenter extends MvpPresenter<TranslateView> implem
 
 	private Translation actualTranslation;
 
-	private final Lock lock = new ReentrantLock();
-
-	private boolean isLoadFailReported;
-
 	private final MultiSetBoolean<Queries> allQueriesLoaded = new MultiSetBoolean<>(Queries.values().length, new OnValueTrueListener() {
 		@Override
 		public void onTrue() {
 
 			actualTranslation = new Translation();
 
-			if (translateResponse != null){
+			if (translateResponse != null) {
 				actualTranslation.setTranslateResponse(translateResponse.getText());
 			}
 
@@ -82,12 +86,69 @@ public final class TranslatePresenter extends MvpPresenter<TranslateView> implem
 		}
 	});
 
+	private boolean isLoadFailReported;
+
 	@Override
 	protected void onFirstViewAttach() {
 		TranslateApp.getAppComponent().inject(this);
 
 		databaseModule.getDatabaseManager().addOnTranslateAddedListener(this);
 		transferModule.getTransferManager().addListener(this);
+	}
+
+	public void initLangs(@Nullable final Set<Language> readableWords, @Nullable final Set<Language> mostUsedInputLangs,
+		@Nullable final Set<Language> mostUsedOutputLangs) {
+
+		if (readableWords == null) {
+			return;
+		}
+
+		final Set<Language> inputLangs = new HashSet<>(readableWords);
+		final Set<Language> outputLangs = new HashSet<>(readableWords);
+
+		if (mostUsedInputLangs != null && mostUsedInputLangs.size() > 0) {
+			//Вставляем языки с расставленным приоритетом
+			inputLangs.removeAll(mostUsedInputLangs);
+			inputLangs.addAll(mostUsedInputLangs);
+		}
+
+		if (mostUsedOutputLangs != null && mostUsedOutputLangs.size() > 0) {
+			//Вставляем языки с расставленным приоритетом
+			outputLangs.removeAll(mostUsedOutputLangs);
+			outputLangs.addAll(mostUsedOutputLangs);
+		}
+
+		getViewState().setInputLangs(inputLangs);
+		getViewState().setOutputLangs(outputLangs);
+	}
+
+	public void onTranslateClick(@NonNull final String lang, @NonNull final String text, @NonNull final Progressable progressable) {
+		Guard.checkNotNull(lang, "null == lang");
+		Guard.checkNotNull(text, "null == text");
+		Guard.checkNotNull(progressable, "null == progressable");
+
+		getViewState().hideKeyboard();
+		translate(lang, text, progressable);
+	}
+
+	public void onFavoriteClick() {
+		addToFavorites();
+	}
+
+	public void onSwapLangClick() {
+		getViewState().swapLang();
+	}
+
+	public void onInputLangSelected(final int position) {
+		if (position != 0) {
+			getViewState().selectInputLang(position);
+		}
+	}
+
+	public void onOutputLangSelected(final int position) {
+		if (position != 0) {
+			getViewState().selectOutputLang(position);
+		}
 	}
 
 	@Override
@@ -117,12 +178,15 @@ public final class TranslatePresenter extends MvpPresenter<TranslateView> implem
 
 		actualTranslation = translation;
 
-		getViewState().onViewFullTranslation(translation);
+		getViewState().onTranslation(translation);
 	}
 
-	public void translate(@NonNull final String lang, @NonNull final String text, @NonNull final Progressable progressable) {
-		Guard.checkNotNull(lang, "null == lang");
-		Guard.checkNotNull(text, "null == text");
+	@Override
+	public void closeDialog() {
+		getViewState().closeDialog();
+	}
+
+	private void translate(final String lang, final String text, final Progressable progressable) {
 
 		if (text.isEmpty()) {
 			getViewState().onEmptyInput();
@@ -150,7 +214,7 @@ public final class TranslatePresenter extends MvpPresenter<TranslateView> implem
 		apiModule.getDictApi().use(new DictCallback(progressable), progressable).lookup(lang, text, null, null);
 	}
 
-	public void addToFavorites() {
+	private void addToFavorites() {
 		if (actualTranslation != null) {
 			actualTranslation.setIsFavorite(!actualTranslation.getIsFavorite());
 
@@ -182,7 +246,7 @@ public final class TranslatePresenter extends MvpPresenter<TranslateView> implem
 
 		@Override
 		public void onResponse(final Call<TranslateResponse> call,
-							   final Response<TranslateResponse> response) {
+			final Response<TranslateResponse> response) {
 			super.onResponse(call, response);
 			if (response.body() != null) {
 				translateResponse = response.body();
@@ -215,7 +279,7 @@ public final class TranslatePresenter extends MvpPresenter<TranslateView> implem
 
 		@Override
 		public void onResponse(final Call<LookupResponse> call,
-							   final Response<LookupResponse> response) {
+			final Response<LookupResponse> response) {
 			super.onResponse(call, response);
 			if (response.body() != null) {
 				lookupResponse = response.body();
@@ -239,5 +303,4 @@ public final class TranslatePresenter extends MvpPresenter<TranslateView> implem
 			reportLoadFailed(ErrorCodes.NETWORK_ERROR_CUSTOM);
 		}
 	}
-
 }

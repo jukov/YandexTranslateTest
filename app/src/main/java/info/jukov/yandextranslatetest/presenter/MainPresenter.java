@@ -6,6 +6,7 @@ import info.jukov.yandextranslatetest.TranslateApp;
 import info.jukov.yandextranslatetest.model.module.TransferModule;
 import info.jukov.yandextranslatetest.model.storage.dao.Translation;
 import info.jukov.yandextranslatetest.model.transfer.TransferManager.OnFullTranslateListener;
+import info.jukov.yandextranslatetest.ui.dialog.DialogCloser;
 import javax.inject.Inject;
 
 /**
@@ -14,7 +15,7 @@ import javax.inject.Inject;
  * Time: 20:42
  */
 @InjectViewState
-public class MainPresenter extends MvpPresenter<MainView> implements OnFullTranslateListener {
+public final class MainPresenter extends MvpPresenter<MainView> implements OnFullTranslateListener, DialogCloser {
 
 	@Inject TransferModule transferModule;
 
@@ -29,5 +30,10 @@ public class MainPresenter extends MvpPresenter<MainView> implements OnFullTrans
 	@Override
 	public void onFullTranslateListener(final Translation translation) {
 		getViewState().moveToTranslateTab();
+	}
+
+	@Override
+	public void closeDialog() {
+		getViewState().closeDialog();
 	}
 }
