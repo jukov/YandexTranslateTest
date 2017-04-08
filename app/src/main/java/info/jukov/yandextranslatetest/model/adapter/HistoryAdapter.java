@@ -42,9 +42,10 @@ public final class HistoryAdapter extends AbstractTranslateHistoryAdapter<Histor
 			LOG.verbose("Updated; Size: " + getTranslationList().size() + "; Text: " + translation.getText());
 
 		} else {
-			getTranslationList().add(translation);
+			getTranslationList().add(0, translation);
 
 			notifyDataSetChanged();
+			getDataSetChangedListener().onDataSetChange(getItemCount());
 
 			LOG.verbose("Added; Size: " + getTranslationList().size() + "; Text: " + translation.getText());
 		}

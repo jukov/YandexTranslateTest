@@ -46,7 +46,7 @@ public final class FavoritesAdapter extends AbstractTranslateHistoryAdapter<Favo
 				LOG.verbose("Updated; Size: " + getTranslationList().size() + "; Text: " + translation.getText());
 
 			} else {
-				getTranslationList().add(translation);
+				getTranslationList().add(0, translation);
 
 				notifyDataSetChanged();
 				getDataSetChangedListener().onDataSetChange(getItemCount());

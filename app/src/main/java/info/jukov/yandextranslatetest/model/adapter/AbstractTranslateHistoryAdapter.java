@@ -128,8 +128,8 @@ public abstract class AbstractTranslateHistoryAdapter<VH extends ViewHolder> ext
 
 			if (translation.getTranslateResponse() != null) {
 				textViewOutput.setText(translation.getTranslateResponse());
-			} else if (translation.getDictionatyResponse() != null) {
-				textViewOutput.setText(translation.getDictionatyResponse());
+			} else if (translation.getDictionaryResponse() != null) {
+				textViewOutput.setText(translation.getDictionaryResponse());
 			}
 		}
 

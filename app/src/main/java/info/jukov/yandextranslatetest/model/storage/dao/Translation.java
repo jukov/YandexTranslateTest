@@ -25,22 +25,22 @@ public final class Translation {
 	@NotNull private String lang;
 
 	@NonNull private String translateResponse;
-	private String dictionatyResponse;
+	private String dictionaryResponse;
 
 	@NonNull private boolean isFavorite;
 
 	@Transient private LookupResponse lookupResponse;
 
-	@Generated(hash = 857362517)
+	@Generated(hash = 1219768497)
 	public Translation(Long _id, @NotNull String text, @NotNull String lang,
-			@NotNull String translateResponse, String dictionatyResponse,
-			boolean isFavorite) {
-		this._id = _id;
-		this.text = text;
-		this.lang = lang;
-		this.translateResponse = translateResponse;
-		this.dictionatyResponse = dictionatyResponse;
-		this.isFavorite = isFavorite;
+									@NotNull String translateResponse, String dictionaryResponse,
+									boolean isFavorite) {
+					this._id = _id;
+					this.text = text;
+					this.lang = lang;
+					this.translateResponse = translateResponse;
+					this.dictionaryResponse = dictionaryResponse;
+					this.isFavorite = isFavorite;
 	}
 
 	@Generated(hash = 321689573)
@@ -79,12 +79,12 @@ public final class Translation {
 					this.translateResponse = translateResponse;
 	}
 
-	public String getDictionatyResponse() {
-					return this.dictionatyResponse;
+	public String getDictionaryResponse() {
+					return this.dictionaryResponse;
 	}
 
-	public void setDictionatyResponse(String dictionatyResponse) {
-					this.dictionatyResponse = dictionatyResponse;
+	public void setDictionaryResponse(String dictionaryResponse) {
+					this.dictionaryResponse = dictionaryResponse;
 	}
 
 	public boolean getIsFavorite() {
@@ -98,8 +98,8 @@ public final class Translation {
 	@Nullable
 	public LookupResponse getLookupResponse() {
 		if (lookupResponse == null) {
-			if (dictionatyResponse != null) {
-				lookupResponse = JsonUtils.deserialize(LookupResponse.class, dictionatyResponse);
+			if (dictionaryResponse != null) {
+				lookupResponse = JsonUtils.deserialize(LookupResponse.class, dictionaryResponse);
 			}
 		}
 
@@ -126,8 +126,8 @@ public final class Translation {
 		if (!getTranslateResponse().equals(that.getTranslateResponse())) {
 			return false;
 		}
-		if (getDictionatyResponse() != null ? !getDictionatyResponse().equals(that.getDictionatyResponse())
-			: that.getDictionatyResponse() != null) {
+		if (getDictionaryResponse() != null ? !getDictionaryResponse().equals(that.getDictionaryResponse())
+			: that.getDictionaryResponse() != null) {
 			return false;
 		}
 
@@ -139,7 +139,7 @@ public final class Translation {
 		int result = getText().hashCode();
 		result = 31 * result + getLang().hashCode();
 		result = 31 * result + getTranslateResponse().hashCode();
-		result = 31 * result + (getDictionatyResponse() != null ? getDictionatyResponse().hashCode() : 0);
+		result = 31 * result + (getDictionaryResponse() != null ? getDictionaryResponse().hashCode() : 0);
 		return result;
 	}
 }

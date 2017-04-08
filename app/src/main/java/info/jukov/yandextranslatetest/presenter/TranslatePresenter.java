@@ -67,7 +67,7 @@ public final class TranslatePresenter extends MvpPresenter<TranslateView> implem
 			}
 
 			if (lookupResponse != null && !lookupResponse.isEmpty()) {
-				actualTranslation.setDictionatyResponse(JsonUtils.serialize(lookupResponse));
+				actualTranslation.setDictionaryResponse(JsonUtils.serialize(lookupResponse));
 			}
 
 			actualTranslation.setText(text);

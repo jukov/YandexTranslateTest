@@ -4,6 +4,8 @@ import android.support.annotation.NonNull;
 import info.jukov.yandextranslatetest.model.storage.dao.TranslationDao.Properties;
 import info.jukov.yandextranslatetest.util.Log;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -30,6 +32,28 @@ public class DatabaseManager {
 		this.translationDao = translationDao;
 
 		translationList = new ArrayList<>(translationDao.loadAll());
+
+		//Сортировка по возрастанию id (больше id - младше перевод)
+		Collections.sort(translationList, new Comparator<Translation>() {
+			@Override
+			public int compare(final Translation o1, final Translation o2) {
+				if (o1.get_id() == null) {
+					return 1;
+				}
+
+				if (o2.get_id() == null) {
+					return -1;
+				}
+
+				if (o1.get_id() > o2.get_id()) {
+					return -1;
+				} else if (o1.get_id() < o2.get_id()) {
+					return 1;
+				} else {
+					return 0;
+				}
+			}
+		});
 
 		listenerList = new ArrayList<>();
 	}
@@ -77,7 +101,7 @@ public class DatabaseManager {
 
 			translationDao.update(translation);
 		} else {
-			translationList.add(translation);
+			translationList.add(0, translation);
 
 			translationDao.insert(translation);
 		}
