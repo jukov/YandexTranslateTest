@@ -25,8 +25,6 @@ import info.jukov.yandextranslatetest.util.MultiSetBoolean;
 import info.jukov.yandextranslatetest.util.MultiSetBoolean.OnValueTrueListener;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 import javax.inject.Inject;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -44,8 +42,6 @@ public final class TranslatePresenter extends MvpPresenter<TranslateView> implem
 		TRANSLATE,
 		DICT
 	}
-
-	private final Lock lock = new ReentrantLock();
 
 	@Inject ApiModule apiModule;
 
@@ -85,8 +81,6 @@ public final class TranslatePresenter extends MvpPresenter<TranslateView> implem
 			databaseModule.getDatabaseManager().processTranslate(actualTranslation);
 		}
 	});
-
-	private boolean isLoadFailReported;
 
 	@Override
 	protected void onFirstViewAttach() {
@@ -207,8 +201,6 @@ public final class TranslatePresenter extends MvpPresenter<TranslateView> implem
 		translateResponse = null;
 		lookupResponse = null;
 
-		isLoadFailReported = false;
-
 		allQueriesLoaded.reset();
 		apiModule.getTranslateApi().use(new TranslateCallback(progressable), progressable).translate(lang, text);
 		apiModule.getDictApi().use(new DictCallback(progressable), progressable).lookup(lang, text, null, null);
@@ -227,15 +219,7 @@ public final class TranslatePresenter extends MvpPresenter<TranslateView> implem
 	}
 
 	private void reportLoadFailed(final int errorCode) {
-		lock.lock();
-		try {
-			if (!isLoadFailReported) {
-				isLoadFailReported = true;
-				getViewState().onLoadFailed(errorCode);
-			}
-		} finally {
-			lock.unlock();
-		}
+		getViewState().onLoadFailed(errorCode);
 	}
 
 	private final class TranslateCallback extends CallbackWithProgress<TranslateResponse> {
@@ -283,24 +267,17 @@ public final class TranslatePresenter extends MvpPresenter<TranslateView> implem
 			super.onResponse(call, response);
 			if (response.body() != null) {
 				lookupResponse = response.body();
-				allQueriesLoaded.set(Queries.DICT);
-				return;
 			}
 
-			if (getErrorBody() != null) {
-				ErrorResponse errorResponse = JsonUtils.deserialize(ErrorResponse.class, getErrorBody());
-				if (errorResponse != null) {
-					reportLoadFailed(errorResponse.getCode());
-				}
-			}
-
-			reportLoadFailed(response.code());
+			//Ошибки от Словаря игнорируются, в случае если запрос от словаря
+			// не прошел просто показываем результат Переводчика
+			allQueriesLoaded.set(Queries.DICT);
 		}
 
 		@Override
 		public void onFailure(final Call<LookupResponse> call, final Throwable t) {
 			super.onFailure(call, t);
-			reportLoadFailed(ErrorCodes.NETWORK_ERROR_CUSTOM);
+			allQueriesLoaded.set(Queries.DICT);
 		}
 	}
 }
