@@ -144,11 +144,15 @@ public final class SettingsFragment extends PreferenceFragmentCompat implements 
 
 		if (getString(R.string.preferenceKey_deleteHistory).equals(preference.getKey())) {
 			makeConfirmDialog(ConfirmablePreference.DELETE_HISTORY).show();
-		} else if (getString(R.string.preferenceKey_deleteFavorites).equals(preference.getKey())) {
-			makeConfirmDialog(ConfirmablePreference.DELETE_FAVORITES).show();
+			return true;
 		}
 
-		return true;
+		if (getString(R.string.preferenceKey_deleteFavorites).equals(preference.getKey())) {
+			makeConfirmDialog(ConfirmablePreference.DELETE_FAVORITES).show();
+			return true;
+		}
+
+		return super.onPreferenceTreeClick(preference);
 	}
 
 	private Dialog makeConfirmDialog(@NonNull final ConfirmablePreference confirmablePreference) {
