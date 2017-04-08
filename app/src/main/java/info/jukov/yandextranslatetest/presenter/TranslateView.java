@@ -84,4 +84,10 @@ public interface TranslateView extends MvpView {
 	 * Закрывает диалог.
 	 */
 	void closeDialog();
+
+	/**
+	 * Сообщает о том, что переводимый текст слишком длинный.
+	 */
+	@StateStrategyType(OneExecutionStateStrategy.class)
+	void onTextTooLong();
 }

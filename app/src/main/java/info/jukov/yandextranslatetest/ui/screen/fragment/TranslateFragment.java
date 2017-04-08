@@ -6,7 +6,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
+import android.text.Editable;
 import android.text.Html;
+import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -63,6 +65,7 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 	@BindView(R.id.spinnerOutputLanguage) Spinner spinnerOutputLanguage;
 	@BindView(R.id.buttonSwapLang) ImageView buttonSwapLang;
 	@BindView(R.id.editTextTranslatable) EditText editTextTranslatable;
+	@BindView(R.id.textViewLettersCount) TextView textViewLettersCount;
 	@BindView(R.id.buttonTranslate) Button buttonTranslate;
 	@BindView(R.id.buttonFavorite) ImageButton buttonFavorite;
 	@BindView(R.id.textViewTranslated) TextView textViewTranslated;
@@ -113,6 +116,12 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 		}
 	}
 
+	@Override
+	public void onStart() {
+		super.onStart();
+		updateLetterCounter(editTextTranslatable.length());
+	}
+
 	private void initUi() {
 		editTextTranslatable.setOnEditorActionListener(new OnEditorActionListener() {
 			@Override
@@ -121,6 +130,15 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 
 				return true;
 			}
+		});
+
+		editTextTranslatable.addTextChangedListener(new TextWatcher() {
+			@Override public void onTextChanged(final CharSequence s, final int start, final int before, final int count) {
+				updateLetterCounter(s.length());
+			}
+
+			@Override public void beforeTextChanged(final CharSequence s, final int start, final int count, final int after) {}
+			@Override public void afterTextChanged(final Editable s) {}
 		});
 
 		textViewCopyright.setText(Html.fromHtml(getString(R.string.translateFragment_copyright)));
@@ -283,6 +301,11 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 	}
 
 	@Override
+	public void onTextTooLong() {
+		ToastUtils.shortToast(getContext(), R.string.translateFragment_toast_errorTextTooLong);
+	}
+
+	@Override
 	public void startProgress() {
 		progressBar.setVisibility(View.VISIBLE);
 
@@ -299,6 +322,15 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 			progressBar.setVisibility(View.INVISIBLE);
 
 			setContentEnabled(true);
+		}
+	}
+
+	private void updateLetterCounter(final int lettersCount) {
+		if (lettersCount > 100) {
+			textViewLettersCount.setText(getString(R.string.translateFragment_textViewLettersCount, Integer.toString(lettersCount)));
+			textViewLettersCount.setVisibility(View.VISIBLE);
+		} else {
+			textViewLettersCount.setVisibility(View.INVISIBLE);
 		}
 	}
 

@@ -13,6 +13,8 @@
 
 	<dimen name="space_swipeLangButton_padding">4dp</dimen>
 
+	<dimen name="space_textViewLettersCount_padding">24dp</dimen>
+
 	<dimen name="elevation_fragmentTranslate_appBar">4dp</dimen>
 
 	<dimen name="textsize_headline">24sp</dimen>

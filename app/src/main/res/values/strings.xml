@@ -10,6 +10,9 @@
 
 	<string name="translateFragment_toast_errorNothingToTranslate">Nothing to translate</string>
 	<string name="translateFragment_toast_errorNothingToAddToFavorites">Nothing to add to favorites</string>
+	<string name="translateFragment_toast_errorTextTooLong">Translatable text is too long</string>
+
+	<string name="translateFragment_textViewLettersCount">%s / 10000</string>
 
 	<!--HistoryFragment-->
 	<string name="historyFragment_textViewEmptyList">No translations have been added to history. Try to translate something.</string>

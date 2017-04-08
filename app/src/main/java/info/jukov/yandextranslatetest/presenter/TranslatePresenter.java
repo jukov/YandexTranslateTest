@@ -38,6 +38,8 @@ import retrofit2.Response;
 public final class TranslatePresenter extends MvpPresenter<TranslateView> implements DatabaseListener, OnFullTranslateListener,
 																					 DialogCloser {
 
+	public static final int MAX_LENGTH_OF_TRANSLATABLE_TEXT = 10000;
+
 	private enum Queries {
 		TRANSLATE,
 		DICT
@@ -184,6 +186,11 @@ public final class TranslatePresenter extends MvpPresenter<TranslateView> implem
 
 		if (text.isEmpty()) {
 			getViewState().onEmptyInput();
+			return;
+		}
+
+		if (text.length() > MAX_LENGTH_OF_TRANSLATABLE_TEXT) {
+			getViewState().onTextTooLong();
 			return;
 		}
 
