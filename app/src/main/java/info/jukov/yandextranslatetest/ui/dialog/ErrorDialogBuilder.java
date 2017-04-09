@@ -72,7 +72,7 @@ public final class ErrorDialogBuilder {
 
 				final Button negativeButton = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_NEGATIVE);
 				if (negativeButton != null) {
-					setListener(activity, dialogCloser, negativeButton, errorDialog.getPositiveButton());
+					setListener(activity, dialogCloser, negativeButton, errorDialog.getNegativeButton());
 				}
 			}
 		});
