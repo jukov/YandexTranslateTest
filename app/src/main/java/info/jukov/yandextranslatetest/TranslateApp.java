@@ -1,6 +1,7 @@
 package info.jukov.yandextranslatetest;
 
 import android.app.Application;
+import android.support.v7.app.AppCompatDelegate;
 import info.jukov.yandextranslatetest.model.component.AppComponent;
 import info.jukov.yandextranslatetest.model.component.DaggerAppComponent;
 import info.jukov.yandextranslatetest.model.module.ApiModule;
@@ -39,6 +40,8 @@ public final class TranslateApp extends Application {
 		appComponent = buildComponent();
 
 		DictionaryConstructor.init(this);
+
+		AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 	}
 
 	private AppComponent buildComponent() {

@@ -15,6 +15,7 @@ import info.jukov.yandextranslatetest.util.Guard;
 import info.jukov.yandextranslatetest.util.Log;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -64,7 +65,7 @@ public final class LanguageAdapter extends BaseAdapter {
 
 		this.languages = new ArrayList<>(languages);
 
-		this.languages.sort(mostUsedcomparator);
+		Collections.sort(this.languages, mostUsedcomparator);
 
 		inflater = LayoutInflater.from(context);
 	}

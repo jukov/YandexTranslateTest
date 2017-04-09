@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="app_name">Yandex.Translate Test</string>
 	<string name="activityPreference_apiKeysCategory_title">API ключи</string>
 	<string name="activityPreference_deleteFavorites_title">Удалить избранное</string>
 	<string name="activityPreference_deleteHistory_title">Удалить историю</string>
@@ -23,7 +22,7 @@
 	<string name="alertDialogInvalidKeys_exit_button">Выход</string>
 	<string name="alertDialogInvalidKeys_goToSettings_button">Перейти к настройкам</string>
 	<string name="alertDialogInvalidKeys_keysNotSet_text">Для использования переводчика вам нужно ввести API ключи для Яндекс.Переводчика и Яндекс.Словаря в настройках.</string>
-	<string name="alertDialogInvalidKeys_keysNotSet_title">API ключи не истановлены</string>
+	<string name="alertDialogInvalidKeys_keysNotSet_title">API ключи не установлены</string>
 	<string name="alertDialogInvalidKeys_networkError_text">Произошла сетевая ошибка. Проверьте, доступно ли интернет-соединение и попробуйте позже.</string>
 	<string name="alertDialogInvalidKeys_networkError_title">Сетевая ошибка</string>
 	<string name="alertDialogInvalidKeys_tryAgain_button">Попробовать еще раз</string>

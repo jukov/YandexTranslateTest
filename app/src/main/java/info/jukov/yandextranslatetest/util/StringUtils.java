@@ -16,13 +16,13 @@ public final class StringUtils {
 
 	public static String formatInputLang(final String lang) {
 		Guard.checkNotNull(lang, "null == lang");
-		Guard.checkPreCondition(lang.length() == 5 || lang.contains("-"), "Lang must be correspond pattern 'xx-xx': " + lang);
+		Guard.checkPreCondition(lang.length() >= 5 || lang.contains("-"), "Lang must be correspond pattern 'xxx-xxx': " + lang);
 		return lang.split("-", 2)[0];
 	}
 
 	public static String formatOutputLang(final String lang) {
 		Guard.checkNotNull(lang, "null == lang");
-		Guard.checkPreCondition(lang.length() == 5 || lang.contains("-"), "Lang must be correspond pattern 'xx-xx'");
+		Guard.checkPreCondition(lang.length() >= 5 || lang.contains("-"), "Lang must be correspond pattern 'xxx-xxx'");
 		return lang.split("-", 2)[1];
 	}
 
