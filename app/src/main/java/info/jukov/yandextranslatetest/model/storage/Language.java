@@ -6,7 +6,7 @@ package info.jukov.yandextranslatetest.model.storage;
  * Time: 19:12
  */
 
-public class Language {
+public final class Language implements Cloneable {
 
 	private String code;
 	private String readableLangWord;
@@ -71,5 +71,14 @@ public class Language {
 		int result = getCode().hashCode();
 		result = 31 * result + getReadableLangWord().hashCode();
 		return result;
+	}
+
+	@Override
+	public Language clone() {
+		try {
+			return ((Language) super.clone());
+		} catch (final CloneNotSupportedException e) {
+			throw new IllegalStateException("Clone not supported?");
+		}
 	}
 }

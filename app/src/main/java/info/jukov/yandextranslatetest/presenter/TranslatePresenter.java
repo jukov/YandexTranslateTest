@@ -100,7 +100,14 @@ public final class TranslatePresenter extends MvpPresenter<TranslateView> implem
 		}
 
 		final Set<Language> inputLangs = new HashSet<>(readableWords);
-		final Set<Language> outputLangs = new HashSet<>(readableWords);
+		final Set<Language> outputLangs = new HashSet<>();
+
+		//Клонируем языки, чтобы избежать коллизий из-за общего
+		// параметра mostUsedPriority в Language
+		for (final Language language : readableWords) {
+			outputLangs.add(language.clone());
+		}
+
 
 		if (mostUsedInputLangs != null && mostUsedInputLangs.size() > 0) {
 			//Вставляем языки с расставленным приоритетом

@@ -158,9 +158,7 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 				presenter.onInputLangSelected(position);
 			}
 
-			@Override
-			public void onNothingSelected(final AdapterView<?> parent) {
-			}
+			@Override public void onNothingSelected(final AdapterView<?> parent) {}
 		});
 
 		spinnerOutputLanguage.setOnItemSelectedListener(new OnItemSelectedListener() {
@@ -169,9 +167,7 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 				presenter.onOutputLangSelected(position);
 			}
 
-			@Override
-			public void onNothingSelected(final AdapterView<?> parent) {
-			}
+			@Override public void onNothingSelected(final AdapterView<?> parent) {}
 		});
 	}
 
@@ -272,7 +268,10 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 		final String inputLangCode = inputSpinnerAdapter.getItem(spinnerInputLanguage.getSelectedItemPosition());
 		final String ontputLangCode = outputSpinnerAdapter.getItem(spinnerOutputLanguage.getSelectedItemPosition());
 
+		inputSpinnerAdapter.pinItemToTop(ontputLangCode);
 		spinnerInputLanguage.setSelection(inputSpinnerAdapter.getPosition(ontputLangCode));
+
+		outputSpinnerAdapter.pinItemToTop(inputLangCode);
 		spinnerOutputLanguage.setSelection(outputSpinnerAdapter.getPosition(inputLangCode));
 	}
 

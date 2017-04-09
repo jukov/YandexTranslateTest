@@ -95,7 +95,6 @@ public final class LanguageAdapter extends BaseAdapter {
 	 * @param position индекс закрепляемого элемента.
 	 */
 	public void pinItemToTop(final int position) {
-
 		Guard.checkPreCondition(position < languages.size(), "Position too big");
 		Guard.checkPreCondition(position >= 0, "Position too small");
 

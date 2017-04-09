@@ -57,16 +57,16 @@ public interface TranslateView extends MvpView {
 	void swapLang();
 
 	/**
-	 * Выбирввет язык ввода.
+	 * Выбирает язык ввода.
 	 *
-	 * @param position позиция языка
+	 * @param position позиция языка в спиннере
 	 */
 	void selectInputLang(int position);
 
 	/**
-	 * Выбирввет язык вывода.
+	 * Выбирает язык вывода.
 	 *
-	 * @param position позиция языка
+	 * @param position позиция языка в спиннере
 	 */
 	void selectOutputLang(int position);
 
