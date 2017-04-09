@@ -15,6 +15,7 @@ public final class Log {
 
 	public Log(@NonNull final Class clazz) {
 		Guard.checkNotNull(clazz, "null == class");
+
 		tag = clazz.getName();
 	}
 

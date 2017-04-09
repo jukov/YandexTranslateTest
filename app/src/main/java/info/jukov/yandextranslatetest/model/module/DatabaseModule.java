@@ -14,7 +14,7 @@ import javax.inject.Singleton;
  * Time: 20:40
  */
 @Module
-public class DatabaseModule {
+public final class DatabaseModule {
 
 	private final DatabaseManager databaseManager;
 

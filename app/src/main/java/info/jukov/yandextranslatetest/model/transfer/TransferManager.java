@@ -10,9 +10,11 @@ import java.util.List;
  * User: jukov
  * Date: 02.04.2017
  * Time: 19:56
+ *
+ * Объект для передачи данных между компонентами. На данный момент используется только для передачи перевода из истории в {@link
+ * info.jukov.yandextranslatetest.presenter.TranslatePresenter} и его отобржения.
  */
-
-public class TransferManager {
+public final class TransferManager {
 
 	private final List<OnFullTranslateListener> listenerList;
 
@@ -35,6 +37,7 @@ public class TransferManager {
 	}
 
 	public interface OnFullTranslateListener {
+
 		void onFullTranslateListener(Translation translation);
 	}
 

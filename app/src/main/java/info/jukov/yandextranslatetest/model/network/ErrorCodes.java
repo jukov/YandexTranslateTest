@@ -4,8 +4,9 @@ package info.jukov.yandextranslatetest.model.network;
  * User: jukov
  * Date: 19.03.2017
  * Time: 14:33
+ *
+ * Коды ошибок от сервера + кастомные коды ошибок.
  */
-
 public interface ErrorCodes {
 
 	int WRONG_API_KEY = 401;

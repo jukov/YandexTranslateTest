@@ -2,6 +2,7 @@ package info.jukov.yandextranslatetest.model.storage.dao;
 
 import android.support.annotation.NonNull;
 import info.jukov.yandextranslatetest.model.storage.dao.TranslationDao.Properties;
+import info.jukov.yandextranslatetest.util.Guard;
 import info.jukov.yandextranslatetest.util.Log;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,7 +29,9 @@ public class DatabaseManager {
 
 	private final List<DatabaseListener> listenerList;
 
-	public DatabaseManager(final TranslationDao translationDao) {
+	public DatabaseManager(@NonNull final TranslationDao translationDao) {
+		Guard.checkNotNull(translationDao, "null == translationDao");
+
 		this.translationDao = translationDao;
 
 		translationList = new ArrayList<>(translationDao.loadAll());
@@ -92,6 +95,7 @@ public class DatabaseManager {
 	 * О добавлении поступлении нового объекта оповещаются все {@link DatabaseListener}.
 	 */
 	public void processTranslate(@NonNull final Translation translation) {
+		Guard.checkNotNull(translation, "null == translation");
 
 		final int itemIndex = translationList.indexOf(translation);
 
@@ -114,6 +118,9 @@ public class DatabaseManager {
 	}
 
 	public Translation getTranslateFromDatabase(@NonNull final String lang, @NonNull final String text) {
+		Guard.checkNotNull(lang, "null == lang");
+		Guard.checkNotNull(text, "null == text");
+
 		final List<Translation> translationList = translationDao.queryBuilder()
 			.where(Properties.Lang.eq(lang), Properties.Text.eq(text))
 			.build()

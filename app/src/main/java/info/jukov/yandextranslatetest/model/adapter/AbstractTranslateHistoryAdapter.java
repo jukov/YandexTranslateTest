@@ -75,6 +75,8 @@ public abstract class AbstractTranslateHistoryAdapter<VH extends ViewHolder> ext
 	}
 
 	public void setTranslations(final List<Translation> translationList) {
+		Guard.checkNotNull(translationList, "null == translationList");
+
 		this.translationList.addAll(translationList);
 
 		notifyDataSetChanged();
@@ -98,7 +100,7 @@ public abstract class AbstractTranslateHistoryAdapter<VH extends ViewHolder> ext
 
 		private Translation translation;
 
-		protected ViewHolder(final View itemView) {
+		protected ViewHolder(@NonNull final View itemView) {
 			super(itemView);
 			ButterKnife.bind(this, itemView);
 

@@ -20,6 +20,9 @@ public final class JsonUtils {
 
 	@Nullable
 	public static <T> T deserialize(@NonNull final Class<T> clazz, @NonNull final String json) {
+		Guard.checkNotNull(clazz, "null == clazz");
+		Guard.checkNotNull(json, "null == json");
+
 		if (objectMapper == null) {
 			objectMapper = new ObjectMapper();
 		}
@@ -33,7 +36,9 @@ public final class JsonUtils {
 	}
 
 	@Nullable
-	public static String serialize(final Object target) {
+	public static String serialize(@NonNull final Object target) {
+		Guard.checkNotNull(target, "null == target");
+
 		if (objectMapper == null) {
 			objectMapper = new ObjectMapper();
 		}

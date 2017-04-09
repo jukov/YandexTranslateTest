@@ -80,7 +80,6 @@ public final class FavoritesAdapter extends AbstractTranslateHistoryAdapter<Favo
 
 	@Override
 	public FavoritesViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
-
 		final View view = getInflater().inflate(R.layout.recycler_history_item, parent, false);
 
 		final FavoritesViewHolder viewHolder = new FavoritesViewHolder(view);

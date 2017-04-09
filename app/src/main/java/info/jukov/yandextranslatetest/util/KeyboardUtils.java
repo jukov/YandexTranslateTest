@@ -1,6 +1,7 @@
 package info.jukov.yandextranslatetest.util;
 
 import android.app.Activity;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
@@ -12,7 +13,9 @@ import android.view.inputmethod.InputMethodManager;
 
 public final class KeyboardUtils {
 
-	public static void hideSoftInput(final Activity activity) {
+	public static void hideSoftInput(@NonNull final Activity activity) {
+		Guard.checkNotNull(activity, "null == activity");
+
 		View view = activity.getCurrentFocus();
 
 		if (view == null) {

@@ -14,7 +14,7 @@ import javax.inject.Singleton;
  * Time: 18:03
  */
 @Module
-public class ContextModule {
+public final class ContextModule {
 
 	private final Context context;
 

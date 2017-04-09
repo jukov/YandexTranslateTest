@@ -62,7 +62,7 @@ public final class DictApi {
 			}
 		}
 
-		public void lookup(final String lang, final String text, @Nullable final String ui,
+		public void lookup(@NonNull final String lang, @NonNull final String text, @Nullable final String ui,
 						   @Nullable final String flags) {
 			Guard.checkNotNull(lang, "null == lang");
 			Guard.checkNotNull(text, "null == text");

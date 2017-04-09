@@ -14,6 +14,8 @@ import android.widget.Toast;
 public final class ToastUtils {
 
 	public static void shortToast(@NonNull final Context context, @StringRes final int textRes) {
+		Guard.checkNotNull(context, "null == context");
+
 		Toast.makeText(context, textRes, Toast.LENGTH_SHORT).show();
 	}
 

@@ -7,7 +7,6 @@ import com.arellomobile.mvp.MvpView;
  * Date: 18.03.2017
  * Time: 21:03
  */
-
 public interface ApiKeysCheckView extends MvpView {
 
 	void onKeysEntered();

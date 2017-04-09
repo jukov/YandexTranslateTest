@@ -35,7 +35,7 @@ public final class LangPreferences {
 
 	private static final String LANG_DELIMITER = "-";
 
-	private static SharedPreferences getPreferences(final Context context) {
+	private static SharedPreferences getPreferences(@NonNull final Context context) {
 		Guard.checkNotNull(context, "null == context");
 
 		return context.getApplicationContext().getSharedPreferences(FILE, Context.MODE_PRIVATE);
@@ -44,7 +44,7 @@ public final class LangPreferences {
 	/**
 	 * Стирает все данные о поддерживаемых языках.
 	 */
-	public static void clear(final Context context) {
+	public static void clear(@NonNull final Context context) {
 		getPreferences(context).edit().clear().commit();
 	}
 
@@ -134,16 +134,18 @@ public final class LangPreferences {
 	/**
 	 * Записывает в {@link SharedPreferences} список самых используемых исходных языков
 	 */
-	public static void putMostUsedInputLangs(@NonNull final Context context,
-											 final List<Language> mostUsedlanguages) {
+	public static void putMostUsedInputLangs(@NonNull final Context context, @NonNull final List<Language> mostUsedlanguages) {
+		Guard.checkNotNull(mostUsedlanguages, "null == mostUsedlanguages");
+
 		putMostUsedLangs(context, new HashSet<Language>(mostUsedlanguages), MOST_USED_INPUT_LANGS);
 	}
 
 	/**
 	 * Записывает в {@link SharedPreferences} список самых используемых переводящих языков
 	 */
-	public static void putMostUsedOutputLangs(@NonNull final Context context,
-											  final List<Language> mostUsedlanguages) {
+	public static void putMostUsedOutputLangs(@NonNull final Context context, @NonNull final List<Language> mostUsedlanguages) {
+		Guard.checkNotNull(mostUsedlanguages, "null == mostUsedlanguages");
+
 		putMostUsedLangs(context, new HashSet<Language>(mostUsedlanguages), MOST_USED_OUTPUT_LANGS);
 	}
 
@@ -163,8 +165,8 @@ public final class LangPreferences {
 		return getMostUsedLangs(context, MOST_USED_OUTPUT_LANGS);
 	}
 
-	private static void putMostUsedLangs(final Context context,
-										 final Set<Language> mostUsedlanguages, final String key) {
+	private static void putMostUsedLangs(@NonNull final Context context, @NonNull final Set<Language> mostUsedlanguages,
+		@NonNull final String key) {
 
 		final Set<String> serializedLangs = new HashSet<>();
 
@@ -176,7 +178,7 @@ public final class LangPreferences {
 			.commit();
 	}
 
-	private static Set<Language> getMostUsedLangs(final Context context, final String key) {
+	private static Set<Language> getMostUsedLangs(@NonNull final Context context, @NonNull final String key) {
 
 		Set<String> serializedLangs = getPreferences(context)
 			.getStringSet(key, null);

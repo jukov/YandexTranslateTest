@@ -14,7 +14,7 @@ import javax.inject.Singleton;
  * Time: 19:53
  */
 @Module
-public class TransferModule {
+public final class TransferModule {
 
 	private final TransferManager transferManager;
 

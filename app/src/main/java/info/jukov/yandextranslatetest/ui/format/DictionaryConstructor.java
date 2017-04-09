@@ -47,17 +47,20 @@ public final class DictionaryConstructor {
 	@ColorInt private static int secondaryItemsColor;
 
 	public static void init(@NonNull final Context context) {
-		secondaryItemsColor = context.getResources()
-			.getColor(R.color.text_dictConstructor_secondaryItems);
+		Guard.checkNotNull(context, "null == context");
+
+		secondaryItemsColor = context.getResources().getColor(R.color.text_dictConstructor_secondaryItems);
 	}
 
 	/**
 	 * Прикрепляет к {@code parent} набор {@link android.view.View},
 	 * которые визуализируют объект {@link LookupResponse}
 	 */
-	public static void makeLookupResponse(@NonNull final Context context,
-		@NonNull final LinearLayout parent, @NonNull final LookupResponse response) {
-
+	public static void makeLookupResponse(@NonNull final Context context, @NonNull final LinearLayout parent,
+		@NonNull final LookupResponse response) {
+		Guard.checkNotNull(context, "null == context");
+		Guard.checkNotNull(parent, "null == parent");
+		Guard.checkNotNull(response, "null == response");
 		Guard.checkPreCondition(secondaryItemsColor != 0, "Call method init before use this class");
 
 		final LayoutInflater inflater = LayoutInflater.from(context);
@@ -78,8 +81,8 @@ public final class DictionaryConstructor {
 		}
 	}
 
-	private static void makeTranslations(@NonNull final LinearLayout parent,
-		@NonNull final LayoutInflater inflater, @NonNull final List<Translation> translations) {
+	private static void makeTranslations(@NonNull final LinearLayout parent, @NonNull final LayoutInflater inflater,
+		@NonNull final List<Translation> translations) {
 
 		int translationCount = 0;
 
@@ -235,7 +238,7 @@ public final class DictionaryConstructor {
 	 * Возвращает строку и информацией о транскрипции слова.
 	 */
 	public static CharSequence formatDefinition(@NonNull final LookupResponse response) {
-
+		Guard.checkNotNull(response, "null == response");
 		Guard.checkPreCondition(secondaryItemsColor != 0, "Call method init before use this class");
 
 		if (response.getDefinitions() != null) {

@@ -4,8 +4,9 @@ package info.jukov.yandextranslatetest.model.network;
  * User: jukov
  * Date: 19.03.2017
  * Time: 14:59
+ *
+ * POJO класс для ошибки от сервера.
  */
-
 public class ErrorResponse {
 
 	private int code;

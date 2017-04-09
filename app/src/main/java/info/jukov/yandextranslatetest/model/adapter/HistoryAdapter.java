@@ -9,6 +9,7 @@ import info.jukov.yandextranslatetest.model.adapter.HistoryAdapter.HistoryViewHo
 import info.jukov.yandextranslatetest.model.storage.dao.DatabaseManager;
 import info.jukov.yandextranslatetest.model.storage.dao.Translation;
 import info.jukov.yandextranslatetest.ui.base.TranslationListHolder;
+import info.jukov.yandextranslatetest.util.Guard;
 import info.jukov.yandextranslatetest.util.Log;
 import java.util.Iterator;
 
@@ -30,6 +31,7 @@ public final class HistoryAdapter extends AbstractTranslateHistoryAdapter<Histor
 
 	@Override
 	public void processTranslation(@NonNull final Translation translation) {
+		Guard.checkNotNull(translation, "null == translation");
 
 		final int itemIndex = getTranslationList().indexOf(translation);
 
@@ -77,7 +79,6 @@ public final class HistoryAdapter extends AbstractTranslateHistoryAdapter<Histor
 
 	@Override
 	public HistoryViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
-
 		final View view = getInflater().inflate(R.layout.recycler_history_item, parent, false);
 
 		final HistoryViewHolder viewHolder = new HistoryViewHolder(view);

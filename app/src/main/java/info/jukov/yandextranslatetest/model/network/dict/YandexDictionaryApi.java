@@ -27,8 +27,4 @@ interface YandexDictionaryApi {
 	Call<LookupResponse> lookup(@Query("key") String key, @Query("lang") String lang,
 								@Field("text") String text, @Query("ui") String ui,
 								@Query("flags") String flags);
-
-	//TODO: Family filter
-	//TODO:Error code processing
-
 }

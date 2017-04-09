@@ -26,6 +26,8 @@ public final class TabAdapter extends FragmentStatePagerAdapter {
 
 	private TabAdapter(final Context context, final FragmentManager fragmentManager) {
 		super(fragmentManager);
+		Guard.checkNotNull(fragmentManager, "null == fragmentManager");
+		Guard.checkNotNull(context, "null == context");
 
 		this.context = context;
 
@@ -73,7 +75,9 @@ public final class TabAdapter extends FragmentStatePagerAdapter {
 			tabAdapter = new TabAdapter(context, fragmentManager);
 		}
 
-		public Builder addTab(final MvpAppCompatFragment fragment, @StringRes final int titleRes) {
+		public Builder addTab(@NonNull final MvpAppCompatFragment fragment, @StringRes final int titleRes) {
+			Guard.checkNotNull(fragment, "null == fragment");
+
 			tabAdapter.tabs.add(new TabWrapper(fragment, context.getString(titleRes)));
 			return this;
 		}
@@ -89,7 +93,7 @@ public final class TabAdapter extends FragmentStatePagerAdapter {
 		@StringRes private final String title;
 		private final MvpAppCompatFragment fragment;
 
-		private TabWrapper(final MvpAppCompatFragment fragment, @StringRes final String title) {
+		private TabWrapper(@NonNull final MvpAppCompatFragment fragment, @StringRes final String title) {
 			this.fragment = fragment;
 			this.title = title;
 		}

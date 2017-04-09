@@ -58,8 +58,9 @@ public final class LanguageAdapter extends BaseAdapter {
 
 	private final LayoutInflater inflater;
 
-	public LanguageAdapter(@NonNull final Context context,
-						   @NonNull final Collection<Language> languages) {
+	public LanguageAdapter(@NonNull final Context context, @NonNull final Collection<Language> languages) {
+		Guard.checkNotNull(context, "null == context");
+		Guard.checkNotNull(languages, "null == languages");
 
 		this.languages = new ArrayList<>(languages);
 
@@ -75,7 +76,7 @@ public final class LanguageAdapter extends BaseAdapter {
 	 * @return true - если элемент был найден и прикреплен. false - если элемент найден не был.
 	 */
 	public boolean pinItemToTop(@NonNull final String code) {
-
+		Guard.checkNotNull(code, "null == code");
 		Guard.checkPreCondition(code.length() == 2, "Code must contain exactly two letters");
 
 		for (int i = 0; i < languages.size(); i++) {
@@ -176,7 +177,7 @@ public final class LanguageAdapter extends BaseAdapter {
 	@Override
 	public View getView(final int position, final View convertView, final ViewGroup parent) {
 
-		ViewHolder viewHolder;
+		final ViewHolder viewHolder;
 
 		View view = convertView;
 		if (view != null) {
