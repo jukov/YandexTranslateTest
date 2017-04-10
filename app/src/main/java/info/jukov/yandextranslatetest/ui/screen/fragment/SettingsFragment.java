@@ -75,7 +75,11 @@ public final class SettingsFragment extends PreferenceFragmentCompat implements 
 
 	@Inject DatabaseModule databaseModule;
 
-	private boolean apiKeysChanged = false;
+	/**
+	 * Флаг, определающий, нужно ли перезапустить приложение после изменения настроек.
+	 * Перезапуск требуется для повтороного запроса параметров компонентами приложения.
+	 **/
+	private boolean needToRestart = false;
 
 	public static SettingsFragment newInstance() {
 		SettingsFragment fragment = new SettingsFragment();
@@ -104,8 +108,8 @@ public final class SettingsFragment extends PreferenceFragmentCompat implements 
 		}
 	}
 
-	public boolean isApiKeysChanged() {
-		return apiKeysChanged;
+	public boolean isNeedToRestart() {
+		return needToRestart;
 	}
 
 	@Override
@@ -134,7 +138,7 @@ public final class SettingsFragment extends PreferenceFragmentCompat implements 
 	public void onSharedPreferenceChanged(final SharedPreferences sharedPreferences,
 		final String key) {
 		if (getString(R.string.preferenceKey_translateApiKey).equals(key) || getString(R.string.preferenceKey_dictApiKey).equals(key)) {
-			apiKeysChanged = true;
+			needToRestart = true;
 			updatePreferenceSummary(findPreference(key));
 		}
 	}

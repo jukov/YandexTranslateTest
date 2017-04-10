@@ -66,7 +66,7 @@ public final class SettingsActivity extends AppCompatActivity {
 
 	@Override
 	public boolean onSupportNavigateUp() {
-		if (settingsFragment.isApiKeysChanged() || isForKeyChange) {
+		if (settingsFragment.isNeedToRestart() || isForKeyChange) {
 			setResult(RESULT_OK);
 		} else {
 			setResult(RESULT_CANCELED);
