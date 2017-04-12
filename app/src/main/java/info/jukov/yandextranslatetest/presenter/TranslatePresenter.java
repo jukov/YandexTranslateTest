@@ -108,7 +108,6 @@ public final class TranslatePresenter extends MvpPresenter<TranslateView> implem
 			outputLangs.add(language.clone());
 		}
 
-
 		if (mostUsedInputLangs != null && mostUsedInputLangs.size() > 0) {
 			//Вставляем языки с расставленным приоритетом
 			inputLangs.removeAll(mostUsedInputLangs);

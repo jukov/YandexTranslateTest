@@ -161,6 +161,7 @@
 				android:layout_marginLeft="@dimen/space_all_screenPadding"
 				android:layout_marginRight="@dimen/space_all_screenPadding"
 				android:layout_marginTop="@dimen/space_all_betweenContent"
+				android:textIsSelectable="true"
 				tools:text="Время"/>
 
 			<TextView
@@ -171,6 +172,7 @@
 				android:layout_marginLeft="@dimen/space_all_screenPadding"
 				android:layout_marginRight="@dimen/space_all_screenPadding"
 				android:layout_marginTop="@dimen/space_all_betweenContent"
+				android:textIsSelectable="true"
 				tools:text="Time [taɪm]"/>
 
 			<LinearLayout

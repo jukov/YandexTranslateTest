@@ -8,4 +8,5 @@
 	android:paddingTop="@dimen/space_all_betweenContent"
 	android:paddingLeft="@dimen/space_componentDictHorizontal_double"
 	android:paddingRight="@dimen/space_all_screenPadding"
+	android:textIsSelectable="true"
 	tools:text="1. время, раз, момент, срок"/>

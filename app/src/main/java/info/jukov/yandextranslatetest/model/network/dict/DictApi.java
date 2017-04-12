@@ -37,8 +37,7 @@ public final class DictApi {
 			.getString(preferenceKey, "");
 	}
 
-	public <T> DictApi.Sender use(@NonNull final Callback<T> callback,
-								  @Nullable final Progressable progressable) {
+	public <T> DictApi.Sender use(@NonNull final Callback<T> callback, @Nullable final Progressable progressable) {
 		Guard.checkNotNull(callback, "null == callback");
 
 		return new DictApi.Sender(callback, progressable);
@@ -50,8 +49,7 @@ public final class DictApi {
 
 		@Nullable private final Progressable progressable;
 
-		private Sender(@NonNull final Callback<T> callback,
-					   @Nullable final Progressable progressable) {
+		private Sender(@NonNull final Callback<T> callback, @Nullable final Progressable progressable) {
 			this.callback = callback;
 			this.progressable = progressable;
 		}

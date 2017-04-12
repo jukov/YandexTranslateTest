@@ -7,4 +7,5 @@
 	android:layout_height="wrap_content"
 	android:paddingLeft="@dimen/space_componentDiciHorizontal_triple"
 	android:paddingRight="@dimen/space_all_screenPadding"
+	android:textIsSelectable="true"
 	tools:text="(all, your, base, are, be)"/>
