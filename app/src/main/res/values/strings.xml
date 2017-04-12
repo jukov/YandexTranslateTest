@@ -14,6 +14,13 @@
 
 	<string name="translateFragment_textViewLettersCount">%s / 10000</string>
 
+	<!--TranslationListFragment-->
+	<string name="translationListFragment_ActionsDialog_title">Choose action</string>
+	<string-array name="translationListFragment_ActionsDialog_actions">
+		<item>Copy translation</item>
+		<item>Delete translation</item>
+	</string-array>
+
 	<!--HistoryFragment-->
 	<string name="historyFragment_textViewEmptyList">No translations have been added to history. Try to translate something.</string>
 
@@ -97,5 +104,8 @@
 	<string name="about_author">by Alexander Zhukov</string>
 	<string name="about_license">Licensed by WTFPL http://www.wtfpl.net/</string>
 	<string name="about_otherLicenses">Components licenses:</string>
+
+	<!--Misc-->
+	<string name="misc_clipBoard_label">Translation</string>
 
 </resources>

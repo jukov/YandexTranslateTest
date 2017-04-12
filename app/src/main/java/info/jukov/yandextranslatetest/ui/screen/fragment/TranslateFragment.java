@@ -43,8 +43,8 @@ import info.jukov.yandextranslatetest.ui.dialog.ErrorDialogBuilder;
 import info.jukov.yandextranslatetest.ui.format.DictionaryConstructor;
 import info.jukov.yandextranslatetest.util.KeyboardUtils;
 import info.jukov.yandextranslatetest.util.Log;
+import info.jukov.yandextranslatetest.util.OsUtils;
 import info.jukov.yandextranslatetest.util.StringUtils;
-import info.jukov.yandextranslatetest.util.ToastUtils;
 import java.util.Set;
 
 /**
@@ -82,7 +82,7 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 
 	private int progressableTasksCount = 0;
 
-	@Nullable private Dialog currentDialog = null;
+	private Dialog currentDialog = null;
 
 	public static TranslateFragment newInstance() {
 
@@ -225,7 +225,7 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 
 	@Override
 	public void onEmptyInput() {
-		ToastUtils.shortToast(getContext(), R.string.translateFragment_toast_errorNothingToTranslate);
+		OsUtils.shortToast(getContext(), R.string.translateFragment_toast_errorNothingToTranslate);
 	}
 
 	@Override
@@ -239,7 +239,7 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 
 	@Override
 	public void onNothingToAddToFavorite() {
-		ToastUtils.shortToast(getContext(), R.string.translateFragment_toast_errorNothingToAddToFavorites);
+		OsUtils.shortToast(getContext(), R.string.translateFragment_toast_errorNothingToAddToFavorites);
 	}
 
 	@Override
@@ -255,6 +255,9 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 	public void closeDialog() {
 		if (currentDialog != null) {
 			currentDialog.dismiss();
+			currentDialog = null;
+		} else {
+			LOG.warning("Attempt to close nonexistent dialog");
 		}
 	}
 
@@ -301,7 +304,7 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 
 	@Override
 	public void onTextTooLong() {
-		ToastUtils.shortToast(getContext(), R.string.translateFragment_toast_errorTextTooLong);
+		OsUtils.shortToast(getContext(), R.string.translateFragment_toast_errorTextTooLong);
 	}
 
 	@Override

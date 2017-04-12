@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -83,6 +84,17 @@ public abstract class AbstractTranslateHistoryAdapter<VH extends ViewHolder> ext
 		getDataSetChangedListener().onDataSetChange(getItemCount());
 	}
 
+	public void deleteTranslation(final Translation translation) {
+
+		final int itemPosition = translationList.indexOf(translation);
+
+		if (itemPosition != -1) {
+			translationList.remove(itemPosition);
+			notifyItemRemoved(itemPosition);
+			getDataSetChangedListener().onDataSetChange(getItemCount());
+		}
+	}
+
 	public abstract void processTranslation(final Translation translation);
 
 	public abstract void deleteFavorites();
@@ -108,6 +120,14 @@ public abstract class AbstractTranslateHistoryAdapter<VH extends ViewHolder> ext
 				@Override
 				public void onClick(final View v) {
 					translationListHolder.viewFullTranslation(translation);
+				}
+			});
+
+			conteinerText.setOnLongClickListener(new OnLongClickListener() {
+				@Override
+				public boolean onLongClick(final View v) {
+					translationListHolder.onLongItemClick(translation);
+					return true;
 				}
 			});
 

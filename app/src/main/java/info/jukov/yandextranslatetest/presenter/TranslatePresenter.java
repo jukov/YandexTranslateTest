@@ -56,31 +56,31 @@ public final class TranslatePresenter extends MvpPresenter<TranslateView> implem
 	private String lang;
 	private String text;
 
-	private Translation actualTranslation;
+	private Translation currentTranslation;
 
 	private final MultiSetBoolean<Queries> allQueriesLoaded = new MultiSetBoolean<>(Queries.values().length, new OnValueTrueListener() {
 		@Override
 		public void onTrue() {
 
-			actualTranslation = new Translation();
+			currentTranslation = new Translation();
 
 			if (translateResponse != null) {
-				actualTranslation.setTranslateResponse(translateResponse.getText());
+				currentTranslation.setTranslateResponse(translateResponse.getText());
 			}
 
 			if (lookupResponse != null && !lookupResponse.isEmpty()) {
-				actualTranslation.setDictionaryResponse(JsonUtils.serialize(lookupResponse));
+				currentTranslation.setDictionaryResponse(JsonUtils.serialize(lookupResponse));
 			}
 
-			actualTranslation.setText(text);
-			actualTranslation.setLang(lang);
+			currentTranslation.setText(text);
+			currentTranslation.setLang(lang);
 
-			getViewState().onTranslation(actualTranslation);
+			getViewState().onTranslation(currentTranslation);
 
 			lang = null;
 			text = null;
 
-			databaseModule.getDatabaseManager().processTranslate(actualTranslation);
+			databaseModule.getDatabaseManager().processTranslate(currentTranslation);
 		}
 	});
 
@@ -155,10 +155,19 @@ public final class TranslatePresenter extends MvpPresenter<TranslateView> implem
 
 	@Override
 	public void onTranslateProcessed(@NonNull final Translation translation) {
-		Guard.checkNotNull(translation, "null == actualTranslation");
+		Guard.checkNotNull(translation, "null == currentTranslation");
 
-		if (translation.equals(this.actualTranslation)) {
+		if (translation.equals(this.currentTranslation)) {
 			getViewState().onFavoritesAction(translation.getIsFavorite());
+		}
+	}
+
+	@Override
+	public void onTranslateDeleted(@NonNull final Translation translation) {
+		Guard.checkNotNull(translation, "null == translation");
+
+		if (translation.equals(currentTranslation)) {
+			getViewState().onFavoritesAction(false);
 		}
 	}
 
@@ -169,7 +178,7 @@ public final class TranslatePresenter extends MvpPresenter<TranslateView> implem
 
 	@Override
 	public void onFavoritesDeleted() {
-		actualTranslation = null;
+		currentTranslation = null;
 
 		getViewState().onFavoritesAction(false);
 	}
@@ -178,7 +187,7 @@ public final class TranslatePresenter extends MvpPresenter<TranslateView> implem
 	public void onFullTranslateListener(@NonNull final Translation translation) {
 		Guard.checkNotNull(translation, "null == translation");
 
-		actualTranslation = translation;
+		currentTranslation = translation;
 
 		getViewState().onTranslation(translation);
 	}
@@ -200,11 +209,11 @@ public final class TranslatePresenter extends MvpPresenter<TranslateView> implem
 			return;
 		}
 
-		actualTranslation = databaseModule.getDatabaseManager().getTranslateFromDatabase(lang, text);
+		currentTranslation = databaseModule.getDatabaseManager().getTranslateFromDatabase(lang, text);
 
-		if (actualTranslation != null) {
-			getViewState().onTranslation(actualTranslation);
-			getViewState().onFavoritesAction(actualTranslation.getIsFavorite());
+		if (currentTranslation != null) {
+			getViewState().onTranslation(currentTranslation);
+			getViewState().onFavoritesAction(currentTranslation.getIsFavorite());
 			return;
 		}
 
@@ -220,12 +229,12 @@ public final class TranslatePresenter extends MvpPresenter<TranslateView> implem
 	}
 
 	private void addToFavorites() {
-		if (actualTranslation != null) {
-			actualTranslation.setIsFavorite(!actualTranslation.getIsFavorite());
+		if (currentTranslation != null) {
+			currentTranslation.setIsFavorite(!currentTranslation.getIsFavorite());
 
-			databaseModule.getDatabaseManager().processTranslate(actualTranslation);
+			databaseModule.getDatabaseManager().processTranslate(currentTranslation);
 
-			getViewState().onFavoritesAction(actualTranslation.getIsFavorite());
+			getViewState().onFavoritesAction(currentTranslation.getIsFavorite());
 		} else {
 			getViewState().onNothingToAddToFavorite();
 		}

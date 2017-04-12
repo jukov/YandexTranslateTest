@@ -154,6 +154,21 @@ public class DatabaseManager {
 		notifyFavoritesDeleted();
 	}
 
+	public void deleteTranslation(@NonNull final Translation translation) {
+		Guard.checkNotNull(translation, "null == translation");
+		translationDao.delete(translation);
+
+		notifyTranslateDeleted(translation);
+	}
+
+	private void notifyTranslateDeleted(@NonNull final Translation translation) {
+		for (final DatabaseListener listener : listenerList) {
+			if (listener != null) {
+				listener.onTranslateDeleted(translation);
+			}
+		}
+	}
+
 	private void notifyTranslateProcessed(@NonNull final Translation translation) {
 		for (final DatabaseListener listener : listenerList) {
 			if (listener != null) {
@@ -181,6 +196,8 @@ public class DatabaseManager {
 	public interface DatabaseListener {
 
 		void onTranslateProcessed(final Translation translation);
+
+		void onTranslateDeleted(final Translation translation);
 
 		void onHistoryDeleted();
 

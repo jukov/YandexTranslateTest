@@ -33,6 +33,11 @@ public final class FavoritesPresenter extends MvpPresenter<FavoritesView> implem
 	}
 
 	@Override
+	public void onTranslateDeleted(final Translation translation) {
+		getViewState().onDeleteFavorite(translation);
+	}
+
+	@Override
 	public void onFavoritesDeleted() {
 		getViewState().deleteFavorites();
 	}

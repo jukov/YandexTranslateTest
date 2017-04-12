@@ -16,5 +16,7 @@ public interface FavoritesView extends MvpView {
 
 	void onNewFavorite(Translation translation);
 
+	void onDeleteFavorite(Translation translation);
+
 	void deleteFavorites();
 }

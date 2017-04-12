@@ -24,8 +24,7 @@ import java.util.List;
 
 public final class FavoritesFragment extends BaseTranslationsListFragment implements FavoritesView {
 
-	@InjectPresenter FavoritesPresenter presenter;
-
+	@InjectPresenter FavoritesPresenter favoritesPresenter;
 
 	public static FavoritesFragment newInstance() {
 		FavoritesFragment fragment = new FavoritesFragment();
@@ -51,6 +50,11 @@ public final class FavoritesFragment extends BaseTranslationsListFragment implem
 	@Override
 	public void onNewFavorite(final Translation translation) {
 		adapter.processTranslation(translation);
+	}
+
+	@Override
+	public void onDeleteFavorite(final Translation translation) {
+		adapter.deleteTranslation(translation);
 	}
 
 	@Override

@@ -33,6 +33,11 @@ public final class HistoryPresenter extends MvpPresenter<HistoryView> implements
 	}
 
 	@Override
+	public void onTranslateDeleted(final Translation translation) {
+		getViewState().onDeleteTranslation(translation);
+	}
+
+	@Override
 	public void onHistoryDeleted() {
 		getViewState().onHistoryDeleted();
 	}

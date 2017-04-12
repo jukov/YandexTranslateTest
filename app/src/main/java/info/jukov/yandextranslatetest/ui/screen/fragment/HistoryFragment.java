@@ -22,7 +22,7 @@ import java.util.List;
 
 public final class HistoryFragment extends BaseTranslationsListFragment implements HistoryView {
 
-	@InjectPresenter HistoryPresenter presenter;
+	@InjectPresenter HistoryPresenter historyPresenter;
 
 	public static HistoryFragment newInstance() {
 		HistoryFragment fragment = new HistoryFragment();
@@ -48,6 +48,11 @@ public final class HistoryFragment extends BaseTranslationsListFragment implemen
 	@Override
 	public void onNewTranslation(final Translation translation) {
 		adapter.processTranslation(translation);
+	}
+
+	@Override
+	public void onDeleteTranslation(final Translation translation) {
+		adapter.deleteTranslation(translation);
 	}
 
 	@Override

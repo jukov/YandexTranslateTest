@@ -16,4 +16,5 @@ public interface TranslationListHolder {
 	 * */
 	void viewFullTranslation(Translation translation);
 
+	void onLongItemClick(Translation translation);
 }
