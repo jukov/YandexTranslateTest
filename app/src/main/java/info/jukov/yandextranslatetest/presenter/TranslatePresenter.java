@@ -124,12 +124,11 @@ public final class TranslatePresenter extends MvpPresenter<TranslateView> implem
 		getViewState().setOutputLangs(outputLangs);
 	}
 
-	public void onTranslateClick(@NonNull final String lang, @NonNull final String text, @NonNull final Progressable progressable) {
+	public void onTranslate(@NonNull final String lang, @NonNull final String text, @NonNull final Progressable progressable) {
 		Guard.checkNotNull(lang, "null == lang");
 		Guard.checkNotNull(text, "null == text");
 		Guard.checkNotNull(progressable, "null == progressable");
 
-		getViewState().hideKeyboard();
 		translate(lang, text, progressable);
 	}
 

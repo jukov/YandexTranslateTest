@@ -129,8 +129,7 @@ public final class LanguageAdapter extends BaseAdapter {
 
 		final List<Language> mostUsedLanguages = new ArrayList<>(MOST_USED_ITEM_COUNT);
 
-		for (int i = 0; i < (languages.size() > MOST_USED_ITEM_COUNT ?
-			MOST_USED_ITEM_COUNT : languages.size()); i++) {
+		for (int i = 0; i < (languages.size() > MOST_USED_ITEM_COUNT ? MOST_USED_ITEM_COUNT : languages.size()); i++) {
 
 			final Language language = languages.get(i);
 
@@ -146,7 +145,7 @@ public final class LanguageAdapter extends BaseAdapter {
 
 	/**
 	 * @return индекс языка по его коду. Если язык не найден, возвращает -1.
-	 * */
+	 */
 	public int getPosition(@NonNull final String langCode) {
 		Guard.checkNotNull(langCode, "null == langCode");
 

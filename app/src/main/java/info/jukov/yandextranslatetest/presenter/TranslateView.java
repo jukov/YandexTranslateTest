@@ -47,11 +47,6 @@ public interface TranslateView extends MvpView {
 	void onLoadFailed(int errorCode);
 
 	/**
-	 * Скрывает клавиатуру.
-	 */
-	void hideKeyboard();
-
-	/**
 	 * Меняет местами языки ввода и вывода.
 	 */
 	void swapLang();

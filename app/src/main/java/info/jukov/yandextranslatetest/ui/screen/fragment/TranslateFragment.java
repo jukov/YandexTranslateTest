@@ -2,6 +2,8 @@ package info.jukov.yandextranslatetest.ui.screen.fragment;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -58,6 +60,10 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 	private static final Log LOG = new Log(TranslateFragment.class);
 
 	private static final String LANG_DELIMITER = "-";
+
+	private static final int HANDLER_MESSAGE_TRANSLATE = 1000;
+
+	private static final int TRANSLATE_DELAY = 1000;
 
 	@InjectPresenter TranslatePresenter presenter;
 
@@ -126,20 +132,37 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 		editTextTranslatable.setOnEditorActionListener(new OnEditorActionListener() {
 			@Override
 			public boolean onEditorAction(final TextView v, final int actionId, final KeyEvent event) {
-				presenter.onTranslateClick(getLangForServer(), getTranslatableText(), TranslateFragment.this);
+				presenter.onTranslate(getLangForServer(), getTranslatableText(), TranslateFragment.this);
 
 				return true;
 			}
 		});
+
+		final Handler handler = new Handler() {
+			@Override
+			public void handleMessage(final Message msg) {
+				if (msg.what == HANDLER_MESSAGE_TRANSLATE) {
+					presenter.onTranslate(getLangForServer(), getTranslatableText(), TranslateFragment.this);
+				}
+			}
+		};
 
 		editTextTranslatable.addTextChangedListener(new TextWatcher() {
 			@Override public void onTextChanged(final CharSequence s, final int start, final int before, final int count) {
 				updateLetterCounter(s.length());
 			}
 
+			@Override public void afterTextChanged(final Editable s) {
+				handler.removeMessages(HANDLER_MESSAGE_TRANSLATE);
+				if (s.length() >= 3) {
+					handler.sendEmptyMessageDelayed(HANDLER_MESSAGE_TRANSLATE, TRANSLATE_DELAY);
+				}
+			}
+
 			@Override public void beforeTextChanged(final CharSequence s, final int start, final int count, final int after) {}
-			@Override public void afterTextChanged(final Editable s) {}
 		});
+
+
 
 		textViewCopyright.setText(Html.fromHtml(getString(R.string.translateFragment_copyright)));
 		textViewCopyright.setMovementMethod(LinkMovementMethod.getInstance());
@@ -173,7 +196,8 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 
 	@OnClick(R.id.buttonTranslate)
 	void onTranslateClick() {
-		presenter.onTranslateClick(getLangForServer(), getTranslatableText(), this);
+		KeyboardUtils.hideSoftInput(getActivity());
+		presenter.onTranslate(getLangForServer(), getTranslatableText(), this);
 	}
 
 	@OnClick(R.id.buttonFavorite)
@@ -208,7 +232,9 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 			containerDictResult.setVisibility(View.GONE);
 		}
 
-		editTextTranslatable.setText(translation.getText());
+		if (!editTextTranslatable.getText().toString().equals(translation.getText())) {
+			editTextTranslatable.setText(translation.getText());
+		}
 
 		final int inputPosition = inputSpinnerAdapter.getPosition(StringUtils.formatInputLang(translation.getLang()));
 		if (inputPosition != -1) {
@@ -262,11 +288,6 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 	}
 
 	@Override
-	public void hideKeyboard() {
-		KeyboardUtils.hideSoftInput(getActivity());
-	}
-
-	@Override
 	public void swapLang() {
 		final String inputLangCode = inputSpinnerAdapter.getItem(spinnerInputLanguage.getSelectedItemPosition());
 		final String ontputLangCode = outputSpinnerAdapter.getItem(spinnerOutputLanguage.getSelectedItemPosition());
@@ -311,6 +332,10 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 	public void startProgress() {
 		progressBar.setVisibility(View.VISIBLE);
 
+		textViewTranslated.setText("");
+		textViewDict.setText("");
+		containerDictResult.removeAllViews();
+
 		setContentEnabled(false);
 
 		progressableTasksCount++;
@@ -343,10 +368,12 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 		buttonTranslate.setEnabled(enabled);
 		buttonFavorite.setEnabled(enabled);
 
-		if (enabled) {
-			DrawableCompat.setTint(buttonFavorite.getDrawable(), ContextCompat.getColor(getContext(), R.color.colorAccent));
-		} else {
-			DrawableCompat.setTint(buttonFavorite.getDrawable(), ContextCompat.getColor(getContext(), R.color.favoriteDisabled));
+		if (getContext() != null) {
+			if (enabled) {
+				DrawableCompat.setTint(buttonFavorite.getDrawable(), ContextCompat.getColor(getContext(), R.color.colorAccent));
+			} else {
+				DrawableCompat.setTint(buttonFavorite.getDrawable(), ContextCompat.getColor(getContext(), R.color.favoriteDisabled));
+			}
 		}
 	}
 

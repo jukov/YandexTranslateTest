@@ -51,9 +51,9 @@ public final class LangPreferences {
 	/**
 	 * Записывает в {@link SharedPreferences} названия поддерживаемых языков
 	 * в виде строки "xx-NNNN", где xx - двухбуквенный код языка, NNNN - читаемое название языка.
-	 * */
+	 */
 	public static void putReadebleLangWords(@NonNull final Context context,
-											@NonNull final Map<String, String> words) {
+		@NonNull final Map<String, String> words) {
 		Guard.checkNotNull(words, "null == words");
 
 		final Set<String> packedLangs = new HashSet<>();
@@ -70,7 +70,7 @@ public final class LangPreferences {
 
 	/**
 	 * Возвращает поддерживаемые языки в виде набора объектов {@link Language}
-	 * */
+	 */
 	@Nullable
 	public static Set<Language> getReadableWords(@NonNull final Context context) {
 
@@ -97,9 +97,9 @@ public final class LangPreferences {
 
 	/**
 	 * Записывает в {@link SharedPreferences} пары языков, которые поддерживаются Api словаря.
-	 * */
+	 */
 	public static void putDictLangs(@NonNull final Context context,
-									@NonNull final Set<String> langs) {
+		@NonNull final Set<String> langs) {
 		Guard.checkNotNull(langs, "null == langs");
 
 		getPreferences(context).edit().putStringSet(DICT_LANGS, langs).commit();
@@ -107,7 +107,7 @@ public final class LangPreferences {
 
 	/**
 	 * Возвращает пары языков, которые поддерживаются Api словаря.
-	 * */
+	 */
 	@Nullable
 	public static Set<String> getDictLangs(@NonNull final Context context) {
 		return getPreferences(context).getStringSet(DICT_LANGS, null);
@@ -115,9 +115,9 @@ public final class LangPreferences {
 
 	/**
 	 * Записывает в {@link SharedPreferences} пары языков, которые поддерживаются Api переводчика.
-	 * */
+	 */
 	public static void putTranslateLangs(@NonNull final Context context,
-										 @NonNull final Set<String> langs) {
+		@NonNull final Set<String> langs) {
 		Guard.checkNotNull(langs, "null == langs");
 
 		getPreferences(context).edit().putStringSet(TRANSLATE_LANGS, langs).commit();
@@ -125,7 +125,7 @@ public final class LangPreferences {
 
 	/**
 	 * Возвращает пары языков, которые поддерживаются Api переводчика.
-	 * */
+	 */
 	@Nullable
 	public static Set<String> getTranslateLangs(@NonNull final Context context) {
 		return getPreferences(context).getStringSet(TRANSLATE_LANGS, null);
@@ -174,14 +174,12 @@ public final class LangPreferences {
 			serializedLangs.add(JsonUtils.serialize(language));
 		}
 
-		getPreferences(context).edit().putStringSet(key, serializedLangs)
-			.commit();
+		getPreferences(context).edit().putStringSet(key, serializedLangs).commit();
 	}
 
 	private static Set<Language> getMostUsedLangs(@NonNull final Context context, @NonNull final String key) {
 
-		Set<String> serializedLangs = getPreferences(context)
-			.getStringSet(key, null);
+		Set<String> serializedLangs = getPreferences(context).getStringSet(key, null);
 
 		if (serializedLangs == null) {
 			return null;
