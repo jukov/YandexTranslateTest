@@ -22,7 +22,7 @@ public final class HistoryPresenter extends MvpPresenter<HistoryView> implements
 	protected void onFirstViewAttach() {
 		TranslateApp.getAppComponent().inject(this);
 
-		getViewState().onTranslationsFromDatabase(databaseModule.getDatabaseManager().getTranslationList());
+		getViewState().onHistoryFromDatabase(databaseModule.getDatabaseManager().getTranslationList());
 
 		databaseModule.getDatabaseManager().addOnTranslateAddedListener(this);
 	}

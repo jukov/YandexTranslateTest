@@ -2,6 +2,7 @@ package info.jukov.yandextranslatetest.ui.screen.fragment;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnShowListener;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -67,6 +68,14 @@ public class BaseTranslationsListFragment extends MvpAppCompatFragment implement
 	}
 
 	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		if (currentDialog != null) {
+			currentDialog.dismiss();
+		}
+	}
+
+	@Override
 	public void onDataSetChange(final int currentSize) {
 		if (currentSize == 0) {
 			switchUiToEmptySplash();
@@ -113,6 +122,14 @@ public class BaseTranslationsListFragment extends MvpAppCompatFragment implement
 						translationListPresenter.closeDialog();
 					}
 				});
+			}
+		});
+
+		currentDialog.setOnCancelListener(new OnCancelListener() {
+			@Override
+			public void onCancel(final DialogInterface dialog) {
+				translationListPresenter.closeDialog();
+				LOG.info("dismiss");
 			}
 		});
 

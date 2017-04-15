@@ -1,10 +1,12 @@
 package info.jukov.yandextranslatetest.presenter;
 
 import com.arellomobile.mvp.MvpView;
+import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy;
 import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 import info.jukov.yandextranslatetest.model.storage.Language;
 import info.jukov.yandextranslatetest.model.storage.dao.Translation;
+import info.jukov.yandextranslatetest.util.strategy.AddToStartSingleStrategy;
 import java.util.Set;
 
 /**
@@ -18,6 +20,7 @@ public interface TranslateView extends MvpView {
 	/**
 	 * Отображает перевод.
 	 */
+	@StateStrategyType(AddToEndSingleStrategy.class)
 	void onTranslation(Translation translation);
 
 	/**
@@ -37,6 +40,7 @@ public interface TranslateView extends MvpView {
 	 *
 	 * @param added содержит информацию о статусе. Если true, перевод добавлен в избранное.
 	 */
+	@StateStrategyType(AddToEndSingleStrategy.class)
 	void onFavoritesAction(boolean added);
 
 	/**
@@ -44,11 +48,13 @@ public interface TranslateView extends MvpView {
 	 *
 	 * @param errorCode тип ошибки.
 	 */
+	@StateStrategyType(AddToEndSingleStrategy.class)
 	void onLoadFailed(int errorCode);
 
 	/**
 	 * Меняет местами языки ввода и вывода.
 	 */
+	@StateStrategyType(AddToEndSingleStrategy.class)
 	void swapLang();
 
 	/**
@@ -68,16 +74,19 @@ public interface TranslateView extends MvpView {
 	/**
 	 * Задает список языков ввода.
 	 */
+	@StateStrategyType(AddToStartSingleStrategy.class)
 	void setInputLangs(Set<Language> inputLangs);
 
 	/**
 	 * Задает список языков вывода.
 	 */
+	@StateStrategyType(AddToStartSingleStrategy.class)
 	void setOutputLangs(Set<Language> outputLangs);
 
 	/**
 	 * Закрывает диалог.
 	 */
+	@StateStrategyType(AddToEndSingleStrategy.class)
 	void closeDialog();
 
 	/**

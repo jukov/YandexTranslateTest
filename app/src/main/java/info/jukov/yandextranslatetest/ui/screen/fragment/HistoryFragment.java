@@ -41,7 +41,7 @@ public final class HistoryFragment extends BaseTranslationsListFragment implemen
 	}
 
 	@Override
-	public void onTranslationsFromDatabase(final List<Translation> translationList) {
+	public void onHistoryFromDatabase(final List<Translation> translationList) {
 		adapter.setTranslations(translationList);
 	}
 

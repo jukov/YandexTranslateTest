@@ -12,11 +12,23 @@ import java.util.List;
 
 public interface FavoritesView extends MvpView {
 
+	/**
+	 * Отображает избраенные переводы из базы данных.
+	 */
 	void onFavoritesFromDatabase(List<Translation> translationList);
 
+	/**
+	 * Отображает новый избранный перевод.
+	 */
 	void onNewFavorite(Translation translation);
 
+	/**
+	 * Удаляет избранный перевод.
+	 */
 	void onDeleteFavorite(Translation translation);
 
+	/**
+	 * Удаляет все избранные переводы.
+	 */
 	void deleteFavorites();
 }
