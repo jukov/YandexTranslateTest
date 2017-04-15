@@ -60,4 +60,16 @@
 		<item name="android:textColor">@color/text_all_black54</item>
 	</style>
 
+	<style name="TextSubheading.Bold">
+		<item name="android:textSize">@dimen/textsize_subheading</item>
+		<item name="android:textColor">@color/text_all_black87</item>
+		<item name="android:textStyle">bold</item>
+	</style>
+
+	<style name="TextTitle.Bold">
+		<item name="android:textSize">@dimen/textsize_title</item>
+		<item name="android:textColor">@color/text_all_black87</item>
+		<item name="android:textStyle">bold</item>
+	</style>
+
 </resources>
