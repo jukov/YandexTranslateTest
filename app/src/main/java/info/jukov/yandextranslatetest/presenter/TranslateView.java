@@ -3,6 +3,7 @@ package info.jukov.yandextranslatetest.presenter;
 import com.arellomobile.mvp.MvpView;
 import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy;
 import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy;
+import com.arellomobile.mvp.viewstate.strategy.SkipStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 import info.jukov.yandextranslatetest.model.storage.Language;
 import info.jukov.yandextranslatetest.model.storage.dao.Translation;
@@ -54,7 +55,7 @@ public interface TranslateView extends MvpView {
 	/**
 	 * Меняет местами языки ввода и вывода.
 	 */
-	@StateStrategyType(AddToEndSingleStrategy.class)
+	@StateStrategyType(SkipStrategy.class)
 	void swapLang();
 
 	/**
@@ -62,6 +63,7 @@ public interface TranslateView extends MvpView {
 	 *
 	 * @param position позиция языка в спиннере
 	 */
+	@StateStrategyType(SkipStrategy.class)
 	void selectInputLang(int position);
 
 	/**
@@ -69,6 +71,7 @@ public interface TranslateView extends MvpView {
 	 *
 	 * @param position позиция языка в спиннере
 	 */
+	@StateStrategyType(SkipStrategy.class)
 	void selectOutputLang(int position);
 
 	/**

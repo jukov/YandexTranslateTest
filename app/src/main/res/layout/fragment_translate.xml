@@ -29,8 +29,8 @@
 				android:layout_height="wrap_content"
 				android:orientation="horizontal">
 
-				<Spinner
-					android:id="@+id/spinnerInputLanguage"
+				<info.jukov.yandextranslatetest.ui.DropdownView
+					android:id="@+id/dropdownViewInputLang"
 					android:layout_width="match_parent"
 					android:layout_height="@dimen/height_spinnerLang"
 					android:layout_weight="1"/>
@@ -55,8 +55,8 @@
 					android:layout_height="match_parent"
 					android:background="@color/divider_black12"/>
 
-				<Spinner
-					android:id="@+id/spinnerOutputLanguage"
+				<info.jukov.yandextranslatetest.ui.DropdownView
+					android:id="@+id/dropdownViewOutputLang"
 					android:layout_width="match_parent"
 					android:layout_height="@dimen/height_spinnerLang"
 					android:layout_weight="1"/>

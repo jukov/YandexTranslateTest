@@ -38,7 +38,7 @@ public final class LanguageAdapter extends BaseAdapter {
 	 * В начало списка попадают объекты с {@link Language#getMostUsedPriority()} больше нуля,
 	 * затем все остальные объекты по {@link Language#getReadableLangWord()} в алфивитном порядке.
 	 */
-	private static final Comparator<Language> mostUsedcomparator = new Comparator<Language>() {
+	private static final Comparator<Language> MOST_USED_COMPARATOR = new Comparator<Language>() {
 		//В данной ситуации переполнение int невозможно на практике
 		@SuppressWarnings("SubtractionInCompareTo")
 		@Override
@@ -65,7 +65,7 @@ public final class LanguageAdapter extends BaseAdapter {
 
 		this.languages = new ArrayList<>(languages);
 
-		Collections.sort(this.languages, mostUsedcomparator);
+		Collections.sort(this.languages, MOST_USED_COMPARATOR);
 
 		inflater = LayoutInflater.from(context);
 	}
@@ -78,7 +78,7 @@ public final class LanguageAdapter extends BaseAdapter {
 	 */
 	public boolean pinItemToTop(@NonNull final String code) {
 		Guard.checkNotNull(code, "null == code");
-		Guard.checkPreCondition(code.length() == 2, "Code must contain exactly two letters");
+		Guard.checkPreCondition(code.length() >= 2 && code.length() <= 3, "Code must contain only two or three letters");
 
 		for (int i = 0; i < languages.size(); i++) {
 			if (languages.get(i).getCode().equals(code)) {
@@ -165,8 +165,8 @@ public final class LanguageAdapter extends BaseAdapter {
 	}
 
 	@Override
-	public String getItem(final int position) {
-		return languages.get(position).getCode();
+	public Language getItem(final int position) {
+		return languages.get(position);
 	}
 
 	@Override
@@ -183,7 +183,7 @@ public final class LanguageAdapter extends BaseAdapter {
 		if (view != null) {
 			viewHolder = (ViewHolder) view.getTag();
 		} else {
-			view = inflater.inflate(R.layout.component_spinner_item_lang, parent, false);
+			view = inflater.inflate(R.layout.component_lang_item_text, parent, false);
 			viewHolder = new ViewHolder(view);
 			view.setTag(viewHolder);
 		}
