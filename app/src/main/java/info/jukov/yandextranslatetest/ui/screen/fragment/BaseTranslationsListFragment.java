@@ -1,5 +1,7 @@
 package info.jukov.yandextranslatetest.ui.screen.fragment;
 
+import android.animation.Animator;
+import android.animation.Animator.AnimatorListener;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
@@ -64,6 +66,8 @@ public abstract class BaseTranslationsListFragment extends MvpAppCompatFragment 
 
 	private Dialog currentDialog = null;
 
+	private int animationDuration;
+
 	@Nullable @Override
 	public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container,
 		@Nullable final Bundle savedInstanceState) {
@@ -72,6 +76,8 @@ public abstract class BaseTranslationsListFragment extends MvpAppCompatFragment 
 		TranslateApp.getAppComponent().inject(this);
 
 		searchView.setOnQueryTextListener(this);
+
+		animationDuration = getContext().getResources().getInteger(android.R.integer.config_shortAnimTime);
 
 		return view;
 	}
@@ -184,13 +190,61 @@ public abstract class BaseTranslationsListFragment extends MvpAppCompatFragment 
 	protected abstract List<Translation> getTranslations();
 
 	private void switchUiToEmptySplash() {
+		textViewEmptyList.setAlpha(0.0f);
 		textViewEmptyList.setVisibility(View.VISIBLE);
-		containerTranslations.setVisibility(View.GONE);
+
+		textViewEmptyList.animate()
+			.alpha(1.0f)
+			.setDuration(animationDuration)
+			.setListener(null);
+
+		containerTranslations.animate()
+			.alpha(0.0f)
+			.setDuration(animationDuration)
+			.setListener(new AnimatorListener() {
+				@Override
+				public void onAnimationEnd(final Animator animation) {
+					containerTranslations.setVisibility(View.GONE);
+				}
+
+				@Override public void onAnimationStart(final Animator animation) { }
+				@Override public void onAnimationCancel(final Animator animation) { }
+				@Override public void onAnimationRepeat(final Animator animation) { }
+			});
 	}
 
 	private void switchUiToList() {
-		textViewEmptyList.setVisibility(View.GONE);
-		containerTranslations.setVisibility(View.VISIBLE);
+		if (containerTranslations.getVisibility() != View.VISIBLE) {
+			containerTranslations.setAlpha(0.0f);
+			containerTranslations.setVisibility(View.VISIBLE);
+
+			containerTranslations.animate()
+				.alpha(1.0f)
+				.setDuration(animationDuration)
+				.setListener(null);
+
+			textViewEmptyList.animate()
+				.alpha(0.0f)
+				.setDuration(animationDuration)
+				.setListener(new AnimatorListener() {
+					@Override
+					public void onAnimationEnd(final Animator animation) {
+						textViewEmptyList.setVisibility(View.GONE);
+					}
+
+					@Override
+					public void onAnimationStart(final Animator animation) {
+					}
+
+					@Override
+					public void onAnimationCancel(final Animator animation) {
+					}
+
+					@Override
+					public void onAnimationRepeat(final Animator animation) {
+					}
+				});
+		}
 	}
 
 }

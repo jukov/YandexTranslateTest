@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
@@ -79,6 +80,7 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 	@BindView(R.id.textViewDict) TextView textViewDict;
 	@BindView(R.id.textViewCopyright) TextView textViewCopyright;
 	@BindView(R.id.containerDictResult) LinearLayout containerDictResult;
+	@BindView(R.id.containerTranslateResult) NestedScrollView containerTranslateResult;
 	@BindView(R.id.progressBar) ProgressBar progressBar;
 
 	private LanguageAdapter inputSpinnerAdapter;
@@ -166,7 +168,8 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 			}
 
 			@Override
-			public void beforeTextChanged(final CharSequence s, final int start, final int count, final int after) {}
+			public void beforeTextChanged(final CharSequence s, final int start, final int count, final int after) {
+			}
 		});
 
 		textViewCopyright.setText(Html.fromHtml(getString(R.string.translateFragment_copyright)));
@@ -227,6 +230,8 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 
 	@Override
 	public void onTranslation(@NonNull final Translation translation) {
+
+		containerTranslateResult.scrollTo(0, 0);
 
 		textViewTranslated.setText(translation.getTranslateResponse());
 
