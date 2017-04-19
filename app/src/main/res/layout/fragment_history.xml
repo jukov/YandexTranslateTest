@@ -1,23 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
-	android:orientation="vertical"
 	android:layout_width="match_parent"
-	android:layout_height="match_parent">
+	android:layout_height="match_parent"
+	android:orientation="vertical">
 
-	<android.support.v7.widget.RecyclerView
-		android:id="@+id/recyclerViewHistory"
+	<LinearLayout
+		android:id="@+id/containerTranslations"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
-		android:visibility="gone"/>
+		android:orientation="vertical">
+
+		<android.support.design.widget.AppBarLayout
+			android:id="@+id/containerInput"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:background="@color/background_white50"
+			android:stateListAnimator="@animator/appbar_elevated"
+			app:layout_scrollFlags="scroll">
+
+			<android.support.v7.widget.SearchView
+				android:id="@+id/searchView"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				app:iconifiedByDefault="false"/>
+
+		</android.support.design.widget.AppBarLayout>
+
+		<android.support.v7.widget.RecyclerView
+			android:id="@+id/recyclerViewHistory"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"/>
+
+	</LinearLayout>
 
 	<TextView
 		android:id="@+id/textViewEmptyList"
+		style="@style/TextHeadline.Transparent"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
-		android:padding="@dimen/space_all_screenPadding"
 		android:gravity="center"
-		tools:text="@string/historyFragment_textViewEmptyList"
-		style="@style/TextHeadline.Transparent"/>
-	
+		android:padding="@dimen/space_all_screenPadding"
+		tools:text="@string/historyFragment_textViewEmptyList"/>
+
 </LinearLayout>

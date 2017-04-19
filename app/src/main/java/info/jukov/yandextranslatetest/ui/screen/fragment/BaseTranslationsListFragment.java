@@ -9,11 +9,14 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.SearchView.OnQueryTextListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,6 +35,8 @@ import info.jukov.yandextranslatetest.ui.base.TranslationListHolder;
 import info.jukov.yandextranslatetest.util.Guard;
 import info.jukov.yandextranslatetest.util.Log;
 import info.jukov.yandextranslatetest.util.OsUtils;
+import java.util.ArrayList;
+import java.util.List;
 import javax.inject.Inject;
 
 /**
@@ -40,8 +45,8 @@ import javax.inject.Inject;
  * Time: 23:23
  */
 
-public class BaseTranslationsListFragment extends MvpAppCompatFragment implements TranslationListView, OnDataSetChangedListener,
-																				  TranslationListHolder {
+public abstract class BaseTranslationsListFragment extends MvpAppCompatFragment implements TranslationListView, OnQueryTextListener,
+																				  OnDataSetChangedListener, TranslationListHolder {
 
 	private static final Log LOG = new Log(BaseTranslationsListFragment.class);
 
@@ -49,6 +54,8 @@ public class BaseTranslationsListFragment extends MvpAppCompatFragment implement
 
 	@BindView(R.id.recyclerViewHistory) RecyclerView recyclerViewHistory;
 	@BindView(R.id.textViewEmptyList) TextView textViewEmptyList;
+	@BindView(R.id.searchView) SearchView searchView;
+	@BindView(R.id.containerTranslations) LinearLayout containerTranslations;
 
 	@Inject DatabaseModule databaseModule;
 	@Inject TransferModule transferModule;
@@ -63,6 +70,8 @@ public class BaseTranslationsListFragment extends MvpAppCompatFragment implement
 		View view = inflater.inflate(R.layout.fragment_history, null);
 		ButterKnife.bind(this, view);
 		TranslateApp.getAppComponent().inject(this);
+
+		searchView.setOnQueryTextListener(this);
 
 		return view;
 	}
@@ -146,14 +155,42 @@ public class BaseTranslationsListFragment extends MvpAppCompatFragment implement
 		}
 	}
 
+	@Override
+	public boolean onQueryTextChange(final String newText) {
+		final List<Translation> filteredTranslations = filter(getTranslations(), newText);
+		adapter.replaceAll(filteredTranslations);
+		recyclerViewHistory.scrollToPosition(0);
+		return true;
+	}
+
+	@Override
+	public boolean onQueryTextSubmit(final String query) {
+		return false;
+	}
+
+	private static List<Translation> filter(final List<Translation> translations, final String rawQuery) {
+		final String query = rawQuery.toLowerCase();
+
+		final List<Translation> filteredTranslations = new ArrayList<>();
+		for (final Translation translation : translations) {
+			if (translation.getText().toLowerCase().contains(query) || translation.getTranslateResponse().toLowerCase().contains(query)) {
+				filteredTranslations.add(translation);
+			}
+		}
+
+		return filteredTranslations;
+	}
+
+	protected abstract List<Translation> getTranslations();
+
 	private void switchUiToEmptySplash() {
 		textViewEmptyList.setVisibility(View.VISIBLE);
-		recyclerViewHistory.setVisibility(View.GONE);
+		containerTranslations.setVisibility(View.GONE);
 	}
 
 	private void switchUiToList() {
 		textViewEmptyList.setVisibility(View.GONE);
-		recyclerViewHistory.setVisibility(View.VISIBLE);
+		containerTranslations.setVisibility(View.VISIBLE);
 	}
 
 }

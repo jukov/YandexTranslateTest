@@ -21,6 +21,27 @@ import java.util.List;
  */
 public class DatabaseManager {
 
+	public static final Comparator<Translation> TRANSLATION_COMPARATOR = new Comparator<Translation>() {
+		@Override
+		public int compare(final Translation o1, final Translation o2) {
+			if (o1.get_id() == null) {
+				return 1;
+			}
+
+			if (o2.get_id() == null) {
+				return -1;
+			}
+
+			if (o1.get_id() > o2.get_id()) {
+				return -1;
+			} else if (o1.get_id() < o2.get_id()) {
+				return 1;
+			} else {
+				return 0;
+			}
+		}
+	};
+
 	private static final Log LOG = new Log(DatabaseManager.class);
 
 	private final TranslationDao translationDao;
@@ -37,26 +58,7 @@ public class DatabaseManager {
 		translationList = new ArrayList<>(translationDao.loadAll());
 
 		//Сортировка по возрастанию id (больше id - младше перевод)
-		Collections.sort(translationList, new Comparator<Translation>() {
-			@Override
-			public int compare(final Translation o1, final Translation o2) {
-				if (o1.get_id() == null) {
-					return 1;
-				}
-
-				if (o2.get_id() == null) {
-					return -1;
-				}
-
-				if (o1.get_id() > o2.get_id()) {
-					return -1;
-				} else if (o1.get_id() < o2.get_id()) {
-					return 1;
-				} else {
-					return 0;
-				}
-			}
-		});
+		Collections.sort(translationList, TRANSLATION_COMPARATOR);
 
 		listenerList = new ArrayList<>();
 	}
@@ -146,17 +148,18 @@ public class DatabaseManager {
 	}
 
 	public void deleteHistory() {
-		translationDao.queryBuilder()
-			.where(TranslationDao.Properties.IsFavorite.eq(Boolean.FALSE))
-			.buildDelete().executeDeleteWithoutDetachingEntities();
+		translationDao.deleteAll();
+
+		translationList.clear();
 
 		notifyHistoryDeleted();
 	}
 
 	public void deleteFavorites() {
-		translationDao.queryBuilder()
-			.where(TranslationDao.Properties.IsFavorite.eq(Boolean.TRUE))
-			.buildDelete().executeDeleteWithoutDetachingEntities();
+
+		for (final Translation translation : translationList) {
+			translation.setIsFavorite(false);
+		}
 
 		notifyFavoritesDeleted();
 	}
@@ -164,6 +167,8 @@ public class DatabaseManager {
 	public void deleteTranslation(@NonNull final Translation translation) {
 		Guard.checkNotNull(translation, "null == translation");
 		translationDao.delete(translation);
+
+		translationList.remove(translation);
 
 		notifyTranslateDeleted(translation);
 	}

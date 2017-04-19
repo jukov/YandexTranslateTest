@@ -2,6 +2,8 @@ package info.jukov.yandextranslatetest.model.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.util.SortedList;
+import android.support.v7.util.SortedList.Callback;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +21,6 @@ import info.jukov.yandextranslatetest.model.storage.dao.Translation;
 import info.jukov.yandextranslatetest.ui.base.TranslationListHolder;
 import info.jukov.yandextranslatetest.util.Guard;
 import info.jukov.yandextranslatetest.util.StringUtils;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,7 +32,49 @@ import java.util.List;
  */
 public abstract class AbstractTranslateHistoryAdapter<VH extends ViewHolder> extends RecyclerView.Adapter<VH> {
 
-	private final List<Translation> translationList;
+	private final SortedList<Translation> translationList = new SortedList<Translation>(Translation.class, new Callback<Translation>() {
+
+		@Override
+		public int compare(final Translation o1, final Translation o2) {
+			return DatabaseManager.TRANSLATION_COMPARATOR.compare(o1, o2);
+		}
+
+		@Override
+		public void onChanged(final int position, final int count) {
+			notifyItemRangeChanged(position, count);
+		}
+
+		@Override
+		public boolean areContentsTheSame(final Translation oldItem, final Translation newItem) {
+			return oldItem.equals(newItem);
+		}
+
+		@Override
+		public boolean areItemsTheSame(final Translation item1, final Translation item2) {
+
+			if (item1.get_id() == null || item2.get_id() == null) {
+				return false;
+			}
+
+			return item1.get_id().equals(item2.get_id());
+		}
+
+		@Override
+		public void onInserted(final int position, final int count) {
+			notifyItemRangeInserted(position, count);
+		}
+
+		@Override
+		public void onRemoved(final int position, final int count) {
+			notifyItemRangeRemoved(position, count);
+		}
+
+		@Override
+		public void onMoved(final int fromPosition, final int toPosition) {
+			notifyItemMoved(fromPosition, toPosition);
+		}
+	});
+
 	private final LayoutInflater inflater;
 	private final DatabaseManager databaseManager;
 	private final TranslationListHolder translationListHolder;
@@ -49,15 +92,13 @@ public abstract class AbstractTranslateHistoryAdapter<VH extends ViewHolder> ext
 		this.dataSetChangedListener = dataSetChangedListener;
 		this.translationListHolder = translationListHolder;
 		this.databaseManager = databaseManager;
-
-		translationList = new ArrayList<>();
 	}
 
 	public OnDataSetChangedListener getDataSetChangedListener() {
 		return dataSetChangedListener;
 	}
 
-	public List<Translation> getTranslationList() {
+	protected SortedList<Translation> getTranslationList() {
 		return translationList;
 	}
 
@@ -80,7 +121,6 @@ public abstract class AbstractTranslateHistoryAdapter<VH extends ViewHolder> ext
 
 		this.translationList.addAll(translationList);
 
-		notifyDataSetChanged();
 		getDataSetChangedListener().onDataSetChange(getItemCount());
 	}
 
@@ -89,10 +129,21 @@ public abstract class AbstractTranslateHistoryAdapter<VH extends ViewHolder> ext
 		final int itemPosition = translationList.indexOf(translation);
 
 		if (itemPosition != -1) {
-			translationList.remove(itemPosition);
-			notifyItemRemoved(itemPosition);
+			translationList.remove(translation);
 			getDataSetChangedListener().onDataSetChange(getItemCount());
 		}
+	}
+
+	public void replaceAll(final List<Translation> translations) {
+		translationList.beginBatchedUpdates();
+		for (int i = translationList.size() - 1; i >= 0; i--) {
+			final Translation model = translationList.get(i);
+			if (!translations.contains(model)) {
+				translationList.remove(model);
+			}
+		}
+		translationList.addAll(translations);
+		translationList.endBatchedUpdates();
 	}
 
 	public abstract void processTranslation(final Translation translation);

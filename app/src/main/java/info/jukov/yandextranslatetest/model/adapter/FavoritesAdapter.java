@@ -40,24 +40,21 @@ public final class FavoritesAdapter extends AbstractTranslateHistoryAdapter<Favo
 
 				LOG.verbose("Updated; Size: " + getTranslationList().size() + "; Text: " + translation.getText());
 
-				notifyItemChanged(itemIndex);
 				getDataSetChangedListener().onDataSetChange(getItemCount());
 
 				LOG.verbose("Updated; Size: " + getTranslationList().size() + "; Text: " + translation.getText());
 
 			} else {
-				getTranslationList().add(0, translation);
+				getTranslationList().add(translation);
 
-				notifyDataSetChanged();
 				getDataSetChangedListener().onDataSetChange(getItemCount());
 
 				LOG.verbose("Added; Size: " + getTranslationList().size() + "; Text: " + translation.getText());
 			}
 		} else {
 			if (itemIndex != -1) {
-				getTranslationList().remove(itemIndex);
+				getTranslationList().remove(translation);
 
-				notifyItemRemoved(itemIndex);
 				getDataSetChangedListener().onDataSetChange(getItemCount());
 
 				LOG.verbose("Removed; Size: " + getTranslationList().size() + "; Text: " + translation.getText());
@@ -69,13 +66,12 @@ public final class FavoritesAdapter extends AbstractTranslateHistoryAdapter<Favo
 	public void deleteFavorites() {
 		getTranslationList().clear();
 
-		notifyDataSetChanged();
 		getDataSetChangedListener().onDataSetChange(getItemCount());
 	}
 
 	@Override
 	public void deleteHistory() {
-		//unused in this adapter
+		getTranslationList().clear();
 	}
 
 	@Override

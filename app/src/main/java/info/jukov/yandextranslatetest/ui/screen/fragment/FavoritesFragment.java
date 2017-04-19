@@ -43,6 +43,11 @@ public final class FavoritesFragment extends BaseTranslationsListFragment implem
 	}
 
 	@Override
+	protected List<Translation> getTranslations() {
+		return databaseModule.getDatabaseManager().getFavoritesList();
+	}
+
+	@Override
 	public void onFavoritesFromDatabase(final List<Translation> translationList) {
 		adapter.setTranslations(translationList);
 	}
@@ -65,25 +70,6 @@ public final class FavoritesFragment extends BaseTranslationsListFragment implem
 	@Override
 	public void viewFullTranslation(@NonNull final Translation translation) {
 		transferModule.getTransferManager().onFullTranslate(translation);
-	}
-
-	@Override
-	public void onDataSetChange(final int currentSize) {
-		if (currentSize == 0) {
-			switchUiToEmptySplash();
-		} else {
-			switchUiToList();
-		}
-	}
-
-	private void switchUiToEmptySplash() {
-		textViewEmptyList.setVisibility(View.VISIBLE);
-		recyclerViewHistory.setVisibility(View.GONE);
-	}
-
-	private void switchUiToList() {
-		textViewEmptyList.setVisibility(View.GONE);
-		recyclerViewHistory.setVisibility(View.VISIBLE);
 	}
 
 	public void onFavoriteStatusChange(@NonNull final Translation translation) {

@@ -11,7 +11,6 @@ import info.jukov.yandextranslatetest.model.storage.dao.Translation;
 import info.jukov.yandextranslatetest.ui.base.TranslationListHolder;
 import info.jukov.yandextranslatetest.util.Guard;
 import info.jukov.yandextranslatetest.util.Log;
-import java.util.Iterator;
 
 /**
  * User: jukov
@@ -37,16 +36,13 @@ public final class HistoryAdapter extends AbstractTranslateHistoryAdapter<Histor
 
 		if (itemIndex != -1) {
 			getTranslationList().remove(translation);
-			getTranslationList().add(itemIndex, translation);
-
-			notifyItemChanged(itemIndex);
+			getTranslationList().add(translation);
 
 			LOG.verbose("Updated; Size: " + getTranslationList().size() + "; Text: " + translation.getText());
 
 		} else {
-			getTranslationList().add(0, translation);
+			getTranslationList().add(translation);
 
-			notifyDataSetChanged();
 			getDataSetChangedListener().onDataSetChange(getItemCount());
 
 			LOG.verbose("Added; Size: " + getTranslationList().size() + "; Text: " + translation.getText());
@@ -55,25 +51,19 @@ public final class HistoryAdapter extends AbstractTranslateHistoryAdapter<Histor
 
 	@Override
 	public void deleteFavorites() {
-		for (final Iterator<Translation> iterator = getTranslationList().iterator(); iterator.hasNext(); ) {
-			if (iterator.next().getIsFavorite() == true) {
-				iterator.remove();
+		for (int i = 0; i < getTranslationList().size(); i++) {
+			final Translation translation = getTranslationList().get(i);
+
+			if (translation.getIsFavorite() == true) {
+				translation.setIsFavorite(false);
 			}
 		}
-
-		notifyDataSetChanged();
-		getDataSetChangedListener().onDataSetChange(getItemCount());
 	}
 
 	@Override
 	public void deleteHistory() {
-		for (final Iterator<Translation> iterator = getTranslationList().iterator(); iterator.hasNext(); ) {
-			if (iterator.next().getIsFavorite() == false) {
-				iterator.remove();
-			}
-		}
+		getTranslationList().clear();
 
-		notifyDataSetChanged();
 		getDataSetChangedListener().onDataSetChange(getItemCount());
 	}
 

@@ -41,6 +41,11 @@ public final class HistoryFragment extends BaseTranslationsListFragment implemen
 	}
 
 	@Override
+	protected List<Translation> getTranslations() {
+		return databaseModule.getDatabaseManager().getTranslationList();
+	}
+
+	@Override
 	public void onHistoryFromDatabase(final List<Translation> translationList) {
 		adapter.setTranslations(translationList);
 	}
