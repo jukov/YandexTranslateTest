@@ -60,6 +60,12 @@ public final class DropdownView extends FrameLayout {
 		init();
 	}
 
+	@Override
+	public void setEnabled(final boolean enabled) {
+		super.setEnabled(enabled);
+		textViewHeader.setEnabled(enabled);
+	}
+
 	public void setAdapter(final ListAdapter adapter) {
 		listPopupWindow.setAdapter(adapter);
 	}

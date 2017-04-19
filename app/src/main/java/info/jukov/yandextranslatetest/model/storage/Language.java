@@ -20,6 +20,12 @@ public final class Language implements Cloneable {
 		this.readableLangWord = readableLangWord;
 	}
 
+	public Language(final String code, final String readableLangWord, final int mostUsedPriority) {
+		this.code = code;
+		this.readableLangWord = readableLangWord;
+		this.mostUsedPriority = mostUsedPriority;
+	}
+
 	public String getCode() {
 		return code;
 	}

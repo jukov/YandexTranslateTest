@@ -29,8 +29,16 @@ import java.util.List;
 
 public final class LanguageAdapter extends BaseAdapter {
 
+	/**
+	 * Кастомный код для элемента "определить язык".
+	 * */
+	public static final String DETECT_LANGS_CODE = "DETECT_LANGS_CODE";
+
 	private static final Log LOG = new Log(LanguageAdapter.class);
 
+	/**
+	 * Количество элементов, которое прикрепляется в верхнюю часть списка.
+	 * */
 	private static final int MOST_USED_ITEM_COUNT = 3;
 
 	/**
@@ -59,13 +67,37 @@ public final class LanguageAdapter extends BaseAdapter {
 
 	private final LayoutInflater inflater;
 
-	public LanguageAdapter(@NonNull final Context context, @NonNull final Collection<Language> languages) {
+	/**
+	 * Отступ от первого элемента. Установка значений больше 0 позволяет положить в верхнюю часть
+	 * списка элементы, которые не будут учитываться при прикреплении элементов и всегда будут находиться
+	 * в верхней части списка.
+	 * */
+	private final int offset;
+
+	/**
+	 * Определяет, есть ли в этом адаптере элемент "определить язык".
+	 * */
+	private final boolean withDetectLanguage;
+
+	public LanguageAdapter(@NonNull final Context context, @NonNull final Collection<Language> languages,
+		final boolean withDetectLanguage) {
 		Guard.checkNotNull(context, "null == context");
 		Guard.checkNotNull(languages, "null == languages");
 
 		this.languages = new ArrayList<>(languages);
+		this.withDetectLanguage = withDetectLanguage;
 
 		Collections.sort(this.languages, MOST_USED_COMPARATOR);
+
+		if (withDetectLanguage) {
+			this.languages.add(0, new Language(
+				DETECT_LANGS_CODE,
+				context.getString(R.string.trnslateFragment_langAdapter_detectLang),
+				MOST_USED_ITEM_COUNT + 1));
+			offset = 1;
+		} else {
+			offset = 0;
+		}
 
 		inflater = LayoutInflater.from(context);
 	}
@@ -81,7 +113,7 @@ public final class LanguageAdapter extends BaseAdapter {
 		Guard.checkPreCondition(code.length() >= 2 && code.length() <= 3, "Code must contain only two or three letters");
 
 		for (int i = 0; i < languages.size(); i++) {
-			if (languages.get(i).getCode().equals(code)) {
+			if (code.equals(languages.get(i).getCode())) {
 				pinItemToTop(i);
 				return true;
 			}
@@ -100,20 +132,23 @@ public final class LanguageAdapter extends BaseAdapter {
 		Guard.checkPreCondition(position < languages.size(), "Position too big");
 		Guard.checkPreCondition(position >= 0, "Position too small");
 
+		if (position < offset) {
+			return;
+		}
+
 		//Лист отсортирован по приоритету - проверяя первое значение
 		//узнаем количество прикрепленных объектов
-		final int currentPinnedItemsCount = languages.get(0).getMostUsedPriority();
+		final int currentPinnedItemsCount = languages.get(offset).getMostUsedPriority();
 
 		//Перемещаем выбранный элемент в топ
 		final Language tempLanguage = languages.remove(position);
-		languages.add(0, tempLanguage);
+		languages.add(offset, tempLanguage);
 
 		//Определяем текущий максимальный приоритет
-		int priority = currentPinnedItemsCount < MOST_USED_ITEM_COUNT
-			? currentPinnedItemsCount + 1 : MOST_USED_ITEM_COUNT;
+		int priority = currentPinnedItemsCount < MOST_USED_ITEM_COUNT ? currentPinnedItemsCount + 1 : MOST_USED_ITEM_COUNT;
 
 		//Проставляем приоритет всем языкам
-		for (int i = 0; i < languages.size(); i++) {
+		for (int i = offset; i < languages.size(); i++) {
 			final Language language = languages.get(i);
 			language.setMostUsedPriority(priority);
 			priority = priority > 0 ? priority - 1 : 0;
@@ -129,7 +164,7 @@ public final class LanguageAdapter extends BaseAdapter {
 
 		final List<Language> mostUsedLanguages = new ArrayList<>(MOST_USED_ITEM_COUNT);
 
-		for (int i = 0; i < (languages.size() > MOST_USED_ITEM_COUNT ? MOST_USED_ITEM_COUNT : languages.size()); i++) {
+		for (int i = offset; i < (languages.size() > MOST_USED_ITEM_COUNT ? MOST_USED_ITEM_COUNT + offset : languages.size()); i++) {
 
 			final Language language = languages.get(i);
 
@@ -157,6 +192,14 @@ public final class LanguageAdapter extends BaseAdapter {
 		}
 
 		return -1;
+	}
+
+	public boolean isWithDetectLanguage() {
+		return withDetectLanguage;
+	}
+
+	public Language getFirstItem() {
+		return languages.get(offset);
 	}
 
 	@Override

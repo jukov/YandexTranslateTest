@@ -103,7 +103,14 @@ public class DatabaseManager {
 			translationList.remove(translation);
 			translationList.add(itemIndex, translation);
 
-			translationDao.update(translation);
+//			Нельзя сделать просто update(), так как из-за определения языка может прийти перевод, который уже есть в базе, но не имеет id.
+//			Поэтому, сначала проверяем наличие перевода.
+			final Translation oldTranslation = getTranslateFromDatabase(translation.getLang(), translation.getText());
+
+			if (oldTranslation != null) {
+				oldTranslation.setIsFavorite(translation.getIsFavorite());
+				translationDao.update(oldTranslation);
+			}
 		} else {
 			translationList.add(0, translation);
 

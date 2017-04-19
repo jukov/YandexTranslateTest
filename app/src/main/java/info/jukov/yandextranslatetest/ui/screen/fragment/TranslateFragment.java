@@ -84,9 +84,14 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 	private LanguageAdapter inputSpinnerAdapter;
 	private LanguageAdapter outputSpinnerAdapter;
 
+	private Language selectedInputLanguage;
+	private Language selectedOutputLanguage;
+
 	private int progressableTasksCount = 0;
 
 	private Dialog currentDialog = null;
+
+	private Handler translatableHandler;
 
 	public static TranslateFragment newInstance() {
 
@@ -137,7 +142,7 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 			}
 		});
 
-		final Handler handler = new Handler() {
+		translatableHandler = new Handler() {
 			@Override
 			public void handleMessage(final Message msg) {
 				if (msg.what == HANDLER_MESSAGE_TRANSLATE) {
@@ -154,9 +159,9 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 
 			@Override
 			public void afterTextChanged(final Editable s) {
-				handler.removeMessages(HANDLER_MESSAGE_TRANSLATE);
+				translatableHandler.removeMessages(HANDLER_MESSAGE_TRANSLATE);
 				if (s.length() >= 3) {
-					handler.sendEmptyMessageDelayed(HANDLER_MESSAGE_TRANSLATE, TRANSLATE_DELAY);
+					translatableHandler.sendEmptyMessageDelayed(HANDLER_MESSAGE_TRANSLATE, TRANSLATE_DELAY);
 				}
 			}
 
@@ -195,7 +200,7 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 				presenter.onInputLangSelected(position);
 			}
 		});
-		
+
 		dropdownViewOutputLang.addOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
@@ -242,6 +247,8 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 			containerDictResult.setVisibility(View.GONE);
 		}
 
+		translatableHandler.removeMessages(HANDLER_MESSAGE_TRANSLATE);
+
 		if (!editTextTranslatable.getText().toString().equals(translation.getText())) {
 			editTextTranslatable.setText(translation.getText());
 		}
@@ -249,14 +256,18 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 		final int inputPosition = inputSpinnerAdapter.getPosition(StringUtils.formatInputLang(translation.getLang()));
 		if (inputPosition != -1) {
 			inputSpinnerAdapter.pinItemToTop(inputPosition);
-			dropdownViewInputLang.setText(inputSpinnerAdapter.getItem(0).getReadableLangWord());
+			dropdownViewInputLang.setText(inputSpinnerAdapter.getFirstItem().getReadableLangWord());
+			selectedInputLanguage = inputSpinnerAdapter.getFirstItem();
 		}
 
 		final int outputPosition = outputSpinnerAdapter.getPosition(StringUtils.formatOutputLang(translation.getLang()));
 		if (outputPosition != -1) {
 			outputSpinnerAdapter.pinItemToTop(outputPosition);
-			dropdownViewOutputLang.setText(outputSpinnerAdapter.getItem(0).getReadableLangWord());
+			dropdownViewOutputLang.setText(outputSpinnerAdapter.getFirstItem().getReadableLangWord());
+			selectedOutputLanguage = outputSpinnerAdapter.getFirstItem();
 		}
+
+		setButtonSwapLangEnabled(true);
 
 		onFavoritesAction(translation.getIsFavorite());
 	}
@@ -301,40 +312,53 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 
 	@Override
 	public void swapLang() {
-		final Language inputLang = inputSpinnerAdapter.getItem(0);
-		final Language outputLang = outputSpinnerAdapter.getItem(0);
+		inputSpinnerAdapter.pinItemToTop(selectedOutputLanguage.getCode());
+		dropdownViewInputLang.setText(selectedOutputLanguage.getReadableLangWord());
 
-		inputSpinnerAdapter.pinItemToTop(outputLang.getCode());
-		dropdownViewInputLang.setText(outputLang.getReadableLangWord());
-		
-		outputSpinnerAdapter.pinItemToTop(inputLang.getCode());
-		dropdownViewOutputLang.setText(inputLang.getReadableLangWord());
+		outputSpinnerAdapter.pinItemToTop(selectedInputLanguage.getCode());
+		dropdownViewOutputLang.setText(selectedInputLanguage.getReadableLangWord());
+
+		final Language temp = selectedInputLanguage;
+		selectedInputLanguage = selectedOutputLanguage;
+		selectedOutputLanguage = temp;
 	}
 
 	@Override
 	public void selectInputLang(final int position) {
-		inputSpinnerAdapter.pinItemToTop(position);
-		dropdownViewInputLang.setText(inputSpinnerAdapter.getItem(0).getReadableLangWord());
+		if (inputSpinnerAdapter.isWithDetectLanguage() && position == 0) {
+			selectedInputLanguage = inputSpinnerAdapter.getItem(position);
+			setButtonSwapLangEnabled(false);
+		} else {
+			inputSpinnerAdapter.pinItemToTop(position);
+			selectedInputLanguage = inputSpinnerAdapter.getFirstItem();
+			setButtonSwapLangEnabled(true);
+		}
+		dropdownViewInputLang.setText(selectedInputLanguage.getReadableLangWord());
 	}
 
 	@Override
 	public void selectOutputLang(final int position) {
-		outputSpinnerAdapter.pinItemToTop(position);
-		dropdownViewOutputLang.setText(outputSpinnerAdapter.getItem(0).getReadableLangWord());
+		if (position != 0) {
+			outputSpinnerAdapter.pinItemToTop(position);
+			selectedOutputLanguage = outputSpinnerAdapter.getFirstItem();
+			dropdownViewOutputLang.setText(selectedOutputLanguage.getReadableLangWord());
+		}
 	}
 
 	@Override
 	public void setInputLangs(final Set<Language> inputLangs) {
-		inputSpinnerAdapter = new LanguageAdapter(getContext(), inputLangs);
+		inputSpinnerAdapter = new LanguageAdapter(getContext(), inputLangs, true);
 		dropdownViewInputLang.setAdapter(inputSpinnerAdapter);
-		dropdownViewInputLang.setText(inputSpinnerAdapter.getItem(0).getReadableLangWord());
+		dropdownViewInputLang.setText(inputSpinnerAdapter.getFirstItem().getReadableLangWord());
+		selectedInputLanguage = inputSpinnerAdapter.getFirstItem();
 	}
 
 	@Override
 	public void setOutputLangs(final Set<Language> outputLangs) {
-		outputSpinnerAdapter = new LanguageAdapter(getContext(), outputLangs);
+		outputSpinnerAdapter = new LanguageAdapter(getContext(), outputLangs, false);
 		dropdownViewOutputLang.setAdapter(outputSpinnerAdapter);
-		dropdownViewOutputLang.setText(outputSpinnerAdapter.getItem(0).getReadableLangWord());
+		dropdownViewOutputLang.setText(outputSpinnerAdapter.getFirstItem().getReadableLangWord());
+		selectedOutputLanguage = outputSpinnerAdapter.getFirstItem();
 	}
 
 	@Override
@@ -382,11 +406,26 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 		buttonTranslate.setEnabled(enabled);
 		buttonFavorite.setEnabled(enabled);
 
+		if (!selectedInputLanguage.getCode().equals(LanguageAdapter.DETECT_LANGS_CODE)) {
+			setButtonSwapLangEnabled(enabled);
+		}
+
 		if (getContext() != null) {
 			if (enabled) {
 				DrawableCompat.setTint(buttonFavorite.getDrawable(), ContextCompat.getColor(getContext(), R.color.colorAccent));
 			} else {
-				DrawableCompat.setTint(buttonFavorite.getDrawable(), ContextCompat.getColor(getContext(), R.color.favoriteDisabled));
+				DrawableCompat.setTint(buttonFavorite.getDrawable(), ContextCompat.getColor(getContext(), R.color.colorDisabled));
+			}
+		}
+	}
+
+	private void setButtonSwapLangEnabled(final boolean enabled) {
+		buttonSwapLang.setEnabled(enabled);
+		if (getContext() != null) {
+			if (enabled) {
+				DrawableCompat.setTint(buttonSwapLang.getDrawable(), ContextCompat.getColor(getContext(), R.color.colorAccent));
+			} else {
+				DrawableCompat.setTint(buttonSwapLang.getDrawable(), ContextCompat.getColor(getContext(), R.color.colorDisabled));
 			}
 		}
 	}
@@ -394,15 +433,18 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 	private String getLangCodeForServer() {
 		final String inputLang = getInputLangCode();
 		final String outputLang = getOutputLangCode();
+		if (LanguageAdapter.DETECT_LANGS_CODE.equals(inputLang)) {
+			return outputLang;
+		}
 		return inputLang + LANG_DELIMITER + outputLang;
 	}
 
 	private String getInputLangCode() {
-		return inputSpinnerAdapter.getItem(0).getCode();
+		return selectedInputLanguage.getCode();
 	}
 
 	private String getOutputLangCode() {
-		return outputSpinnerAdapter.getItem(0).getCode();
+		return selectedOutputLanguage.getCode();
 	}
 
 	private String getTranslatableText() {

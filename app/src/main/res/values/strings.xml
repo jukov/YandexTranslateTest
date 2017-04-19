@@ -14,6 +14,8 @@
 
 	<string name="translateFragment_textViewLettersCount">%s / 10000</string>
 
+	<string name="trnslateFragment_langAdapter_detectLang">Detect language</string>
+
 	<!--TranslationListFragment-->
 	<string name="translationListFragment_ActionsDialog_title">Choose action</string>
 	<string-array name="translationListFragment_ActionsDialog_actions">
@@ -91,7 +93,6 @@
 	<string name="alertDialogInvalidKeys_goToSettings_button">Go to settings</string>
 
 	<!--AlertDialog for delete confirmation -->
-
 	<string name="alertDialogConfirmation_youSure_title">You sure?</string>
 
 	<string name="alertDialogConfirmation_deletingHistoryCannotBeUndone_title">Deleting history cannot be undone</string>

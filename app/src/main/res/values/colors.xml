@@ -20,7 +20,7 @@
 
 	<color name="text_dictConstructor_secondaryItems">@color/text_all_black54</color>
 
-	<color name="favoriteDisabled">@color/grey600</color>
+	<color name="colorDisabled">@color/grey600</color>
 
 	<color name="colorPrimary">@color/deepPurple500</color>
 	<color name="colorPrimaryDark">@color/deepPurple700</color>

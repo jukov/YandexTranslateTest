@@ -73,7 +73,7 @@ public final class TranslatePresenter extends MvpPresenter<TranslateView> implem
 			}
 
 			currentTranslation.setText(text);
-			currentTranslation.setLang(lang);
+			currentTranslation.setLang(translateResponse.getLang());
 
 			getViewState().onTranslation(currentTranslation);
 
@@ -141,15 +141,11 @@ public final class TranslatePresenter extends MvpPresenter<TranslateView> implem
 	}
 
 	public void onInputLangSelected(final int position) {
-		if (position != 0) {
-			getViewState().selectInputLang(position);
-		}
+		getViewState().selectInputLang(position);
 	}
 
 	public void onOutputLangSelected(final int position) {
-		if (position != 0) {
-			getViewState().selectOutputLang(position);
-		}
+		getViewState().selectOutputLang(position);
 	}
 
 	@Override
