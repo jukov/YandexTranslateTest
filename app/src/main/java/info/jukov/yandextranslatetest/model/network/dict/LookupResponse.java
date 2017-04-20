@@ -22,7 +22,7 @@ public final class LookupResponse {
 	@JsonProperty("def")
 	private List<Definition> definition = null;
 
-	private boolean empty;
+	@SuppressWarnings("FieldCanBeLocal") private boolean empty;
 
 	@JsonProperty("def")
 	public List<Definition> getDefinitions() {
@@ -65,7 +65,7 @@ public final class LookupResponse {
 		@JsonProperty("ts")
 		private String ts;
 		@JsonProperty("tr")
-		private List<Translation> translations = null;
+		private List<Translation> translationList = null;
 
 		@JsonProperty("text")
 		public String getText() {
@@ -98,13 +98,13 @@ public final class LookupResponse {
 		}
 
 		@JsonProperty("tr")
-		public List<Translation> getTranslations() {
-			return translations;
+		public List<Translation> getTranslationList() {
+			return translationList;
 		}
 
 		@JsonProperty("tr")
-		public void setTranslations(final List<Translation> translations) {
-			this.translations = translations;
+		public void setTranslationList(final List<Translation> translationList) {
+			this.translationList = translationList;
 		}
 
 		@Override
@@ -113,7 +113,7 @@ public final class LookupResponse {
 				"text='" + text + '\'' +
 				", pos='" + pos + '\'' +
 				", ts='" + ts + '\'' +
-				", translations=" + translations +
+				", translationList=" + translationList +
 				'}';
 		}
 	}
@@ -155,7 +155,7 @@ public final class LookupResponse {
 		public String toString() {
 			return "Example{" +
 				"text='" + text + '\'' +
-				", translations=" + tr +
+				", translationList=" + tr +
 				'}';
 		}
 	}

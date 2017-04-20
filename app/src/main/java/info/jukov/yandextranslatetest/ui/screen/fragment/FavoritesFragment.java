@@ -22,7 +22,7 @@ import java.util.List;
  * Time: 19:31
  */
 
-public final class FavoritesFragment extends BaseTranslationsListFragment implements FavoritesView {
+public final class FavoritesFragment extends BaseTranslationListFragment implements FavoritesView {
 
 	@InjectPresenter FavoritesPresenter favoritesPresenter;
 
@@ -43,13 +43,13 @@ public final class FavoritesFragment extends BaseTranslationsListFragment implem
 	}
 
 	@Override
-	protected List<Translation> getTranslations() {
+	protected List<Translation> getTranslationList() {
 		return databaseModule.getDatabaseManager().getFavoritesList();
 	}
 
 	@Override
 	public void onFavoritesFromDatabase(final List<Translation> translationList) {
-		adapter.setTranslations(translationList);
+		adapter.setTranslationList(translationList);
 	}
 
 	@Override

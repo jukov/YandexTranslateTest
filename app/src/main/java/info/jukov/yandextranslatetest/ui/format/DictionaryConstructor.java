@@ -75,8 +75,8 @@ public final class DictionaryConstructor {
 			textViewPartOfSpeech.setText(definition.getPartOfSpeech());
 
 			//Варианты перевода
-			if (definition.getTranslations() != null) {
-				makeTranslations(parent, inflater, definition.getTranslations());
+			if (definition.getTranslationList() != null) {
+				makeTranslations(parent, inflater, definition.getTranslationList());
 			}
 		}
 	}
@@ -97,36 +97,36 @@ public final class DictionaryConstructor {
 			parent.addView(textViewDefinitions);
 
 			final SpannableStringBuilder stringBuilderDefinitions = new SpannableStringBuilder();
-			stringBuilderDefinitions
-				.append(count, new StyleSpan(BOLD), SPAN_EXCLUSIVE_EXCLUSIVE)
-				.append(DOT, new StyleSpan(BOLD), SPAN_EXCLUSIVE_EXCLUSIVE)
-				.append(SPACE);
+			stringBuilderDefinitions.append(count).append(DOT).append(SPACE);
+
+			stringBuilderDefinitions.setSpan(new StyleSpan(BOLD), 0, count.length() + DOT.length(), SPAN_EXCLUSIVE_EXCLUSIVE);
 
 			if (translation.getText() != null) {
 				stringBuilderDefinitions.append(translation.getText());
 
 				if (translation.getGen() != null) {
-					stringBuilderDefinitions.append(SPACE)
-						.append(translation.getGen(), new StyleSpan(ITALIC),
-							SPAN_EXCLUSIVE_EXCLUSIVE);
+
+					stringBuilderDefinitions.append(SPACE).append(translation.getGen());
 
 					final int genStart = stringBuilderDefinitions.length() - translation.getGen().length();
 					final int genEnd = stringBuilderDefinitions.length();
 
-					stringBuilderDefinitions.setSpan(new ForegroundColorSpan(secondaryItemsColor),
-						genStart, genEnd, SPAN_EXCLUSIVE_EXCLUSIVE);
+					stringBuilderDefinitions.setSpan(new StyleSpan(ITALIC), genStart, genEnd, SPAN_EXCLUSIVE_EXCLUSIVE);
+
+					stringBuilderDefinitions.setSpan(new ForegroundColorSpan(secondaryItemsColor), genStart, genEnd,
+						SPAN_EXCLUSIVE_EXCLUSIVE);
 				}
 
 				if (translation.getAsp() != null) {
-					stringBuilderDefinitions.append(SPACE)
-						.append(translation.getAsp(), new StyleSpan(ITALIC),
-							SPAN_EXCLUSIVE_EXCLUSIVE);
+					stringBuilderDefinitions.append(SPACE).append(translation.getAsp());
 
 					final int aspStart = stringBuilderDefinitions.length() - translation.getAsp().length();
 					final int aspEnd = stringBuilderDefinitions.length();
 
-					stringBuilderDefinitions.setSpan(new ForegroundColorSpan(secondaryItemsColor),
-						aspStart, aspEnd, SPAN_EXCLUSIVE_EXCLUSIVE);
+					stringBuilderDefinitions.setSpan(new StyleSpan(ITALIC), aspStart, aspEnd, SPAN_EXCLUSIVE_EXCLUSIVE);
+
+					stringBuilderDefinitions.setSpan(new ForegroundColorSpan(secondaryItemsColor), aspStart, aspEnd,
+						SPAN_EXCLUSIVE_EXCLUSIVE);
 				}
 			}
 
@@ -134,31 +134,31 @@ public final class DictionaryConstructor {
 				for (final Syn syn : translation.getSynonyms()) {
 
 					if (syn.getText() != null) {
-						stringBuilderDefinitions.append(COMMA).append(SPACE)
-							.append(syn.getText());
+						stringBuilderDefinitions.append(COMMA).append(SPACE).append(syn.getText());
 
 						if (syn.getGen() != null) {
-							stringBuilderDefinitions.append(SPACE)
-								.append(syn.getGen(), new StyleSpan(ITALIC),
-									SPAN_EXCLUSIVE_EXCLUSIVE);
+							stringBuilderDefinitions.append(SPACE).append(syn.getGen());
 
 							final int genStart = stringBuilderDefinitions.length() - syn.getGen().length();
 							final int genEnd = stringBuilderDefinitions.length();
 
-							stringBuilderDefinitions.setSpan(new ForegroundColorSpan(secondaryItemsColor),
-								genStart, genEnd, SPAN_EXCLUSIVE_EXCLUSIVE);
+							stringBuilderDefinitions.setSpan(new StyleSpan(ITALIC), genStart, genEnd, SPAN_EXCLUSIVE_EXCLUSIVE);
+
+							stringBuilderDefinitions.setSpan(new ForegroundColorSpan(secondaryItemsColor), genStart, genEnd,
+								SPAN_EXCLUSIVE_EXCLUSIVE);
 						}
 
 						if (syn.getAsp() != null) {
-							stringBuilderDefinitions.append(SPACE)
-								.append(syn.getAsp(), new StyleSpan(ITALIC),
-									SPAN_EXCLUSIVE_EXCLUSIVE);
+							stringBuilderDefinitions.append(SPACE).append(syn.getAsp());
 
 							final int aspStart = stringBuilderDefinitions.length() - syn.getAsp().length();
 							final int aspEnd = stringBuilderDefinitions.length();
 
-							stringBuilderDefinitions.setSpan(new ForegroundColorSpan(secondaryItemsColor),
-								aspStart, aspEnd, SPAN_EXCLUSIVE_EXCLUSIVE);
+							stringBuilderDefinitions.setSpan(new StyleSpan(ITALIC), aspStart, aspEnd,
+								SPAN_EXCLUSIVE_EXCLUSIVE);
+
+							stringBuilderDefinitions.setSpan(new ForegroundColorSpan(secondaryItemsColor), aspStart, aspEnd,
+								SPAN_EXCLUSIVE_EXCLUSIVE);
 						}
 					}
 				}
@@ -249,12 +249,17 @@ public final class DictionaryConstructor {
 				.append(response.getDefinitions().get(0).getText());
 
 			if (!StringUtils.isNullOrEmpty(response.getDefinitions().get(0).getTs())) {
+
+				final int transcStart = formattedDefinition.length();
+
 				formattedDefinition
 					.append(SPACE)
-					.append(OPEN_BRACE,
-						new ForegroundColorSpan(secondaryItemsColor), SPAN_EXCLUSIVE_INCLUSIVE)
+					.append(OPEN_BRACE)
 					.append(response.getDefinitions().get(0).getTs())
 					.append(CLOSE_BRACE);
+
+				formattedDefinition.setSpan(new ForegroundColorSpan(secondaryItemsColor), transcStart, formattedDefinition.length(),
+					SPAN_EXCLUSIVE_INCLUSIVE);
 			}
 
 			return formattedDefinition;

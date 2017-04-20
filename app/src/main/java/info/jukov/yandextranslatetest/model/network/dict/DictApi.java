@@ -22,6 +22,7 @@ public final class DictApi {
 	private final YandexDictionaryApi api;
 
 	private final String apiKey;
+	private final String uiLang;
 
 	public DictApi(@NonNull final Context context) {
 		Guard.checkNotNull(context, "null == context");
@@ -35,6 +36,8 @@ public final class DictApi {
 		final String preferenceKey = context.getString(R.string.preferenceKey_dictApiKey);
 		apiKey = PreferenceManager.getDefaultSharedPreferences(context)
 			.getString(preferenceKey, "");
+
+		uiLang = context.getString(R.string.lang_code);
 	}
 
 	public <T> DictApi.Sender use(@NonNull final Callback<T> callback, @Nullable final Progressable progressable) {
@@ -60,12 +63,11 @@ public final class DictApi {
 			}
 		}
 
-		public void lookup(@NonNull final String lang, @NonNull final String text, @Nullable final String ui,
-						   @Nullable final String flags) {
+		public void lookup(@NonNull final String lang, @NonNull final String text, @Nullable final String flags) {
 			Guard.checkNotNull(lang, "null == lang");
 			Guard.checkNotNull(text, "null == text");
 
-			api.lookup(apiKey, lang, text, ui, flags).enqueue(callback);
+			api.lookup(apiKey, lang, text, uiLang, flags).enqueue(callback);
 			startProgress();
 		}
 

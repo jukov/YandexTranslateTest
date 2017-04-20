@@ -60,7 +60,7 @@ public final class SettingsActivity extends AppCompatActivity {
 		settingsFragment = SettingsFragment.newInstance();
 
 		final FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-		fragmentTransaction.replace(R.id.fragmentContainer, settingsFragment, SettingsFragment.FRAGMENT_TAG);
+		fragmentTransaction.replace(R.id.containerFragment, settingsFragment, SettingsFragment.FRAGMENT_TAG);
 		fragmentTransaction.commit();
 	}
 

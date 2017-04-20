@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-	<string-array name="licenses">
+	<string-array name="licenses" translatable="false">
 		<item><![CDATA[<b>Retrofit</b>: http://square.github.io/retrofit/#license]]></item>
 		<item><![CDATA[<b>Jackson</b>: http://www.apache.org/licenses/LICENSE-2.0.txt]]></item>
 		<item><![CDATA[<b>Butterknife</b>: https://github.com/JakeWharton/butterknife/blob/master/LICENSE.txt]]></item>

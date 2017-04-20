@@ -19,7 +19,7 @@ import info.jukov.yandextranslatetest.util.Log;
  *
  * Адаптер для отображения избранных переводов.
  */
-public final class FavoritesAdapter extends AbstractTranslateHistoryAdapter<FavoritesViewHolder> {
+public final class FavoritesAdapter extends BaseTranslateHistoryAdapter<FavoritesViewHolder> {
 
 	private static final Log LOG = new Log(FavoritesAdapter.class);
 
@@ -83,7 +83,7 @@ public final class FavoritesAdapter extends AbstractTranslateHistoryAdapter<Favo
 		return viewHolder;
 	}
 
-	public class FavoritesViewHolder extends AbstractTranslateHistoryAdapter.ViewHolder {
+	public class FavoritesViewHolder extends BaseTranslateHistoryAdapter.ViewHolder {
 
 		public FavoritesViewHolder(final View itemView) {
 			super(itemView);

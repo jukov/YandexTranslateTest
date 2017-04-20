@@ -220,7 +220,7 @@ public final class TranslatePresenter extends MvpPresenter<TranslateView> implem
 
 		allQueriesLoaded.reset();
 		apiModule.getTranslateApi().use(new TranslateCallback(progressable), progressable).translate(lang, text);
-		apiModule.getDictApi().use(new DictCallback(progressable), progressable).lookup(lang, text, null, null);
+		apiModule.getDictApi().use(new DictCallback(progressable), progressable).lookup(lang, text, null);
 	}
 
 	private void addToFavorites() {

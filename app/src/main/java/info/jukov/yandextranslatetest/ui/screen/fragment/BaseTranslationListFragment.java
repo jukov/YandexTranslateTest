@@ -26,8 +26,8 @@ import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import info.jukov.yandextranslatetest.R;
 import info.jukov.yandextranslatetest.TranslateApp;
-import info.jukov.yandextranslatetest.model.adapter.AbstractTranslateHistoryAdapter;
-import info.jukov.yandextranslatetest.model.adapter.AbstractTranslateHistoryAdapter.OnDataSetChangedListener;
+import info.jukov.yandextranslatetest.model.adapter.BaseTranslateHistoryAdapter;
+import info.jukov.yandextranslatetest.model.adapter.BaseTranslateHistoryAdapter.OnDataSetChangedListener;
 import info.jukov.yandextranslatetest.model.module.DatabaseModule;
 import info.jukov.yandextranslatetest.model.module.TransferModule;
 import info.jukov.yandextranslatetest.model.storage.dao.Translation;
@@ -47,10 +47,10 @@ import javax.inject.Inject;
  * Time: 23:23
  */
 
-public abstract class BaseTranslationsListFragment extends MvpAppCompatFragment implements TranslationListView, OnQueryTextListener,
-																				  OnDataSetChangedListener, TranslationListHolder {
+public abstract class BaseTranslationListFragment extends MvpAppCompatFragment implements TranslationListView, OnQueryTextListener,
+																						  OnDataSetChangedListener, TranslationListHolder {
 
-	private static final Log LOG = new Log(BaseTranslationsListFragment.class);
+	private static final Log LOG = new Log(BaseTranslationListFragment.class);
 
 	@InjectPresenter TranslationListPresenter translationListPresenter;
 
@@ -62,7 +62,7 @@ public abstract class BaseTranslationsListFragment extends MvpAppCompatFragment 
 	@Inject DatabaseModule databaseModule;
 	@Inject TransferModule transferModule;
 
-	protected AbstractTranslateHistoryAdapter adapter;
+	protected BaseTranslateHistoryAdapter adapter;
 
 	private Dialog currentDialog = null;
 
@@ -163,8 +163,8 @@ public abstract class BaseTranslationsListFragment extends MvpAppCompatFragment 
 
 	@Override
 	public boolean onQueryTextChange(final String newText) {
-		final List<Translation> filteredTranslations = filter(getTranslations(), newText);
-		adapter.replaceAll(filteredTranslations);
+		final List<Translation> filteredTranslationList = filter(getTranslationList(), newText);
+		adapter.replaceAll(filteredTranslationList);
 		recyclerViewHistory.scrollToPosition(0);
 		return true;
 	}
@@ -174,20 +174,20 @@ public abstract class BaseTranslationsListFragment extends MvpAppCompatFragment 
 		return false;
 	}
 
-	private static List<Translation> filter(final List<Translation> translations, final String rawQuery) {
+	private static List<Translation> filter(final List<Translation> translationList, final String rawQuery) {
 		final String query = rawQuery.toLowerCase();
 
-		final List<Translation> filteredTranslations = new ArrayList<>();
-		for (final Translation translation : translations) {
+		final List<Translation> filteredTranslationList = new ArrayList<>();
+		for (final Translation translation : translationList) {
 			if (translation.getText().toLowerCase().contains(query) || translation.getTranslateResponse().toLowerCase().contains(query)) {
-				filteredTranslations.add(translation);
+				filteredTranslationList.add(translation);
 			}
 		}
 
-		return filteredTranslations;
+		return filteredTranslationList;
 	}
 
-	protected abstract List<Translation> getTranslations();
+	protected abstract List<Translation> getTranslationList();
 
 	private void switchUiToEmptySplash() {
 		textViewEmptyList.setAlpha(0.0f);
@@ -232,17 +232,9 @@ public abstract class BaseTranslationsListFragment extends MvpAppCompatFragment 
 						textViewEmptyList.setVisibility(View.GONE);
 					}
 
-					@Override
-					public void onAnimationStart(final Animator animation) {
-					}
-
-					@Override
-					public void onAnimationCancel(final Animator animation) {
-					}
-
-					@Override
-					public void onAnimationRepeat(final Animator animation) {
-					}
+					@Override public void onAnimationStart(final Animator animation) { }
+					@Override public void onAnimationCancel(final Animator animation) { }
+					@Override public void onAnimationRepeat(final Animator animation) { }
 				});
 		}
 	}

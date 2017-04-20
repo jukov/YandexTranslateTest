@@ -24,7 +24,6 @@
 			app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
 			<LinearLayout
-				android:id="@+id/spinnerContainer"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:orientation="horizontal">
@@ -154,7 +153,7 @@
 			android:paddingBottom="@dimen/space_all_screenPadding">
 
 			<TextView
-				android:id="@+id/textViewTranslated"
+				android:id="@+id/textViewTranslation"
 				style="@style/TextTitle"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
@@ -165,7 +164,7 @@
 				tools:text="Время"/>
 
 			<TextView
-				android:id="@+id/textViewDict"
+				android:id="@+id/textViewTranscription"
 				style="@style/TextSubheading"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"

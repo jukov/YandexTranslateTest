@@ -20,7 +20,7 @@ import java.util.List;
  * Time: 19:31
  */
 
-public final class HistoryFragment extends BaseTranslationsListFragment implements HistoryView {
+public final class HistoryFragment extends BaseTranslationListFragment implements HistoryView {
 
 	@InjectPresenter HistoryPresenter historyPresenter;
 
@@ -41,13 +41,13 @@ public final class HistoryFragment extends BaseTranslationsListFragment implemen
 	}
 
 	@Override
-	protected List<Translation> getTranslations() {
+	protected List<Translation> getTranslationList() {
 		return databaseModule.getDatabaseManager().getTranslationList();
 	}
 
 	@Override
 	public void onHistoryFromDatabase(final List<Translation> translationList) {
-		adapter.setTranslations(translationList);
+		adapter.setTranslationList(translationList);
 	}
 
 	@Override

@@ -15,7 +15,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import info.jukov.yandextranslatetest.R;
-import info.jukov.yandextranslatetest.model.adapter.AbstractTranslateHistoryAdapter.ViewHolder;
+import info.jukov.yandextranslatetest.model.adapter.BaseTranslateHistoryAdapter.ViewHolder;
 import info.jukov.yandextranslatetest.model.storage.dao.DatabaseManager;
 import info.jukov.yandextranslatetest.model.storage.dao.Translation;
 import info.jukov.yandextranslatetest.ui.base.TranslationListHolder;
@@ -30,7 +30,7 @@ import java.util.List;
  *
  * Базовый адаптер для отображения переводов.
  */
-public abstract class AbstractTranslateHistoryAdapter<VH extends ViewHolder> extends RecyclerView.Adapter<VH> {
+public abstract class BaseTranslateHistoryAdapter<VH extends ViewHolder> extends RecyclerView.Adapter<VH> {
 
 	private final SortedList<Translation> translationList = new SortedList<Translation>(Translation.class, new Callback<Translation>() {
 
@@ -80,7 +80,7 @@ public abstract class AbstractTranslateHistoryAdapter<VH extends ViewHolder> ext
 	private final TranslationListHolder translationListHolder;
 	private final OnDataSetChangedListener dataSetChangedListener;
 
-	protected AbstractTranslateHistoryAdapter(@NonNull final Context context, @NonNull final DatabaseManager databaseManager,
+	protected BaseTranslateHistoryAdapter(@NonNull final Context context, @NonNull final DatabaseManager databaseManager,
 		@NonNull final TranslationListHolder translationListHolder, @NonNull final OnDataSetChangedListener dataSetChangedListener) {
 		Guard.checkNotNull(context, "null == context");
 		Guard.checkNotNull(databaseManager, "null == databaseManager");
@@ -116,7 +116,7 @@ public abstract class AbstractTranslateHistoryAdapter<VH extends ViewHolder> ext
 		return translationList.size();
 	}
 
-	public void setTranslations(final List<Translation> translationList) {
+	public void setTranslationList(final List<Translation> translationList) {
 		Guard.checkNotNull(translationList, "null == translationList");
 
 		this.translationList.addAll(translationList);
@@ -134,16 +134,16 @@ public abstract class AbstractTranslateHistoryAdapter<VH extends ViewHolder> ext
 		}
 	}
 
-	public void replaceAll(final List<Translation> translations) {
-		translationList.beginBatchedUpdates();
-		for (int i = translationList.size() - 1; i >= 0; i--) {
-			final Translation model = translationList.get(i);
-			if (!translations.contains(model)) {
-				translationList.remove(model);
+	public void replaceAll(final List<Translation> translationList) {
+		this.translationList.beginBatchedUpdates();
+		for (int i = this.translationList.size() - 1; i >= 0; i--) {
+			final Translation model = this.translationList.get(i);
+			if (!translationList.contains(model)) {
+				this.translationList.remove(model);
 			}
 		}
-		translationList.addAll(translations);
-		translationList.endBatchedUpdates();
+		this.translationList.addAll(translationList);
+		this.translationList.endBatchedUpdates();
 	}
 
 	public abstract void processTranslation(final Translation translation);

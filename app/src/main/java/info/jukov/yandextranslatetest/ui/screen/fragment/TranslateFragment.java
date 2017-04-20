@@ -76,8 +76,8 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 	@BindView(R.id.textViewLettersCount) TextView textViewLettersCount;
 	@BindView(R.id.buttonTranslate) Button buttonTranslate;
 	@BindView(R.id.buttonFavorite) ImageButton buttonFavorite;
-	@BindView(R.id.textViewTranslated) TextView textViewTranslated;
-	@BindView(R.id.textViewDict) TextView textViewDict;
+	@BindView(R.id.textViewTranslation) TextView textViewTranslated;
+	@BindView(R.id.textViewTranscription) TextView textViewDict;
 	@BindView(R.id.textViewCopyright) TextView textViewCopyright;
 	@BindView(R.id.containerDictResult) LinearLayout containerDictResult;
 	@BindView(R.id.containerTranslateResult) NestedScrollView containerTranslateResult;

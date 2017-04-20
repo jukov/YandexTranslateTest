@@ -19,7 +19,7 @@ import info.jukov.yandextranslatetest.util.Log;
  *
  * Адаптер для отображения истории переводов
  */
-public final class HistoryAdapter extends AbstractTranslateHistoryAdapter<HistoryViewHolder> {
+public final class HistoryAdapter extends BaseTranslateHistoryAdapter<HistoryViewHolder> {
 
 	private static final Log LOG = new Log(HistoryAdapter.class);
 
@@ -75,7 +75,7 @@ public final class HistoryAdapter extends AbstractTranslateHistoryAdapter<Histor
 		return viewHolder;
 	}
 
-	public class HistoryViewHolder extends AbstractTranslateHistoryAdapter.ViewHolder {
+	public class HistoryViewHolder extends BaseTranslateHistoryAdapter.ViewHolder {
 
 		public HistoryViewHolder(final View itemView) {
 			super(itemView);

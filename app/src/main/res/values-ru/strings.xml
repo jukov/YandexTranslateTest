@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 	<string name="activityPreference_apiKeysCategory_title">API ключи</string>
 	<string name="activityPreference_deleteFavorites_title">Удалить избранное</string>
 	<string name="activityPreference_deleteHistory_title">Удалить историю</string>
@@ -34,12 +34,29 @@
 	<string name="fragmentHistory_title">История</string>
 	<string name="fragmentTranslate_title">Перевод</string>
 	<string name="lang_code">ru</string>
-	<string name="preferenceKey_deleteFavorites"></string>
 	<string name="toolbarMenu_license">Правовая информация</string>
 	<string name="toolbarMenu_settings">Настройки</string>
 	<string name="translateFragment_buttonTranslate">Перевести</string>
-	<string name="translateFragment_copyright">Реализовано с помощью сервисов “Яндекс.Переводчик” и “Яндекс.Словарь”.</string>
+	<string name="translateFragment_copyright" tools:ignore="TypographyQuotes"><![CDATA[Реализовано с помощью сервисов “<a href="http://translate.yandex.ru/">Яндекс.Переводчик</a>” и “<a href="https://tech.yandex.ru/dictionary/">Яндекс.Словарь</a>”.]]></string>
 	<string name="translateFragment_editTextInputHint">Введите текст…</string>
 	<string name="translateFragment_toast_errorNothingToAddToFavorites">Нечего добавлять в избранное</string>
 	<string name="translateFragment_toast_errorNothingToTranslate">Нечего переводить</string>
+	<string name="about_license">Опубликовано под лицензией WTFPL http://www.wtfpl.net/</string>
+	<string name="about_otherLicenses">Лицензии компонентов:</string>
+	<string name="activityLicense_title">О переводчике</string>
+	<string name="activitySettings_title">Настройки</string>
+	<string name="alertDialogInvalidKeys_langNotSupported_text">Это направление перевода не поддерживается.</string>
+	<string name="alertDialogInvalidKeys_langNotSupported_title">Направлние перевода не поддерживается.</string>
+	<string name="alertDialogInvalidKeys_textTooLong_text">Вы ввели слишком длинный текст для перевода. Максимальная длина текста — 10000 символов.</string>
+	<string name="alertDialogInvalidKeys_textTooLong_title">Текст слишком длинный</string>
+	<string name="favoritesFragment_textViewEmptyList">Нет избранных переводов. Попробуйте что-нибудь перевести и нажать на кнопку с “сердечком”.</string>
+	<string name="historyFragment_textViewEmptyList">В истории нет переводов. Попробуйте что-нибудь перевести.</string>
+	<string name="misc_clipBoard_label">Перевод</string>
+	<string name="translateFragment_toast_errorTextTooLong">Переводимый текст слишком длинный</string>
+	<string name="translationListFragment_ActionsDialog_title">Выберите действие</string>
+	<string name="trnslateFragment_langAdapter_detectLang">Определить язык</string>
+	<string-array name="translationListFragment_ActionsDialog_actions">
+		<item>Копировать перевод</item>
+		<item>Удалить перевод</item>
+	</string-array>
 </resources>
