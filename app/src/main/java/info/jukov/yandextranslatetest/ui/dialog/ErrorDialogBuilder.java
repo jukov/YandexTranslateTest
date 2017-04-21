@@ -61,6 +61,7 @@ public final class ErrorDialogBuilder {
 		final Dialog dialog = builder.create();
 
 		dialog.setCanceledOnTouchOutside(errorDialog.isCancelable());
+		dialog.setCancelable(errorDialog.isCancelable());
 
 		dialog.setOnShowListener(new OnShowListener() {
 			@Override
