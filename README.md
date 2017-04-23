@@ -27,7 +27,7 @@ For use application, you need to get API keys for [Yandex.Translate](https://tec
 
 Application licensed by [WTFPL](http://www.wtfpl.net/).
 
-Realized with help of services ["Yandex.Translate"](http://translate.yandex.ru/") and ["Yandex.Dictionary"](https://tech.yandex.ru/dictionary/).
+Realized with help of services ["Yandex.Translate"](http://translate.yandex.ru/) and ["Yandex.Dictionary"](https://tech.yandex.ru/dictionary/).
 
 Component licenses:
 
