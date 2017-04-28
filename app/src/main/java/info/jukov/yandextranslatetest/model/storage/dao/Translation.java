@@ -117,7 +117,7 @@ public final class Translation {
 
 		final Translation that = (Translation) o;
 
-		if (!getText().equals(that.getText())) {
+		if (getText() != null ? !getText().equals(that.getText()) : that.getText() != null) {
 			return false;
 		}
 		if (!getLang().equals(that.getLang())) {
