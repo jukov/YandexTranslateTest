@@ -2,9 +2,7 @@
 
 #### Test application for [Yandex Mobilization](https://yandex.ru/mobilization/) — School of mobile development.
 
-<img src="screenshots/1.png" height="240">
-<img src="screenshots/2.png" height="240">
-<img src="screenshots/3.png" height="240">
+<img src="screenshots/1.png" height="480"><img src="screenshots/2.png" height="480"><img src="screenshots/3.png" height="480">
 
 ## Features
 
