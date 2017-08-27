@@ -214,6 +214,7 @@ public final class TranslateFragment extends MvpAppCompatFragment implements Tra
 
 	@OnClick(R.id.buttonTranslate)
 	void onTranslateClick() {
+		translatableHandler.removeMessages(HANDLER_MESSAGE_TRANSLATE);
 		KeyboardUtils.hideSoftInput(getActivity());
 		presenter.onTranslate(getLangCodeForServer(), getTranslatableText(), this);
 	}

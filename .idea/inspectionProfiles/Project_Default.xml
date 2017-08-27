@@ -824,6 +824,7 @@
     <inspection_tool class="ConvertToStringTemplate" enabled="false" level="INFO" enabled_by_default="true" />
     <inspection_tool class="ConvertTryFinallyToUseCall" enabled="false" level="WEAK WARNING" enabled_by_default="true" />
     <inspection_tool class="ConvertTwoComparisonsToRangeCheck" enabled="false" level="WEAK WARNING" enabled_by_default="true" />
+    <inspection_tool class="CopyWithoutNamedArguments" enabled="false" level="WEAK WARNING" enabled_by_default="true" />
     <inspection_tool class="CovariantCompareTo" enabled="false" level="ERROR" enabled_by_default="false" />
     <inspection_tool class="CovariantEquals" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="CriteriaApiResolveInspection" enabled="false" level="ERROR" enabled_by_default="false" />
@@ -910,6 +911,7 @@
     <inspection_tool class="DeserializableClassInSecureContext" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="DesignForExtension" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="Destructure" enabled="false" level="INFO" enabled_by_default="true" />
+    <inspection_tool class="DestructuringWrongName" enabled="false" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="DialogTitleCapitalization" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="DifferentKotlinGradleVersion" enabled="false" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="DifferentStdlibGradleVersion" enabled="false" level="WARNING" enabled_by_default="true" />
@@ -1722,6 +1724,7 @@
     <inspection_tool class="KRUnspecifiedParameters" enabled="false" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="KeySetIterationMayUseEntrySet" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="KotlinDeprecation" enabled="false" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="KotlinInternalInJava" enabled="false" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="KotlinInvalidBundleOrProperty" enabled="false" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="KotlinUnusedImport" enabled="false" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="LabeledStatement" enabled="false" level="WARNING" enabled_by_default="false" />
@@ -1907,6 +1910,7 @@
     <inspection_tool class="ModuleWithTooManyClasses" enabled="false" level="WARNING" enabled_by_default="false">
       <option name="limit" value="100" />
     </inspection_tool>
+    <inspection_tool class="MoveSuspiciousCallableReferenceIntoParentheses" enabled="false" level="WEAK WARNING" enabled_by_default="true" />
     <inspection_tool class="MultipleBindingAnnotations" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="MultipleDeclaration" enabled="false" level="WARNING" enabled_by_default="false">
       <option name="ignoreForLoopDeclarations" value="true" />
@@ -2246,6 +2250,7 @@
     <inspection_tool class="ReadObjectInitialization" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="ReadResolveAndWriteReplaceProtected" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="RecordStoreResource" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="RecursivePropertyAccessor" enabled="false" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="RedundantArrayCreation" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="RedundantCast" enabled="false" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="RedundantFieldInitialization" enabled="false" level="WARNING" enabled_by_default="false" />
@@ -2878,6 +2883,7 @@
     </inspection_tool>
     <inspection_tool class="UnusedImportStatement" enabled="false" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="UnusedLabel" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="UnusedLambdaExpressionBody" enabled="false" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="UnusedLibrary" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="UnusedLocalVariable" enabled="false" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="UnusedLocalization" enabled="false" level="WARNING" enabled_by_default="true" />
@@ -3010,5 +3016,20 @@
     <inspection_tool class="osmorcMisspelledHeaderName" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="osmorcNonOsgiMavenDependency" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="osmorcUnregisteredActivator" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="unused" enabled="false" level="ERROR" enabled_by_default="false">
+      <option name="LOCAL_VARIABLE" value="true" />
+      <option name="FIELD" value="true" />
+      <option name="METHOD" value="true" />
+      <option name="CLASS" value="true" />
+      <option name="PARAMETER" value="true" />
+      <option name="REPORT_PARAMETER_FOR_PUBLIC_METHODS" value="true" />
+      <option name="ADD_MAINS_TO_ENTRIES" value="true" />
+      <option name="ADD_APPLET_TO_ENTRIES" value="true" />
+      <option name="ADD_SERVLET_TO_ENTRIES" value="true" />
+      <option name="ADD_NONJAVA_TO_ENTRIES" value="true" />
+      <option name="selected" value="false" />
+      <option name="ADD_ANDROID_COMPONENTS_TO_ENTRIES" value="false" />
+      <option name="ADD_TESTNG_TO_ENTRIES" value="false" />
+    </inspection_tool>
   </profile>
 </component>
